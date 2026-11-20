@@ -1,1 +1,44 @@
-{"latest":"1.0.0","version":"1.0.0","pan":"https://pan.baidu.com/s/你的链接","direct":"https://你的直链/vebk-1.0.0.apk","force":false,"releases":[{"version":"1.0.0","date":"2026-11-20","notes":["首个公开版本"]}]}
+{
+    "latest":  "1.1.0",
+    "version":  "1.1.0",
+    "pan":  "https://pan.baidu.com/s/你的链接",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.0/vebk-1.1.0.apk",
+    "force":  false,
+    "releases":  [
+                     {
+                         "version":  "1.1.0",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "外观：深浅模式移入外观弹窗，主题色切换改为渐变过渡",
+                                       "隐私模式：首页金额右侧小眼睛，开启后全 App 金额显示 ***",
+                                       "移除 Material You 取色",
+                                       "PRO 权益页补齐 13 项",
+                                       "修复 检查更新与更新日志超时"
+                                   ]
+                     },
+                     {
+                         "version":  "1.1.2",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "PRO 权益页补齐全部 PRO 功能，共 13 项",
+                                       "新增 车贷房贷、储蓄目标、Material You、关闭启动自检等权益说明"
+                                   ]
+                     },
+                     {
+                         "version":  "1.1.1",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "修复 检查更新 / 更新日志超时（改回公开更新源，缩短等待）"
+                                   ]
+                     },
+                     {
+                         "version":  "1.0.0",
+                         "date":  "2026-11-19",
+                         "notes":  [
+                                       "首个版本：记账、资产、统计、预算、周期记账",
+                                       "WebDAV 备份恢复、CSV 导入导出、检查更新",
+                                       "锁屏与指纹解锁、主题与背景、退款报销标记"
+                                   ]
+                     }
+                 ]
+}
