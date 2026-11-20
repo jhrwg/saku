@@ -1,11 +1,1 @@
-{
-  "latest": "1.0.0",
-  "version": "1.0.0",
-  "pan": "https://pan.baidu.com/s/你的链接",
-  "direct": "https://你的直链/vebk-1.1.0.apk",
-  "force": false,
-  "releases": [
-    { "version": "1.0.0", "date": "2026-11-20", "notes": ["新增 周期记账", "修复 背景不刷新"] },
-    { "version": "1.0.0", "date": "2026-11-01", "notes": ["首个版本，全新开篇"] }
-  ]
-}
+{"latest":"1.0.0","version":"1.0.0","pan":"https://pan.baidu.com/s/你的链接","direct":"https://你的直链/vebk-1.0.0.apk","force":false,"releases":[{"version":"1.0.0","date":"2026-11-20","notes":["首个公开版本"]}]}
