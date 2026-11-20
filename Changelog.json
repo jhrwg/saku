@@ -1,10 +1,18 @@
 {
-    "latest":  "1.1.1",
-    "version":  "1.1.1",
+    "latest":  "1.1.2",
+    "version":  "1.1.2",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/vebk/releases/download/v1.1.1/vebk-1.1.1.apk",
+    "direct":  "https://github.com/jhrwg/vebk/releases/download/v1.1.2/vebk-1.1.2.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.2",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "PRO 权益页补齐全部 PRO 功能，共 13 项",
+                                       "新增 车贷房贷、储蓄目标、Material You、关闭启动自检等权益说明"
+                                   ]
+                     },
                      {
                          "version":  "1.1.1",
                          "date":  "2026-11-20",
