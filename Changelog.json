@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.23",
-    "version":  "1.1.23",
+    "latest":  "1.1.24",
+    "version":  "1.1.24",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.24/vebk-1.1.24.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.24/vebk-1.1.24.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.24/vebk-1.1.24.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.24",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "验证版：更新弹窗三通道（Gitee / GitHub / 镜像）已就绪",
+                                       "Gitee 直连下载在国内速度更快，推荐优先使用"
+                                   ]
+                     },
                      {
                          "version":  "1.1.23",
                          "date":  "2026-11-21",
