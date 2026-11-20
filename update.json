@@ -1,11 +1,19 @@
 {
-    "latest":  "1.1.14",
-    "version":  "1.1.14",
+    "latest":  "1.1.15",
+    "version":  "1.1.15",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.14/vebk-1.1.14.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.14/vebk-1.1.14.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.15/vebk-1.1.15.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.15/vebk-1.1.15.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.15",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "反馈页显示当前通道地址与配置状态，便于自查",
+                                       "修复 误装旧版时提示「反馈通道未配置」的困惑（1.1.13 里地址是占位符）"
+                                   ]
+                     },
                      {
                          "version":  "1.1.14",
                          "date":  "2026-11-21",
