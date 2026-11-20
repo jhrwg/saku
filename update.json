@@ -1,9 +1,10 @@
 {
-    "latest":  "1.1.22",
-    "version":  "1.1.22",
+    "latest":  "1.1.23",
+    "version":  "1.1.23",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.22/vebk-1.1.22.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.22/vebk-1.1.22.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.23/vebk-1.1.23.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -11,6 +12,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.23",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "更新弹窗改版：Gitee 下载作为主按钮（国内直连），GitHub / 镜像作为备用",
+                                       "Changelog 新增 gitee 字段，三个下载通道独立配置",
+                                       "按钮布局重排：主按钮全宽 + 次要按钮并排 + 一行说明"
+                                   ]
+                     },
                      {
                          "version":  "1.1.22",
                          "date":  "2026-11-21",
