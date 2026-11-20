@@ -1,10 +1,22 @@
 {
-    "latest":  "1.1.6",
-    "version":  "1.1.6",
+    "latest":  "1.1.7",
+    "version":  "1.1.7",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.6/vebk-1.1.6.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.7/vebk-1.1.7.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.7/vebk-1.1.7.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.7",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "PRO 开启按钮校验延迟改为 1500~4000ms",
+                                       "重做「我的」页：资料卡 + 统计 + 快捷宫格 + 数据管理 + 更多",
+                                       "云备份改为全屏页面，新增「更新软件前先备份」开关",
+                                       "首页记一笔按钮增加按下回弹过渡动画",
+                                       "新增国内镜像下载源，更新弹窗可直接用镜像下"
+                                   ]
+                     },
                      {
                          "version":  "1.1.6",
                          "date":  "2026-11-20",
