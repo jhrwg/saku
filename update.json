@@ -1,10 +1,24 @@
 {
-    "latest":  "1.1.5",
-    "version":  "1.1.5",
+    "latest":  "1.1.6",
+    "version":  "1.1.6",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.5/vebk-1.1.5.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.6/vebk-1.1.6.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.6",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "资产页：账户面板新增「更换图标」，18 个图标（含银行、花呗、白条、借呗）",
+                                       "修复 回收站页面布局错乱",
+                                       "修复 云备份周期点击后不刷新，需要返回才生效",
+                                       "云备份支持自定义「每 X 小时」间隔（1~168）",
+                                       "修复 记账提醒开关重启后被重置",
+                                       "PRO 开启按钮增加 50~3000ms 校验延迟与转圈",
+                                       "新增 9 个支出分类（通讯/教育/人情/宠物/运动/数码/美容/旅行/汽车）",
+                                       "新增 5 个收入分类（奖金/兼职/红包/报销/退款）"
+                                   ]
+                     },
                      {
                          "version":  "1.1.5",
                          "date":  "2026-11-20",
