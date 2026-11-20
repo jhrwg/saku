@@ -1,11 +1,21 @@
 {
-    "latest":  "1.1.12",
-    "version":  "1.1.12",
+    "latest":  "1.1.13",
+    "version":  "1.1.13",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.12/vebk-1.1.12.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.12/vebk-1.1.12.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.13/vebk-1.1.13.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.13/vebk-1.1.13.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.13",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "新增 意见反馈页：用户免登录提交，服务端 Worker 转成 GitHub Issue",
+                                       "反馈可附设备信息与崩溃日志，提交成功显示工单编号并可查看进度",
+                                       "离线时自动排队，联网后启动时补发",
+                                       "新增 worker/ 目录：Cloudflare Worker 源码与部署说明"
+                                   ]
+                     },
                      {
                          "version":  "1.1.12",
                          "date":  "2026-11-20",
