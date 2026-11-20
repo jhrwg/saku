@@ -1,0 +1,11 @@
+{
+  "version": "1.1.0",
+  "changelog": [
+    "新增 检查更新，启动时自动检查",
+    "PRO 可关闭启动自检",
+    "修复主题色切换后弹窗透明度异常"
+  ],
+  "pan": "https://pan.baidu.com/s/xxxxxx",
+  "direct": "https://example.com/vebk-1.1.0.apk",
+  "force": false
+}
