@@ -1,10 +1,24 @@
 {
-    "latest":  "1.1.4",
-    "version":  "1.1.4",
+    "latest":  "1.1.5",
+    "version":  "1.1.5",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.4/vebk-1.1.4.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.5/vebk-1.1.5.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.5",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "修复 PRO 权益宫格与我的页三宫格错位",
+                                       "PRO 页移除已开通状态区，关闭 PRO 与开启按钮同尺寸同样式",
+                                       "统一两个收款码大小",
+                                       "云备份周期可自定义：每次启动 / 每 N 小时 / 每天一次",
+                                       "设置分组改名「更多」，安全 / 崩溃日志 / 字体大小移入右上角设置",
+                                       "记账页二次点击已选分类可直接建二级分类",
+                                       "统一各页面大标题与状态栏留白",
+                                       "资产账户新增银行、花呗、白条、借呗等图标"
+                                   ]
+                     },
                      {
                          "version":  "1.1.4",
                          "date":  "2026-11-20",
