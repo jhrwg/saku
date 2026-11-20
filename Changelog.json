@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.8",
-    "version":  "1.1.8",
+    "latest":  "1.1.9",
+    "version":  "1.1.9",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.8/vebk-1.1.8.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.8/vebk-1.1.8.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.9/vebk-1.1.9.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.9/vebk-1.1.9.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.9",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "我的页恢复原来的 PRO 横幅入口（已开通显示状态）",
+                                       "新增应用内下载器：更新包在 App 内下载，进度可见，下完直接安装",
+                                       "安装未知应用权限缺失时会引导去系统设置"
+                                   ]
+                     },
                      {
                          "version":  "1.1.8",
                          "date":  "2026-11-20",
