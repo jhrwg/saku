@@ -1,11 +1,22 @@
 {
-    "latest":  "1.1.17",
-    "version":  "1.1.17",
+    "latest":  "1.1.18",
+    "version":  "1.1.18",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.17/vebk-1.1.17.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.17/vebk-1.1.17.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.18/vebk-1.1.18.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.18/vebk-1.1.18.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.18",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "所有二级页面去掉左上角返回箭头，标题样式统一参考 PRO 页",
+                                       "我的页头像可自定义：点头像从相册选图，立即生效",
+                                       "修复 启动瞬间闪一下系统深浅色：首帧前同步读取外观设置",
+                                       "意见反馈改为应用内打开问卷，底部可一键导出日志、刷新问卷",
+                                       "首页右上角新增公告跑马灯，由公开仓库 notice.json 远程开关"
+                                   ]
+                     },
                      {
                          "version":  "1.1.17",
                          "date":  "2026-11-21",
