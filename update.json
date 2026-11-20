@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.13",
-    "version":  "1.1.13",
+    "latest":  "1.1.14",
+    "version":  "1.1.14",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.13/vebk-1.1.13.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.13/vebk-1.1.13.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.14/vebk-1.1.14.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.14/vebk-1.1.14.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.14",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "意见反馈接入 Cloudflare Worker（https://vebk-feedback.2096197806.workers.dev）",
+                                       "反馈提交失败时可一键复制内容，方便手动发送",
+                                       "离队排队反馈在启动时自动补发"
+                                   ]
+                     },
                      {
                          "version":  "1.1.13",
                          "date":  "2026-11-21",
