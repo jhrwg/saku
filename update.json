@@ -1,11 +1,19 @@
 {
-    "latest":  "1.1.18",
-    "version":  "1.1.18",
+    "latest":  "1.1.19",
+    "version":  "1.1.19",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.18/vebk-1.1.18.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.18/vebk-1.1.18.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.19/vebk-1.1.19.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.19/vebk-1.1.19.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.19",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "首页公告改为镜像优先拉取（gh-proxy / ghproxy），国内网络更容易显示",
+                                       "公告拉取失败时继续用上次缓存，不影响启动"
+                                   ]
+                     },
                      {
                          "version":  "1.1.18",
                          "date":  "2026-11-21",
