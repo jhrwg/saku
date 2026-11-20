@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.16",
-    "version":  "1.1.16",
+    "latest":  "1.1.17",
+    "version":  "1.1.17",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.16/vebk-1.1.16.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.16/vebk-1.1.16.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.17/vebk-1.1.17.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.17/vebk-1.1.17.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.17",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "意见反馈改为腾讯问卷：点按钮打开问卷，匿名填写无需登录",
+                                       "反馈页可一键复制环境信息（版本/机型/系统/PRO）粘到问卷备注",
+                                       "移除 Worker 依赖，国内网络可正常使用"
+                                   ]
+                     },
                      {
                          "version":  "1.1.16",
                          "date":  "2026-11-21",
