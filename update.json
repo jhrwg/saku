@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.15",
-    "version":  "1.1.15",
+    "latest":  "1.1.16",
+    "version":  "1.1.16",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.15/vebk-1.1.15.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.15/vebk-1.1.15.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.16/vebk-1.1.16.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.16/vebk-1.1.16.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.16",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "反馈页新增「设置通道地址」：随时改成自建 Worker / 云函数地址，无需重新打包",
+                                       "反馈页新增「在 GitHub 提交」兜底按钮（自动带标题与正文）",
+                                       "修复 workers.dev 被墙时完全不可用的问题：失败可复制内容或改走 GitHub"
+                                   ]
+                     },
                      {
                          "version":  "1.1.15",
                          "date":  "2026-11-21",
