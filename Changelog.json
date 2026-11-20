@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.7",
-    "version":  "1.1.7",
+    "latest":  "1.1.8",
+    "version":  "1.1.8",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.7/vebk-1.1.7.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.7/vebk-1.1.7.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.8/vebk-1.1.8.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.8/vebk-1.1.8.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.8",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "恢复「我的 → PRO 权益」入口（显示已开通状态）",
+                                       "修复 深色模式下部分页面底色发白：所有页面统一铺主题底色",
+                                       "统一各页面标题与状态栏留白"
+                                   ]
+                     },
                      {
                          "version":  "1.1.7",
                          "date":  "2026-11-20",
