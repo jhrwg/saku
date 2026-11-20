@@ -1,9 +1,9 @@
 {
-    "latest":  "1.1.21",
-    "version":  "1.1.21",
+    "latest":  "1.1.22",
+    "version":  "1.1.22",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.21/vebk-1.1.21.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.21/vebk-1.1.21.apk",
+    "direct":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.22/vebk-1.1.22.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.22/vebk-1.1.22.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -11,6 +11,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.22",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "维护版本：同步版本号并发布到 Gitee / GitHub 双通道",
+                                       "内置 Gitee 直连后，公告与更新检查更稳定",
+                                       "上一版 1.1.21 的全部改动一并包含"
+                                   ]
+                     },
                      {
                          "version":  "1.1.21",
                          "date":  "2026-11-21",
