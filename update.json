@@ -1,11 +1,20 @@
 {
-    "latest":  "1.1.11",
-    "version":  "1.1.11",
+    "latest":  "1.1.12",
+    "version":  "1.1.12",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.11/vebk-1.1.11.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.11/vebk-1.1.11.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.12/vebk-1.1.12.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.12/vebk-1.1.12.apk",
     "force":  false,
     "releases":  [
+                     {
+                         "version":  "1.1.12",
+                         "date":  "2026-11-20",
+                         "notes":  [
+                                       "页面骨架改为与记账页一致：Scaffold + PageHeader + 底部操作栏",
+                                       "回收站、设置、车贷房贷、下载页全部按此重做",
+                                       "新增 docs/page-style.md 记录规范，后续页面统一遵循"
+                                   ]
+                     },
                      {
                          "version":  "1.1.11",
                          "date":  "2026-11-20",
