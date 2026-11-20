@@ -1,11 +1,25 @@
 {
-    "latest":  "1.1.19",
-    "version":  "1.1.19",
+    "latest":  "1.1.20",
+    "version":  "1.1.20",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.19/vebk-1.1.19.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.19/vebk-1.1.19.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.20/vebk-1.1.20.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.20/vebk-1.1.20.apk",
     "force":  false,
+    "notice":  {
+                   "enabled":  true,
+                   "text":  "欢迎使用折耳根记账，有问题可在「我的 → 意见反馈」里告诉我",
+                   "link":  ""
+               },
     "releases":  [
+                     {
+                         "version":  "1.1.20",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 首页公告不显示：MainScreen 没把公告参数传给首页",
+                                       "公告支持从 Changelog.json 的 notice 字段兜底读取",
+                                       "拉取顺序：镜像 notice.json → Changelog.json → raw"
+                                   ]
+                     },
                      {
                          "version":  "1.1.19",
                          "date":  "2026-11-21",
