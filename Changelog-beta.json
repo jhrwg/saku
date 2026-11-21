@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.16",
-    "version":  "1.2.16",
+    "latest":  "1.2.17",
+    "version":  "1.2.17",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.16-beta/vebk-1.2.16-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.16-beta/vebk-1.2.16-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.16-beta/vebk-1.2.16-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.17-beta/vebk-1.2.17-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.17-beta/vebk-1.2.17-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.17-beta/vebk-1.2.17-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -14,7 +14,14 @@
                },
     "releases":  [
                      {
-                         "version":  "1.2.16",
+                         "version":  "1.2.17",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复首页「最近交易 → 全部」点了没反应（现在能进全部记录）"
+                                   ]
+                     },
+                     {
+                         "version":  "1.2.17",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "重要修复：以前重启 App 数据会回到初始状态（本地保存一直没被调用），现在每次改动都会自动存盘",
@@ -26,7 +33,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.16",
+                         "version":  "1.2.17",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页金额改为内嵌数字键盘：点一下数字，金额和大字立刻变（竖屏）",
@@ -37,7 +44,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.16",
+                         "version":  "1.2.17",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页「明细」合并成一张卡：账户、日期 / 时间 / 币种、备注、标签都在里面",
@@ -45,7 +52,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.16",
+                         "version":  "1.2.17",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页保存按钮显示金额（如「保存 ¥128.00」），保存前一眼可核对"
