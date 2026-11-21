@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.32",
-    "version":  "1.1.32",
+    "latest":  "1.2.0",
+    "version":  "1.2.0",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.32/vebk-1.1.32.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.32/vebk-1.1.32.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.32/vebk-1.1.32.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.0/vebk-1.2.0.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.0/vebk-1.2.0.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.0/vebk-1.2.0.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,19 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.0",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "我的页全新改版：资料卡（头像/名称/签名 + 天数·账本·记录数）、通栏 PRO、功能区两行四列",
+                                       "资料可编辑：点头像名称右侧铅笔，弹出底部面板改头像/名称/个性签名",
+                                       "平板与横屏适配：宽屏自动切换左侧导航轨，内容宽度按档位限制",
+                                       "更新弹窗：日志固定高度可滚动，三个下载按钮（直接下载/GitHub/GitHub 镜像），下载中只显示进度并自动安装",
+                                       "PRO 新增「测试版检查更新」开关：普通用户只收正式版，PRO 可选测试版",
+                                       "云备份改为独立页面，修复「更新前先备份」开关不实时",
+                                       "修复 手机横屏侧边抽屉渗透、启动闪主题、测试版版本号无法识别等问题"
+                                   ]
+                     },
                      {
                          "version":  "1.1.32",
                          "date":  "2026-11-21",
