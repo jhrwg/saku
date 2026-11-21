@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.CloudSync
+import androidx.compose.material.icons.rounded.CurrencyExchange
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.House
@@ -113,6 +114,7 @@ fun ProfilePage(
     onOpenRecurring: () -> Unit,
     onOpenFeedback: () -> Unit,
     onOpenTags: () -> Unit,
+    onOpenRates: () -> Unit,
     onOpenDebts: () -> Unit,
     modifier: Modifier = Modifier,
     avatarPath: String = "",
@@ -240,6 +242,7 @@ fun ProfilePage(
                 FunctionTileRow(
                     tiles = listOf(
                         Triple(Icons.Rounded.AccountBalanceWallet, "借入借出", "待收待还") to onOpenDebts,
+                        Triple(Icons.Rounded.CurrencyExchange, "汇率", "153 种货币") to onOpenRates,
                     ),
                 )
             }
@@ -508,7 +511,7 @@ private fun ProBanner(proEnabled: Boolean, onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (proEnabled) "折耳根 PRO 已开通" else "开通 折耳根 PRO",
+                    text = if (proEnabled) "折耳根 Pro 已开通" else "开通 折耳根 Pro",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onPrimary,
