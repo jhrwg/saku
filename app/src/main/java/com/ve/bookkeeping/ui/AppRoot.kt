@@ -64,6 +64,7 @@ import com.ve.bookkeeping.ui.components.AdjustBalanceSheet
 import com.ve.bookkeeping.ui.components.LogCenterSheet
 import com.ve.bookkeeping.ui.components.BalanceAdjustMode
 import com.ve.bookkeeping.ui.components.AppBackgroundLayer
+import com.ve.bookkeeping.ui.components.builtInBackgroundThemes
 import com.ve.bookkeeping.ui.components.AppearanceSheet
 import com.ve.bookkeeping.ui.components.CUSTOM_BACKGROUND_INDEX
 import com.ve.bookkeeping.ui.components.ChangelogSheet
@@ -1862,7 +1863,15 @@ private fun AppContent(
                 onSettingsChange(appearance.copy(backgroundEnabled = enabled))
             },
             onSelectBuiltIn = { index ->
-                onSettingsChange(appearance.copy(backgroundIndex = index, backgroundEnabled = true))
+                // 背景和主题色配套切换：每张背景都有一个推荐配色
+                val matchedTheme = builtInBackgroundThemes.getOrNull(index)
+                onSettingsChange(
+                    appearance.copy(
+                        backgroundIndex = index,
+                        backgroundEnabled = true,
+                        themeId = matchedTheme ?: appearance.themeId,
+                    ),
+                )
             },
             onPickCustomImage = { uri ->
                 val saved = runCatching {
