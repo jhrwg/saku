@@ -32,7 +32,6 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.ReceiptLong
 import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material.icons.rounded.Savings
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material.icons.rounded.Feedback
@@ -93,7 +92,6 @@ fun ProfilePage(
     onOpenTransfer: () -> Unit,
     onOpenNotifications: () -> Unit,
     onOpenSecurity: () -> Unit,
-    onOpenSettings: () -> Unit,
     onOpenTrash: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenLoans: () -> Unit,
@@ -148,28 +146,12 @@ fun ProfilePage(
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f),
             )
-            Surface(
-                onClick = onOpenAppearance,
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Palette,
-                        contentDescription = "外观",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(10.dp).size(20.dp),
-                    )
-                }
-            }
-            IconButton(onClick = onOpenSettings) {
+            IconButton(onClick = onOpenAppearance) {
                 Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = "设置",
+                    imageVector = Icons.Rounded.Palette,
+                    contentDescription = "外观",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp),
                 )
             }
         }
