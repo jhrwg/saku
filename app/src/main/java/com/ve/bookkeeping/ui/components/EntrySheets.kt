@@ -163,7 +163,36 @@ fun CurrencyPickerSheet(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(10.dp))
-            currencies.forEach { currency ->
+            var query by remember { mutableStateOf("") }
+            val shown = remember(query, currencies) {
+                val q = query.trim().lowercase()
+                if (q.isEmpty()) {
+                    currencies
+                } else {
+                    currencies.filter {
+                        it.code.lowercase().contains(q) ||
+                            it.name.contains(query.trim()) ||
+                            it.symbol.contains(query.trim())
+                    }
+                }
+            }
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                shape = RoundedCornerShape(14.dp),
+                placeholder = { Text(text = "搜索币种代码或名称", style = MaterialTheme.typography.bodySmall) },
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "共 ${currencies.size} 种货币，汇率见「我的 → 汇率」",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            LazyColumn(modifier = Modifier.heightIn(max = 420.dp)) {
+                items(shown, key = { it.code }) { currency ->
                 val selected = currency.code == selectedCode
                 Row(
                     modifier = Modifier
@@ -212,7 +241,7 @@ fun CurrencyPickerSheet(
                                     color = MaterialTheme.colorScheme.primaryContainer,
                                 ) {
                                     Text(
-                                        text = "PRO",
+                                        text = "Pro",
                                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -221,6 +250,7 @@ fun CurrencyPickerSheet(
                             }
                         }
                     }
+                }
                 }
             }
         }
