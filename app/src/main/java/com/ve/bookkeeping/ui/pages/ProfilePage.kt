@@ -204,23 +204,19 @@ fun ProfilePage(
         SectionCard {
             FunctionTileRow(
                 tiles = listOf(
-                    Triple(Icons.Rounded.Category, "分类", "$categoryCount 个") to onOpenCategories,
-                    Triple(Icons.Rounded.Repeat, "周期记账", if (recurringCount > 0) "$recurringCount 条" else "未设置") to onOpenRecurring,
-                    Triple(
-                        Icons.Rounded.Savings,
-                        "预算",
-                        if (budgetSummary == "还没设置") "未设置" else "已设置",
-                    ) to onOpenBudget,
-                    Triple(Icons.Rounded.House, "车贷房贷", "月供记账") to onOpenLoans,
+                    ProfileTile(Icons.Rounded.Category, "分类") { onOpenCategories },
+                    ProfileTile(Icons.Rounded.Repeat, "周期记账") { onOpenRecurring },
+                    ProfileTile(Icons.Rounded.Savings, "预算") { onOpenBudget },
+                    ProfileTile(Icons.Rounded.House, "车贷房贷") { onOpenLoans },
                 ),
             )
             Spacer(modifier = Modifier.height(8.dp))
             FunctionTileRow(
                 tiles = listOf(
-                    Triple(Icons.Rounded.ReceiptLong, "全部记录", "$total 笔") to onOpenRecords,
-                    Triple(Icons.Rounded.Sell, "标签", "打标签") to onOpenTags,
-                    Triple(Icons.Rounded.SyncAlt, "导入导出", "CSV") to onOpenTransfer,
-                    Triple(Icons.Rounded.DeleteSweep, "回收站", "可恢复") to onOpenTrash,
+                    ProfileTile(Icons.Rounded.ReceiptLong, "全部记录") { onOpenRecords },
+                    ProfileTile(Icons.Rounded.Sell, "标签") { onOpenTags },
+                    ProfileTile(Icons.Rounded.SyncAlt, "导入导出") { onOpenTransfer },
+                    ProfileTile(Icons.Rounded.DeleteSweep, "回收站") { onOpenTrash },
                 ),
             )
 
@@ -228,21 +224,17 @@ fun ProfilePage(
                 Spacer(modifier = Modifier.height(8.dp))
                 FunctionTileRow(
                     tiles = listOf(
-                        Triple(Icons.Rounded.NotificationsActive, "通知", "提醒") to onOpenNotifications,
-                        Triple(Icons.Rounded.Lock, "安全", "密码") to onOpenSecurity,
-                        Triple(Icons.Rounded.FormatSize, "字体", fontSizeLabel) to onCycleFontScale,
-                        Triple(
-                            Icons.Rounded.BugReport,
-                            "日志",
-                            if (crashCount > 0) "$crashCount 条" else "无",
-                        ) to onOpenCrashLog,
+                        ProfileTile(Icons.Rounded.NotificationsActive, "通知") { onOpenNotifications },
+                        ProfileTile(Icons.Rounded.Lock, "安全") { onOpenSecurity },
+                        ProfileTile(Icons.Rounded.FormatSize, "字体") { onCycleFontScale },
+                        ProfileTile(Icons.Rounded.BugReport, "日志") { onOpenCrashLog },
                     ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 FunctionTileRow(
                     tiles = listOf(
-                        Triple(Icons.Rounded.AccountBalanceWallet, "借入借出", "待收待还") to onOpenDebts,
-                        Triple(Icons.Rounded.CurrencyExchange, "汇率", "153 种货币") to onOpenRates,
+                        ProfileTile(Icons.Rounded.AccountBalanceWallet, "借入借出") { onOpenDebts },
+                        ProfileTile(Icons.Rounded.CurrencyExchange, "汇率") { onOpenRates },
                     ),
                 )
             }
@@ -306,22 +298,24 @@ fun ProfilePage(
     }
 }
 
+private data class ProfileTile(
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val title: String,
+    val onClick: () -> Unit,
+)
+
 @Composable
-private fun FunctionTileRow(
-    tiles: List<Pair<Triple<androidx.compose.ui.graphics.vector.ImageVector, String, String>, () -> Unit>>,
-) {
+private fun FunctionTileRow(tiles: List<ProfileTile>) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        tiles.forEach { (data, action) ->
-            val (icon, title, subtitle) = data
+        tiles.forEach { tile ->
             ToolTile(
-                icon = icon,
-                title = title,
-                subtitle = subtitle,
+                icon = tile.icon,
+                title = tile.title,
                 modifier = Modifier.weight(1f),
-                onClick = action,
+                onClick = tile.onClick,
             )
         }
         // 不满 4 个时补空位，保持列宽一致
@@ -539,13 +533,12 @@ private fun ProBanner(proEnabled: Boolean, onClick: () -> Unit) {
 private fun ToolTile(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
-    subtitle: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.height(78.dp),
+        modifier = modifier.height(72.dp),
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
     ) {
@@ -565,13 +558,6 @@ private fun ToolTile(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
