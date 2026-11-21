@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.29",
-    "version":  "1.1.29",
+    "latest":  "1.1.30",
+    "version":  "1.1.30",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.30",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "重写底部区域：胶囊 Tab 与「记一笔」都是 Scaffold 的兄弟节点，位置只由屏幕底部决定",
+                                       "四个页面切换时 Tab 位置完全固定，不再上跳",
+                                       "内容铺到底，无截断留白"
+                                   ]
+                     },
                      {
                          "version":  "1.1.29",
                          "date":  "2026-11-21",
