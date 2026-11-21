@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.8",
-    "version":  "1.2.8",
+    "latest":  "1.2.9",
+    "version":  "1.2.9",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.9",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "新增借入 / 借出：记录往来账款，支持标记已结清、删除",
+                                       "我的页「更多」新增入口，顶部显示待还/待收合计",
+                                       "借入借出只做往来账，不计入收支与预算统计"
+                                   ]
+                     },
                      {
                          "version":  "1.2.8",
                          "date":  "2026-11-21",
