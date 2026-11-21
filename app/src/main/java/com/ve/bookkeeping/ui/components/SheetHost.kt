@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -70,19 +71,26 @@ fun AppSheet(
                 content()
             }
             if (footer != null) {
-                // 固定在弹窗底部：不参与上面的滚动
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    tonalElevation = 3.dp,
-                    shadowElevation = 8.dp,
-                    modifier = Modifier.fillMaxWidth(),
+                // 悬浮按钮：固定底部、带阴影浮在内容之上，不参与滚动
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        shape = RoundedCornerShape(20.dp),
+                        tonalElevation = 3.dp,
+                        shadowElevation = 14.dp,
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        footer()
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 10.dp),
+                        ) {
+                            footer()
+                        }
                     }
                 }
             } else {
