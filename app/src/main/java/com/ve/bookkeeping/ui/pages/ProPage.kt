@@ -431,7 +431,26 @@ fun ProPage(
     }
 
     if (showBetaWarning) {
-        AppSheet(onDismiss = { showBetaWarning = false }) {
+        AppSheet(
+            onDismiss = { showBetaWarning = false },
+            footer = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = { showBetaWarning = false }) {
+                        Text(text = "先不开")
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            showBetaWarning = false
+                            onToggleBetaUpdates(true)
+                        },
+                        shape = RoundedCornerShape(14.dp),
+                    ) {
+                        Text(text = "我已了解，开启")
+                    }
+                }
+            },
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -451,22 +470,6 @@ fun ProPage(
                     lineHeight = 22.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    TextButton(onClick = { showBetaWarning = false }) {
-                        Text(text = "先不开")
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Button(
-                        onClick = {
-                            showBetaWarning = false
-                            onToggleBetaUpdates(true)
-                        },
-                        shape = RoundedCornerShape(14.dp),
-                    ) {
-                        Text(text = "我已了解，开启")
-                    }
-                }
             }
         }
     }
