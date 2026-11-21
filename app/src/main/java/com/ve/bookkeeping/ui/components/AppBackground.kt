@@ -19,33 +19,35 @@ import java.io.File
 /**
  * 内置背景图（8 张）。
  *
- * [themeId] 是这张图配套的主题色：选中背景时会自动切到这套配色，
- * 免得出现「深色背景 + 浅色主题」看瞎眼的情况。用户仍可再手动改主题色。
+ * 背景图和主题色**互相独立**：每张图自带配色，切换背景不会动主题色。
+ * [scrim] 是这张图自己的遮罩强度（1f 为标准）——浅色图压重一点、深色图压轻一点，
+ * 保证无论用户选了什么主题色，卡片上的字都读得清。
  * 用户自选图片走 `backgroundIndex = -1`。
  */
 data class BuiltInBackground(
     val res: Int,
     val name: String,
-    val themeId: String,
+    val scrim: Float = 1f,
 )
 
 val builtInBackgroundList = listOf(
-    BuiltInBackground(R.drawable.bg_leaf, "青叶", "green"),
-    BuiltInBackground(R.drawable.bg_dawn, "晨光", "orange"),
-    BuiltInBackground(R.drawable.bg_night, "夜色", "gray"),
-    BuiltInBackground(R.drawable.bg_rose, "粉霞", "pink"),
-    BuiltInBackground(R.drawable.bg_ember, "赤陶", "red"),
-    BuiltInBackground(R.drawable.bg_ocean, "海雾", "sky"),
-    BuiltInBackground(R.drawable.bg_mint, "薄荷", "cyan"),
-    BuiltInBackground(R.drawable.bg_sand, "沙岩", "brown"),
+    BuiltInBackground(R.drawable.bg_leaf, "青叶", 0.95f),
+    BuiltInBackground(R.drawable.bg_dawn, "晨光", 1.08f),
+    BuiltInBackground(R.drawable.bg_night, "夜色", 0.78f),
+    BuiltInBackground(R.drawable.bg_rose, "粉霞", 1.05f),
+    BuiltInBackground(R.drawable.bg_ember, "赤陶", 1.0f),
+    BuiltInBackground(R.drawable.bg_ocean, "海雾", 1.0f),
+    BuiltInBackground(R.drawable.bg_mint, "薄荷", 1.05f),
+    BuiltInBackground(R.drawable.bg_sand, "沙岩", 1.02f),
 )
 
 val builtInBackgrounds = builtInBackgroundList.map { it.res }
 
 val builtInBackgroundNames = builtInBackgroundList.map { it.name }
 
-/** 与 [builtInBackgrounds] 一一对应的推荐主题色 id。 */
-val builtInBackgroundThemes = builtInBackgroundList.map { it.themeId }
+/** 取某张背景自己的遮罩强度；自选图按标准强度处理。 */
+fun builtInBackgroundScrim(index: Int): Float =
+    builtInBackgroundList.getOrNull(index)?.scrim ?: 1f
 
 /**
  * 顶层背景层：图片 + 上下重、中间轻的渐变遮罩。
@@ -96,17 +98,30 @@ fun AppBackgroundLayer(
             )
         }
 
+        // 每张背景图用自己调好的遮罩强度，和主题色无关
+        val scrim = builtInBackgroundScrim(backgroundIndex)
+        fun alphaOf(base: Long): Color = Color(base).copy(
+            alpha = (Color(base).alpha * scrim).coerceIn(0f, 1f),
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     if (dark) {
                         Brush.verticalGradient(
-                            listOf(Color(0x99000000), Color(0x3D000000), Color(0x8C000000)),
+                            listOf(
+                                alphaOf(0xFF000000).copy(alpha = 0.60f * scrim),
+                                Color(0x3D000000).copy(alpha = 0.24f * scrim),
+                                Color(0x8C000000).copy(alpha = 0.55f * scrim),
+                            ),
                         )
                     } else {
                         Brush.verticalGradient(
-                            listOf(Color(0x99FFFFFF), Color(0x26FFFFFF), Color(0x8CFFFFFF)),
+                            listOf(
+                                Color(0x99FFFFFF).copy(alpha = 0.60f * scrim),
+                                Color(0x26FFFFFF).copy(alpha = 0.15f * scrim),
+                                Color(0x8CFFFFFF).copy(alpha = 0.55f * scrim),
+                            ),
                         )
                     },
                 ),
