@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ve.bookkeeping.ui.components.SectionCard
 import com.ve.bookkeeping.ui.components.formatMoney
 import com.ve.bookkeeping.ui.model.EntryType
@@ -188,30 +189,35 @@ fun CalendarPage(
                                             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                                         )
                                     },
-                                    modifier = Modifier.padding(2.dp).size(46.dp),
+                                    modifier = Modifier.padding(2.dp).size(48.dp),
                                 ) {
+                                    // 日期固定在左上、金额固定占两行：
+                                    // 这样有没有收支、只有一边还是两边，数字都不会上下跳
                                     Column(
+                                        modifier = Modifier.fillMaxSize().padding(horizontal = 2.dp),
                                         horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.Center,
+                                        verticalArrangement = Arrangement.Top,
                                     ) {
                                         Text(
                                             text = "$day",
                                             style = MaterialTheme.typography.labelMedium,
                                             color = MaterialTheme.colorScheme.onSurface,
+                                            modifier = Modifier.padding(top = 3.dp),
                                         )
-                                        // 同一天既有支出又有收入时，两行都显示，避免收入被吃掉
-                                        if (expense > 0) {
-                                            Text(
-                                                text = "-${shortMoney(expense)}",
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = extra.expense,
-                                            )
+                                        Spacer(modifier = Modifier.height(1.dp))
+                                        // 最多两行：第一行永远从同一位置开始写，
+                                        // 只有一边有金额时也只占第一行，视觉上不会错位
+                                        val lines = buildList {
+                                            if (expense > 0) add("-${shortMoney(expense)}" to extra.expense)
+                                            if (income > 0) add("+${shortMoney(income)}" to extra.income)
                                         }
-                                        if (income > 0) {
+                                        repeat(2) { index ->
+                                            val line = lines.getOrNull(index)
                                             Text(
-                                                text = "+${shortMoney(income)}",
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = extra.income,
+                                                text = line?.first ?: "",
+                                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                                                color = line?.second ?: extra.expense,
+                                                maxLines = 1,
                                             )
                                         }
                                     }
