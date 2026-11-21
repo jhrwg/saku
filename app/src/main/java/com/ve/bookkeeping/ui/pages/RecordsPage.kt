@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
@@ -360,7 +361,7 @@ fun RecordsPage(
                             )
                         }
                     }
-                    items(dayRecords, key = { "rec-${it.id}" }) { record ->
+                    itemsIndexed(dayRecords, key = { index, record -> "rec-${record.id}-$index" }) { _, record ->
                         // 左滑删除：滑出后进入回收站
                         val dismissState = rememberSwipeToDismissBoxState(
                             confirmValueChange = { value ->
