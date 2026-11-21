@@ -74,7 +74,7 @@ fun FeedbackPage(
             append("App 版本：v").append(appVersion)
             append("\n机型：").append(Build.BRAND).append(' ').append(Build.MODEL)
             append("\n系统：Android ").append(Build.VERSION.RELEASE ?: "未知")
-            append("\nPRO：").append(if (proEnabled) "已开通" else "未开通")
+            append("\nPro：").append(if (proEnabled) "已开通" else "未开通")
         }
     }
 
