@@ -56,7 +56,7 @@ import com.ve.bookkeeping.ui.components.AccountTypeSheet
 import com.ve.bookkeeping.ui.components.AddBookDialog
 import com.ve.bookkeeping.ui.components.AmountKeypadSheet
 import com.ve.bookkeeping.ui.components.LedgerDrawerSheet
-import com.ve.bookkeeping.ui.components.ProRequiredDialog
+import com.ve.bookkeeping.ui.components.ProGateSheet
 import com.ve.bookkeeping.ui.model.AccountOption
 import com.ve.bookkeeping.ui.model.AccountType
 import com.ve.bookkeeping.ui.model.LedgerRecord
@@ -519,17 +519,14 @@ fun MainScreen(
         )
     }
 
-    if (showBookProGate) {
-        ProRequiredDialog(
-            title = "多账本需要 Pro",
-            message = "免费版只能同时拥有 1 个账本。开通 Pro 后可以创建无限个账本，账目彼此独立。",
-            onUpgrade = {
-                showBookProGate = false
-                onOpenPro()
-            },
-            onDismiss = { showBookProGate = false },
-        )
-    }
+    ProGateSheet(
+        visible = showBookProGate,
+        onUpgrade = {
+            showBookProGate = false
+            onOpenPro()
+        },
+        onDismiss = { showBookProGate = false },
+    )
 }
 
 /**
