@@ -67,7 +67,6 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.FormatSize
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Sell
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
@@ -204,19 +203,19 @@ fun ProfilePage(
         SectionCard {
             FunctionTileRow(
                 tiles = listOf(
-                    ProfileTile(Icons.Rounded.Category, "分类") { onOpenCategories },
-                    ProfileTile(Icons.Rounded.Repeat, "周期记账") { onOpenRecurring },
-                    ProfileTile(Icons.Rounded.Savings, "预算") { onOpenBudget },
-                    ProfileTile(Icons.Rounded.House, "车贷房贷") { onOpenLoans },
+                    ProfileTile(Icons.Rounded.Category, "分类", onOpenCategories),
+                    ProfileTile(Icons.Rounded.Repeat, "周期记账", onOpenRecurring),
+                    ProfileTile(Icons.Rounded.Savings, "预算", onOpenBudget),
+                    ProfileTile(Icons.Rounded.House, "车贷房贷", onOpenLoans),
                 ),
             )
             Spacer(modifier = Modifier.height(8.dp))
             FunctionTileRow(
                 tiles = listOf(
-                    ProfileTile(Icons.Rounded.ReceiptLong, "全部记录") { onOpenRecords },
-                    ProfileTile(Icons.Rounded.Sell, "标签") { onOpenTags },
-                    ProfileTile(Icons.Rounded.SyncAlt, "导入导出") { onOpenTransfer },
-                    ProfileTile(Icons.Rounded.DeleteSweep, "回收站") { onOpenTrash },
+                    ProfileTile(Icons.Rounded.ReceiptLong, "全部记录", onOpenRecords),
+                    ProfileTile(Icons.Rounded.Sell, "标签", onOpenTags),
+                    ProfileTile(Icons.Rounded.SyncAlt, "导入导出", onOpenTransfer),
+                    ProfileTile(Icons.Rounded.DeleteSweep, "回收站", onOpenTrash),
                 ),
             )
 
@@ -224,17 +223,16 @@ fun ProfilePage(
                 Spacer(modifier = Modifier.height(8.dp))
                 FunctionTileRow(
                     tiles = listOf(
-                        ProfileTile(Icons.Rounded.NotificationsActive, "通知") { onOpenNotifications },
-                        ProfileTile(Icons.Rounded.Lock, "安全") { onOpenSecurity },
-                        ProfileTile(Icons.Rounded.FormatSize, "字体") { onCycleFontScale },
-                        ProfileTile(Icons.Rounded.BugReport, "日志") { onOpenCrashLog },
+                        ProfileTile(Icons.Rounded.NotificationsActive, "通知", onOpenNotifications),
+                        ProfileTile(Icons.Rounded.Lock, "安全", onOpenSecurity),
+                        ProfileTile(Icons.Rounded.BugReport, "日志", onOpenCrashLog),
                     ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 FunctionTileRow(
                     tiles = listOf(
-                        ProfileTile(Icons.Rounded.AccountBalanceWallet, "借入借出") { onOpenDebts },
-                        ProfileTile(Icons.Rounded.CurrencyExchange, "汇率") { onOpenRates },
+                        ProfileTile(Icons.Rounded.AccountBalanceWallet, "借入借出", onOpenDebts),
+                        ProfileTile(Icons.Rounded.CurrencyExchange, "汇率", onOpenRates),
                     ),
                 )
             }
