@@ -110,7 +110,7 @@ private fun ProActionBar(
                 ),
             ) {
                 Text(
-                    text = "关闭 PRO（仅本机）",
+                    text = "关闭 Pro（仅本机）",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -152,7 +152,7 @@ private fun ProActionBar(
                     )
                 } else {
                     Text(
-                        text = "开启 PRO（免费）",
+                        text = "开启 Pro（免费）",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -213,7 +213,7 @@ private val PRO_BENEFITS = listOf(
     ProBenefit(Icons.Rounded.Flag, "储蓄目标", "本期结余 / 目标进度"),
     ProBenefit(Icons.Rounded.ReceiptLong, "退款 · 报销标记", "标记后不计入收支与预算"),
     ProBenefit(Icons.Rounded.BarChart, "图表增强", "近 6 月对比、收入构成、资产走势"),
-    ProBenefit(Icons.Rounded.CurrencyExchange, "多币种", "欧元 / 日元 / 港币 / 英镑 / 韩元"),
+    ProBenefit(Icons.Rounded.CurrencyExchange, "多币种 · 汇率", "153 种货币 + 实时汇率，可离线换算"),
     ProBenefit(Icons.Rounded.CreditCard, "信用卡账单", "本期应还、最低还款、还款提醒"),
     ProBenefit(Icons.Rounded.House, "车贷 · 房贷", "等额本息月供与还款记账"),
     ProBenefit(Icons.Rounded.Fingerprint, "指纹解锁", "不用输密码，一按就进"),
@@ -252,7 +252,7 @@ fun ProPage(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "升级 PRO",
+            text = "升级 Pro",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
@@ -267,7 +267,7 @@ fun ProPage(
         HeroCard(proEnabled = proEnabled)
 
         Spacer(modifier = Modifier.height(14.dp))
-        SectionCard(title = "PRO 权益") {
+        SectionCard(title = "Pro 权益") {
             PRO_BENEFITS.chunked(3).forEach { row ->
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
@@ -349,7 +349,7 @@ fun ProPage(
                         text = if (proEnabled) {
                             "每次打开软件自动检查一次，有新版会弹窗提示"
                         } else {
-                            "PRO 用户可以关闭启动自检"
+                            "Pro 用户可以关闭启动自检"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -376,7 +376,7 @@ fun ProPage(
                     )
                     Text(
                         text = if (!proEnabled) {
-                            "PRO 用户可选择优先接收测试版"
+                            "Pro 用户可选择优先接收测试版"
                         } else if (betaUpdates) {
                             "已开启：启动自检与手动检查都会找测试版"
                         } else {
@@ -501,7 +501,7 @@ private fun HeroCard(proEnabled: Boolean) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "折耳根 PRO",
+                    text = "折耳根 Pro",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
