@@ -89,7 +89,6 @@ fun RatesPage(
         title = "汇率",
         subtitle = "全部 ${catalog.size} 种货币 · 1 单位 = 多少人民币",
         onBack = onBack,
-        showBack = true,
         scrollable = false,
         modifier = modifier,
     ) {
