@@ -70,6 +70,9 @@ import com.ve.bookkeeping.ui.components.AddCategoryDialog
 import com.ve.bookkeeping.ui.components.AllCategoriesSheet
 import com.ve.bookkeeping.ui.components.AmountKeypadSheet
 import com.ve.bookkeeping.ui.components.CurrencyPickerSheet
+import com.ve.bookkeeping.ui.components.InlineAmountKeypad
+import com.ve.bookkeeping.ui.components.editableAmount
+import com.ve.bookkeeping.ui.components.keypadPress
 import com.ve.bookkeeping.ui.components.PageHeader
 import com.ve.bookkeeping.ui.components.SectionCard
 import com.ve.bookkeeping.ui.components.formatMoney
@@ -93,6 +96,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.draw.clip
 import com.ve.bookkeeping.ui.model.Participant
 import java.io.File
@@ -236,6 +240,27 @@ fun EntryPage(
 
     var lastSaveAt by remember { mutableStateOf(0L) }
 
+    // —— 金额输入：竖屏用内嵌键盘（点了立刻改数字），矮屏退回底部面板 ——
+    val canInlineKeypad = LocalConfiguration.current.screenHeightDp >= 520
+    var keypadOpen by rememberSaveable { mutableStateOf(false) }
+    var amountInput by rememberSaveable { mutableStateOf(editableAmount(amount)) }
+
+    fun openKeypad() {
+        amountInput = editableAmount(amount)
+        keypadOpen = true
+    }
+
+    fun pressAmountKey(key: String) {
+        val next = keypadPress(amountInput, key) ?: return
+        amountInput = next
+        amount = next.toDoubleOrNull() ?: 0.0
+    }
+
+    fun addQuickAmount(step: Double) {
+        amount += step
+        amountInput = editableAmount(amount)
+    }
+
     // —— 优惠 / 分摊 / 附件 ——
     var originalAmount by rememberSaveable {
         mutableDoubleStateOf(editRecord?.originalAmount ?: 0.0)
@@ -281,6 +306,13 @@ fun EntryPage(
         bottomBar = {
             Surface(color = MaterialTheme.colorScheme.surface) {
                 Column(modifier = Modifier.navigationBarsPadding()) {
+                    if (keypadOpen && canInlineKeypad) {
+                        InlineAmountKeypad(
+                            amountText = amountInput,
+                            onKey = { pressAmountKey(it) },
+                            onDone = { keypadOpen = false },
+                        )
+                    }
                     Button(
                         onClick = {
                             // 防抖：600ms 内重复点击只记一次，避免连点生成重复账目
@@ -371,7 +403,9 @@ fun EntryPage(
                         symbol = currency.symbol,
                         amountText = formatMoney(amount),
                         color = amountColor,
-                        onClick = { showAmountKeypad = true },
+                        onClick = {
+                            if (canInlineKeypad) openKeypad() else showAmountKeypad = true
+                        },
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
@@ -400,7 +434,7 @@ fun EntryPage(
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(34.dp)
-                                    .clickable { amount += step },
+                                    .clickable { addQuickAmount(step) },
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
@@ -879,6 +913,9 @@ fun EntryPage(
                 selectedTags = selectedTags + name
                 showAddTag = false
             },
+            title = "新建标签",
+            fieldLabel = "标签名称",
+            placeholder = "例如：出差",
         )
     }
 
