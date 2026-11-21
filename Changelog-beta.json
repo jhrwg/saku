@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.12",
-    "version":  "1.2.12",
+    "latest":  "1.2.13",
+    "version":  "1.2.13",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.13-beta/vebk-1.2.13-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.13-beta/vebk-1.2.13-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.13-beta/vebk-1.2.13-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,13 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.13",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "记账页保存按钮显示金额（如「保存 ¥128.00」），保存前一眼可核对"
+                                   ]
+                     },
                      {
                          "version":  "1.2.12",
                          "date":  "2026-11-21",
