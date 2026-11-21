@@ -61,7 +61,10 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.material.icons.rounded.Campaign
 
 @Composable
@@ -386,7 +389,12 @@ private fun HomePagePreview() {
     }
 }
 
-/** 首页右上角的公告胶囊：单行省略，点击打开链接（长文本不再跑马灯，避免裁字）。 */
+/**
+ * 首页右上角的公告胶囊：单行跑马灯滚动，点击打开链接。
+ *
+ * 文字放在自己的 Box 里再 clip，避免滚动时盖到喇叭图标上；
+ * 首尾各留 2dp，字形不会被切一半。
+ */
 @Composable
 private fun NoticePill(text: String, onClick: () -> Unit) {
     Surface(
@@ -405,14 +413,27 @@ private fun NoticePill(text: String, onClick: () -> Unit) {
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(14.dp),
             )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .clipToBounds(),
+            ) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            initialDelayMillis = 900,
+                            repeatDelayMillis = 1200,
+                            velocity = 28.dp,
+                        ),
+                )
+            }
         }
     }
 }
