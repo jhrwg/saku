@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.11",
-    "version":  "1.2.11",
+    "latest":  "1.2.12",
+    "version":  "1.2.12",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.12-beta/vebk-1.2.12-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.12",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "金额卡新增常用金额快捷键 +10 / +50 / +100，点一下累加",
+                                       "分类长按新建二级分类（延续 1.2.11）"
+                                   ]
+                     },
                      {
                          "version":  "1.2.11",
                          "date":  "2026-11-21",
