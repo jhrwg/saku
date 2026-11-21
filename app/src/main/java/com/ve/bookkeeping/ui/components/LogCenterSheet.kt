@@ -96,17 +96,7 @@ fun LogCenterSheet(
         }
     }
 
-    androidx.compose.material3.ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 24.dp),
-        ) {
+    AppSheet(onDismiss = onDismiss) {
             Text(
                 text = "日志",
                 style = MaterialTheme.typography.titleMedium,
@@ -202,5 +192,4 @@ fun LogCenterSheet(
                 }
             }
         }
-    }
 }
