@@ -86,19 +86,7 @@ fun AdjustBalanceSheet(
     val target = amountText.trim().toDoubleOrNull()
     val diff = target?.minus(currentBalance)
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 24.dp),
-        ) {
+    AppSheet(onDismiss = onDismiss) {
             Text(
                 text = "修改余额 · $accountName",
                 style = MaterialTheme.typography.titleMedium,
@@ -193,5 +181,4 @@ fun AdjustBalanceSheet(
                 Text(text = "确认修改")
             }
         }
-    }
 }
