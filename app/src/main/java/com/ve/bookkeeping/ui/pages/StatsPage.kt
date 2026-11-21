@@ -66,6 +66,7 @@ fun StatsPage(
     accounts: List<com.ve.bookkeeping.ui.model.AccountOption> = emptyList(),
     proEnabled: Boolean = true,
     onNeedPro: () -> Unit = {},
+    onTagClick: (String) -> Unit = {},
 ) {
     var tabIndex by rememberSaveable { mutableIntStateOf(1) }
     val ranges = remember { StatsRange.entries }
@@ -183,7 +184,7 @@ fun StatsPage(
 
         if (stats.tags.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
-            TagCard(stats.tags, stats.expense)
+            TagCard(stats.tags, stats.expense, onTagClick)
         }
 
         if (stats.incomeCategories.isNotEmpty()) {
@@ -372,7 +373,11 @@ private fun TrendCard(
 }
 
 @Composable
-private fun TagCard(tags: List<com.ve.bookkeeping.ui.model.TagStat>, total: Double) {
+private fun TagCard(
+    tags: List<com.ve.bookkeeping.ui.model.TagStat>,
+    total: Double,
+    onTagClick: (String) -> Unit,
+) {
     SectionCard(
         title = "标签支出",
         trailing = {
@@ -387,13 +392,14 @@ private fun TagCard(tags: List<com.ve.bookkeeping.ui.model.TagStat>, total: Doub
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { onTagClick(stat.tag) }
                     .padding(vertical = 4.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "#${stat.tag}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.weight(1f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -405,14 +411,16 @@ private fun TagCard(tags: List<com.ve.bookkeeping.ui.model.TagStat>, total: Doub
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                LinearProgressIndicator(
-                    progress = { stat.share.coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                )
+                if (stat.share >= 0.005f) {
+                    LinearProgressIndicator(
+                        progress = { stat.share.coerceIn(0f, 1f) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(6.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                    )
+                }
             }
         }
     }
