@@ -1,11 +1,11 @@
 {
-    "latest":  "1.1.35-beta",
-    "version":  "1.1.35-beta",
+    "latest":  "1.1.37-beta",
+    "version":  "1.1.37-beta",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.35-beta/vebk-1.1.35-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.35-beta/vebk-1.1.35-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.35-beta/vebk-1.1.35-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.37-beta",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 手机横屏时侧边抽屉露出一截：内容区加裁剪，抽屉不再渗到留白区域",
+                                       "云备份改为独立页面（路由跳转），不再叠在我的页上面",
+                                       "修复「更新前先备份」开关点击后不实时反映，需要重进页面"
+                                   ]
+                     },
                      {
                          "version":  "1.1.35-beta",
                          "date":  "2026-11-21",
