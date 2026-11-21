@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.9",
-    "version":  "1.2.9",
+    "latest":  "1.2.10",
+    "version":  "1.2.10",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.9-beta/vebk-1.2.9-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.10",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "记账页重做（第一步）：标题改为「记一笔」并显示当前账本与类型",
+                                       "金额区升级为独立金额卡：大号金额 + 币种/分类/账户小标签，一屏看清当前这笔的上下文",
+                                       "分类区、明细、标签布局保持不变，等待你反馈后再继续调整"
+                                   ]
+                     },
                      {
                          "version":  "1.2.9",
                          "date":  "2026-11-21",
