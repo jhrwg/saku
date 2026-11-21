@@ -598,7 +598,30 @@ private fun ProfileEditSheet(
         if (path.isBlank()) null else runCatching { android.graphics.BitmapFactory.decodeFile(path) }.getOrNull()
     }
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                androidx.compose.material3.OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.weight(1f).height(46.dp),
+                    shape = RoundedCornerShape(14.dp),
+                ) { Text(text = "取消") }
+                androidx.compose.material3.Button(
+                    onClick = {
+                        com.ve.bookkeeping.data.AppLog.info("资料", "点击保存 name=$name bio=$bio")
+                        onSave(
+                            name.trim().ifBlank { "折耳根记账" },
+                            bio.trim().ifBlank { "记录你的一点一滴" },
+                            path,
+                        )
+                    },
+                    modifier = Modifier.weight(1f).height(46.dp),
+                    shape = RoundedCornerShape(14.dp),
+                ) { Text(text = "保存") }
+            }
+        },
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -672,26 +695,6 @@ private fun ProfileEditSheet(
                 shape = RoundedCornerShape(14.dp),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                androidx.compose.material3.OutlinedButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.weight(1f).height(46.dp),
-                    shape = RoundedCornerShape(14.dp),
-                ) { Text(text = "取消") }
-                androidx.compose.material3.Button(
-                    onClick = {
-                        com.ve.bookkeeping.data.AppLog.info("资料", "点击保存 name=$name bio=$bio")
-                        onSave(
-                            name.trim().ifBlank { "折耳根记账" },
-                            bio.trim().ifBlank { "记录你的一点一滴" },
-                            path,
-                        )
-                    },
-                    modifier = Modifier.weight(1f).height(46.dp),
-                    shape = RoundedCornerShape(14.dp),
-                ) { Text(text = "保存") }
-            }
         }
     }
 }
