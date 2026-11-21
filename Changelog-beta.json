@@ -1,11 +1,11 @@
 {
-    "latest": "1.3.12-beta",
-    "version": "1.3.12-beta",
+    "latest": "1.3.13-beta",
+    "version": "1.3.13-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.12-beta/vebk-1.3.12-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.12-beta/vebk-1.3.12-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.12-beta/vebk-1.3.12-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,18 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.3.13-beta",
+            "date": "2026-11-22",
+            "notes": [
+                "新增",
+                "• 新增《开发规范》文档：独立页、底部弹窗、Pro 提示、发版规则",
+                "调整",
+                "• Pro 拦截统一成底部弹窗：文案「该功能需开启 Pro 权益」，按钮「前往 Pro」「以后再说」",
+                "• 独立页去掉左上角返回按钮，统一用系统返回",
+                "• 日志 / 修改余额 / 账户操作弹窗改用统一骨架：不超过半屏、内容可滚、按钮固定"
+            ]
+        },
         {
             "version": "1.3.12-beta",
             "date": "2026-11-22",
