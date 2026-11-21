@@ -2,21 +2,13 @@
 
 package com.ve.bookkeeping.ui.pages
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BugReport
-import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,27 +27,26 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.unit.sp
 import com.ve.bookkeeping.ui.components.LogCenterSheet
 import com.ve.bookkeeping.ui.components.PageScaffold
+import com.ve.bookkeeping.ui.components.SectionCard
 
 /** 意见反馈问卷地址（腾讯问卷，匿名填写，无需登录）。 */
 const val FEEDBACK_FORM_URL = "https://wj.qq.com/s2/28766787/ya5f/"
 
 /**
- * 意见反馈：问卷直接内嵌在 App 里打开。
- *
- * - 底部「日志」打开的弹窗和「我的 → 日志」是同一个（可筛选、可导出 txt）；
- * - 问卷里的「上传附件」按钮会拉起系统文件选择器，选完直接回填到网页里。
+ * 意见反馈：问卷用系统浏览器打开（问卷里的上传附件、拍照等浏览器原生支持），
+ * 日志用「我的 → 日志」同一个弹窗，可一条龙导出 txt 再在问卷里上传。
  */
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun FeedbackPage(
     appVersion: String,
@@ -63,41 +55,84 @@ fun FeedbackPage(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    var webView by remember { mutableStateOf<WebView?>(null) }
-    var reloadKey by remember { mutableIntStateOf(0) }
     var showLogs by remember { mutableStateOf(false) }
+    var copied by remember { mutableStateOf(false) }
 
-    // <input type="file"> 的回调必须由 App 自己接，WebView 默认什么都不做
-    var fileCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
-    val filePicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        val callback = fileCallback
-        fileCallback = null
-        callback?.onReceiveValue(
-            WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data),
-        )
+    BackHandler(onBack = onBack)
+
+    fun openInBrowser() {
+        runCatching {
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(FEEDBACK_FORM_URL))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        }
     }
 
-    // 返回键：先让 WebView 后退，退到首屏再退出页面
-    BackHandler {
-        val view = webView
-        if (view != null && view.canGoBack()) view.goBack() else onBack()
+    fun copyLink() {
+        runCatching {
+            val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
+                as? android.content.ClipboardManager
+            clipboard?.setPrimaryClip(android.content.ClipData.newPlainText("问卷链接", FEEDBACK_FORM_URL))
+            copied = true
+        }
     }
 
     PageScaffold(
         title = "意见反馈",
-        subtitle = "问卷在应用内打开；需要附日志时点「日志 → 导出 txt」再上传",
+        subtitle = "问卷在浏览器里打开，匿名填写，不需要登录",
         onBack = onBack,
-        scrollable = false,
+        scrollable = true,
         modifier = modifier,
-        bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        SectionCard(title = "填写问卷") {
+            Text(
+                text = "用浏览器打开问卷，上传截图、附件、拍照都能正常用；填完直接提交即可。",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 19.sp,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = { openInBrowser() },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(14.dp),
             ) {
+                Icon(
+                    imageVector = Icons.Rounded.OpenInNew,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(text = "在浏览器中填写问卷")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { copyLink() },
+                modifier = Modifier.fillMaxWidth().height(44.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.ContentCopy,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(text = if (copied) "链接已复制" else "复制问卷链接")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        SectionCard(title = "附带日志") {
+            Text(
+                text = "遇到闪退、数据不对时，建议先导出日志：点下面的按钮 → 导出 txt 文件 → " +
+                    "在问卷的「上传附件」里选这个文件。",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 19.sp,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = { showLogs = true },
                     modifier = Modifier.weight(1f).height(48.dp),
@@ -111,73 +146,16 @@ fun FeedbackPage(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(text = "日志 · 导出 txt")
                 }
-                Button(
-                    onClick = { reloadKey++ },
-                    modifier = Modifier.weight(1f).height(48.dp),
-                    shape = RoundedCornerShape(14.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Refresh,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = "刷新问卷")
-                }
             }
-        },
-    ) {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { ctx ->
-                WebView(ctx).apply {
-                    settings.javaScriptEnabled = true
-                    settings.domStorageEnabled = true
-                    settings.loadsImagesAutomatically = true
-                    settings.allowFileAccess = true
-                    settings.allowContentAccess = true
-                    webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            url: String?,
-                        ): Boolean {
-                            if (url == null) return false
-                            // 问卷站内跳转留在 WebView，外部链接交给浏览器
-                            if (url.contains("wj.qq.com")) return false
-                            runCatching {
-                                ctx.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                            }
-                            return true
-                        }
-                    }
-                    webChromeClient = object : WebChromeClient() {
-                        override fun onShowFileChooser(
-                            view: WebView?,
-                            callback: ValueCallback<Array<Uri>>?,
-                            params: FileChooserParams?,
-                        ): Boolean {
-                            if (callback == null) return false
-                            fileCallback?.onReceiveValue(null)
-                            fileCallback = callback
-                            val launcher = params?.createIntent()
-                            if (launcher == null) {
-                                fileCallback = null
-                                return false
-                            }
-                            return runCatching {
-                                filePicker.launch(launcher)
-                                true
-                            }.getOrDefault(false)
-                        }
-                    }
-                    loadUrl(FEEDBACK_FORM_URL)
-                    webView = this
-                }
-            },
-            update = { view ->
-                if (reloadKey > 0) view.reload()
-            },
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "当前版本 v$appVersion" + if (proEnabled) " · Pro 已开通" else "",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     if (showLogs) {
