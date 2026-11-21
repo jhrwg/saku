@@ -400,7 +400,7 @@ private fun AppContent(
     }
 
     val records = remember {
-        mutableStateListOf(*(snapshot?.records ?: emptyList()).toTypedArray())
+        mutableStateListOf(*(ensureUniqueIds(snapshot?.records ?: emptyList())).toTypedArray())
     }
     val accounts = remember {
         mutableStateListOf(*(snapshot?.accounts ?: emptyList()).toTypedArray())
@@ -423,7 +423,7 @@ private fun AppContent(
     }
 
     val trash = remember {
-        mutableStateListOf(*(snapshot?.trash ?: emptyList()).toTypedArray())
+        mutableStateListOf(*(ensureUniqueIds(snapshot?.trash ?: emptyList())).toTypedArray())
     }
 
     // 标签清单放进 SnapshotStateList：新增/删除立刻反映到记账页与标签页
@@ -1052,7 +1052,9 @@ private fun AppContent(
                     if (index >= 0) {
                         records[index] = record
                     } else {
-                        records.addAll(0, expandInstallments(record))
+                        // 新记录用「已有最大 id + 1」分配，避免时间戳相同/分期派生撞 id
+                        val baseId = (records.maxOfOrNull { it.id } ?: 0L) + 1
+                        records.addAll(0, expandInstallments(record, baseId))
                     }
                     // 超支提醒：一旦跨过预算就发一条（同一天不重复刷）
                     runCatching {
@@ -1379,7 +1381,13 @@ private fun AppContent(
                 records = trash,
                 onRestore = { record ->
                     trash.removeAll { it.id == record.id }
-                    records.add(0, record)
+                    // 恢复时如果 id 已被现有账目占用（历史脏数据），重新编号，避免两条 id 相同
+                    val restored = if (records.any { it.id == record.id }) {
+                        record.copy(id = (records.maxOfOrNull { it.id } ?: 0L) + 1)
+                    } else {
+                        record
+                    }
+                    records.add(0, restored)
                 },
                 onDeleteForever = { record -> trash.removeAll { it.id == record.id } },
                 onClear = { trash.clear() },
@@ -1429,6 +1437,7 @@ private fun AppContent(
             AppRoute.Records -> RecordsPage(
                 onDeleteRecord = { record ->
                     records.removeAll { it.id == record.id }
+                    trash.removeAll { it.id == record.id }
                     trash.add(0, record)
                 },
                 records = records,
@@ -1622,6 +1631,7 @@ private fun AppContent(
                 // 删除进回收站，可恢复
                 val index = records.indexOfFirst { it.id == record.id }
                 if (index >= 0) {
+                    trash.removeAll { it.id == record.id }
                     trash.add(0, records[index])
                     records.removeAt(index)
                 }
@@ -1855,9 +1865,9 @@ private const val NOTIFY_BUDGET = 2002
  * 分期付款：把一条「总额 + 期数」的账目拆成 N 条，按月生成。
  * 最后一期吸收除不尽的零头，保证合计等于总额。
  */
-private fun expandInstallments(record: LedgerRecord): List<LedgerRecord> {
+internal fun expandInstallments(record: LedgerRecord, baseId: Long = record.id): List<LedgerRecord> {
     val count = record.installmentCount
-    if (count <= 1) return listOf(record)
+    if (count <= 1) return listOf(record.copy(id = baseId))
 
     val total = record.amount
     val per = Math.round(total / count * 100.0) / 100.0
@@ -1872,7 +1882,7 @@ private fun expandInstallments(record: LedgerRecord): List<LedgerRecord> {
             per
         }
         record.copy(
-            id = record.id + i,
+            id = baseId + i,
             amount = part,
             originalAmount = part,
             discount = 0.0,
@@ -1886,6 +1896,30 @@ private fun expandInstallments(record: LedgerRecord): List<LedgerRecord> {
             installmentCount = count,
         )
     }
+}
+
+/**
+ * 修复历史数据里重复的记录 id。
+ *
+ * 旧版本按时间戳生成 id，同一毫秒保存多条、或分期/周期补记派生的 id 会撞上，
+ * 撞 id 后 LazyColumn 会直接崩（Key "trash-xxx" was already used）。这里给重复项重新编号。
+ */
+internal fun ensureUniqueIds(list: List<LedgerRecord>): List<LedgerRecord> {
+    if (list.isEmpty()) return list
+    val seen = HashSet<Long>(list.size * 2)
+    var maxId = list.maxOf { it.id }
+    var changed = false
+    val result = list.map { record ->
+        if (seen.add(record.id)) {
+            record
+        } else {
+            maxId += 1
+            changed = true
+            seen.add(maxId)
+            record.copy(id = maxId)
+        }
+    }
+    return if (changed) result else list
 }
 
 
