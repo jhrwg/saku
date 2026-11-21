@@ -89,6 +89,8 @@ data class PeriodStats(
     val incomeCategories: List<CategoryStat> = emptyList(),
     /** 标签聚合（按金额降序）。 */
     val tags: List<TagStat> = emptyList(),
+    /** 按星期几的支出（周一 → 周日）。 */
+    val weekdayBars: List<Float> = emptyList(),
 )
 
 /** 退款关联：统计时按「原消费 id → 已退金额」抵扣。 */
@@ -249,6 +251,15 @@ fun statsFor(
             }
             .sortedByDescending { it.amount }
             .take(8),
+        weekdayBars = (0..6).map { index ->
+            expenseRecords
+                .filter { record ->
+                    val c = Calendar.getInstance().apply { timeInMillis = record.occurredAt }
+                    ((c.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY + 7) % 7) == index
+                }
+                .sumOf { it.netStatAmount(refundMap) }
+                .toFloat()
+        },
     )
 }
 
