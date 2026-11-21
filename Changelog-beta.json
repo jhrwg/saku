@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.1",
-    "version":  "1.2.1",
+    "latest":  "1.2.2",
+    "version":  "1.2.2",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.1-beta/vebk-1.2.1-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.1-beta/vebk-1.2.1-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.1-beta/vebk-1.2.1-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.2",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 1.2.1 中筛选条件记忆实际未生效（上次的改动没写进文件），现在关键词/类型/时间/账户会真正保存",
+                                       "金额键盘按键增加触感反馈，输入更跟手"
+                                   ]
+                     },
                      {
                          "version":  "1.2.1",
                          "date":  "2026-11-21",
