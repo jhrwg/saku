@@ -1,4 +1,4 @@
-﻿@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.ve.bookkeeping.ui.components
 
@@ -55,17 +55,7 @@ fun AccountActionSheet(
     val extra = LocalAppExtraColors.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 24.dp),
-        ) {
+    AppSheet(onDismiss = onDismiss) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -145,7 +135,6 @@ fun AccountActionSheet(
                 tint = MaterialTheme.colorScheme.error,
                 onClick = onDelete,
             )
-        }
     }
 }
 
@@ -178,6 +167,7 @@ private fun ActionRow(
         }
     }
 }
+
 
 
 
