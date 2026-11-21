@@ -1,11 +1,11 @@
 {
-    "latest": "1.2.23",
-    "version": "1.2.23",
+    "latest": "1.2.24",
+    "version": "1.2.24",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.2.23-beta/vebk-1.2.23-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.2.23-beta/vebk-1.2.23-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.23-beta/vebk-1.2.23-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,18 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.2.24",
+            "date": "2026-11-21",
+            "notes": [
+                "修复",
+                "• 首页公告恢复跑马灯：长文案会自己滚动，不再被截断显示",
+                "新增",
+                "• 开启「测试版检查更新」前会先弹出风险说明：测试版由 AI 自动开发，可能频繁发版、不稳定、闪退，建议先备份数据",
+                "调整",
+                "• 线上只保留 1.0.0 / 1.1.0 / 1.2.0 三个正式版安装包，其余旧正式版的安装包已下架（测试版不受影响）"
+            ]
+        },
         {
             "version": "1.2.23",
             "date": "2026-11-21",
