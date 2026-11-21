@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.10",
-    "version":  "1.2.10",
+    "latest":  "1.2.11",
+    "version":  "1.2.11",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.10-beta/vebk-1.2.10-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.11-beta/vebk-1.2.11-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.11",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "记账页分类支持直接新建二级分类：长按任意分类即弹出新建子类，建好自动选中",
+                                       "金额卡显示币种/分类/账户/优惠小标签（延续 1.2.10）"
+                                   ]
+                     },
                      {
                          "version":  "1.2.10",
                          "date":  "2026-11-21",
