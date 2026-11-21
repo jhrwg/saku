@@ -141,6 +141,7 @@ fun MainScreen(
     onOpenSecurity: () -> Unit,
     onOpenFeedback: () -> Unit,
     onOpenTags: () -> Unit,
+    onOpenRates: () -> Unit,
     onOpenDebts: () -> Unit,
     avatarPath: String,
     userName: String,
@@ -338,6 +339,7 @@ fun MainScreen(
                             onOpenSecurity = onOpenSecurity,
                             onOpenFeedback = onOpenFeedback,
                             onOpenTags = onOpenTags,
+                    onOpenRates = onOpenRates,
                             onOpenDebts = onOpenDebts,
                             avatarPath = avatarPath,
                             userName = userName,
@@ -518,8 +520,8 @@ fun MainScreen(
 
     if (showBookProGate) {
         ProRequiredDialog(
-            title = "多账本需要 PRO",
-            message = "免费版只能同时拥有 1 个账本。开通 PRO 后可以创建无限个账本，账目彼此独立。",
+            title = "多账本需要 Pro",
+            message = "免费版只能同时拥有 1 个账本。开通 Pro 后可以创建无限个账本，账目彼此独立。",
             onUpgrade = {
                 showBookProGate = false
                 onOpenPro()
