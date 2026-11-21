@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.19",
-    "version":  "1.2.19",
+    "latest":  "1.2.20",
+    "version":  "1.2.20",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.19-beta/vebk-1.2.19-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.19-beta/vebk-1.2.19-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.19-beta/vebk-1.2.19-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.20-beta/vebk-1.2.20-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.20-beta/vebk-1.2.20-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.20-beta/vebk-1.2.20-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -14,7 +14,16 @@
                },
     "releases":  [
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复回收站闪退（提示 Key \"trash-...\" was already used）：历史数据里重复的记录 id 会自动重新编号",
+                                       "新账目改用「已有最大 id + 1」分配，分期付款 / 周期补记不再撞 id",
+                                       "从回收站恢复时，如果 id 已被占用会自动换一个，避免再次出现重复"
+                                   ]
+                     },
+                     {
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "统计页新增「星期分布」：看一周里哪天花得最多",
@@ -23,21 +32,21 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "统计页「标签支出」占比很小时不再出现两个小圆点（进度条太小就不画了）"
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "修复首页「最近交易 → 全部」点了没反应（现在能进全部记录）"
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "重要修复：以前重启 App 数据会回到初始状态（本地保存一直没被调用），现在每次改动都会自动存盘",
@@ -49,7 +58,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页金额改为内嵌数字键盘：点一下数字，金额和大字立刻变（竖屏）",
@@ -60,7 +69,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页「明细」合并成一张卡：账户、日期 / 时间 / 币种、备注、标签都在里面",
@@ -68,7 +77,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.19",
+                         "version":  "1.2.20",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页保存按钮显示金额（如「保存 ¥128.00」），保存前一眼可核对"
