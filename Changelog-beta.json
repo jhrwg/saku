@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.2",
-    "version":  "1.2.2",
+    "latest":  "1.2.3",
+    "version":  "1.2.3",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.2-beta/vebk-1.2.2-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.3-beta/vebk-1.2.3-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.3-beta/vebk-1.2.3-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.3-beta/vebk-1.2.3-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.3",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "全部记录支持左滑删除（滑出即移入回收站，可恢复）",
+                                       "二级分类交互：点已选分类打开子类面板，点父类那一行可直接新建子类"
+                                   ]
+                     },
                      {
                          "version":  "1.2.2",
                          "date":  "2026-11-21",
