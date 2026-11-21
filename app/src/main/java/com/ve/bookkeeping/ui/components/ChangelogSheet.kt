@@ -50,7 +50,18 @@ fun ChangelogSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Button(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Text(text = "关闭")
+            }
+        },
+    ) {
         Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,14 +139,6 @@ fun ChangelogSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = "关闭")
-            }
         }
     }
 }
