@@ -140,6 +140,7 @@ class LedgerStore(context: Context) {
                             stockName = item.optString("stockName").ifBlank { null },
                             cardNote = item.optString("cardNote"),
                             currencyCode = item.optString("currency").ifBlank { "CNY" },
+                            balanceStartAt = item.optLong("balanceStartAt", 0L),
                         ),
                     )
                 }
@@ -425,6 +426,7 @@ class LedgerStore(context: Context) {
                         account.stockName?.let { put("stockName", it) }
                         put("cardNote", account.cardNote)
                         put("currency", account.currencyCode)
+                        if (account.balanceStartAt > 0L) put("balanceStartAt", account.balanceStartAt)
                     },
                 )
             }
