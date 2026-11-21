@@ -529,7 +529,7 @@ private fun AssetTrendCard(
         title = "资产走势（近 30 天）",
         trailing = {
             Text(
-                text = if (proEnabled) "净值变化" else "PRO",
+                text = if (proEnabled) "净值变化" else "Pro",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -538,13 +538,13 @@ private fun AssetTrendCard(
         if (!proEnabled) {
             Column {
                 Text(
-                    text = "资产走势是 PRO 权益：按天看净值变化。",
+                    text = "资产走势是 Pro 权益：按天看净值变化。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = onNeedPro, shape = RoundedCornerShape(14.dp)) {
-                    Text(text = "开通 PRO 查看")
+                    Text(text = "开通 Pro 查看")
                 }
             }
             return@SectionCard
@@ -639,7 +639,7 @@ private fun SixMonthCard(
         title = "近 6 个月支出",
         trailing = {
             Text(
-                text = if (proEnabled) "合计 ¥${moneyText(total)}" else "PRO",
+                text = if (proEnabled) "合计 ¥${moneyText(total)}" else "Pro",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -648,7 +648,7 @@ private fun SixMonthCard(
         if (!proEnabled) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "图表增强是 PRO 权益：月度对比、全年走势、超支预警。",
+                    text = "图表增强是 Pro 权益：月度对比、全年走势、超支预警。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -657,7 +657,7 @@ private fun SixMonthCard(
                     onClick = onNeedPro,
                     shape = RoundedCornerShape(14.dp),
                 ) {
-                    Text(text = "开通 PRO 查看")
+                    Text(text = "开通 Pro 查看")
                 }
             }
             return@SectionCard
