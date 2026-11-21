@@ -26,8 +26,14 @@ import java.util.concurrent.TimeUnit
  */
 object CrashReport {
 
-    /** ntfy.sh 的匿名主题名；留空则只走系统分享。改这里即可开启自动上传。 */
-    const val UPLOAD_TOPIC = ""
+    /** ntfy 主题名（相当于收件箱）；留空则只走系统分享。 */
+    const val NTFY_TOPIC = "vebk-crash-7f3a91"
+
+    /** ntfy 服务器：默认官方；自建（国内 VPS）时改成自己的地址。 */
+    const val NTFY_SERVER = "https://ntfy.sh"
+
+    /** 可选：PushPlus（国内可直连，微信收推送）的 token；留空则不启用。 */
+    const val PUSHPLUS_TOKEN = ""
 
     private const val MARKER = ".reported"
 
@@ -96,47 +102,83 @@ object CrashReport {
     }
 
     /**
-     * 尝试自动上传。返回 true 表示已经送出去了（此时界面不再弹分享面板）。
-     * 上传是后台线程，调用方在 IO 线程执行即可。
+     * 上传日志：先试 ntfy，失败再试 PushPlus（国内直连）。
+     * 返回 true 表示已经送出去；false 时调用方退回系统分享。
+     * 这是阻塞调用，必须在 IO 线程执行。
      */
     fun upload(context: Context, file: File): Boolean {
-        if (UPLOAD_TOPIC.isBlank()) return false
-        val body = buildText(context, file).take(3500) // ntfy 单条上限 4KB
-        return runCatching {
-            val conn = (java.net.URL("https://ntfy.sh/$UPLOAD_TOPIC").openConnection()
-                as java.net.HttpURLConnection).apply {
-                requestMethod = "POST"
-                connectTimeout = 8000
-                readTimeout = 8000
-                doOutput = true
-                setRequestProperty("Content-Type", "text/plain; charset=utf-8")
-                setRequestProperty("Title", "vebk crash ${versionName(context)}")
-                setRequestProperty("Tags", "boom")
-            }
-            conn.outputStream.use { it.write(body.toByteArray()) }
-            val code = conn.responseCode
-            conn.disconnect()
-            code in 200..299
-        }.getOrDefault(false)
+        val body = buildText(context, file)
+        if (NTFY_TOPIC.isNotBlank() && sendNtfy(context, body.take(3500))) return true
+        if (PUSHPLUS_TOKEN.isNotBlank() && sendPushPlus(context, body.take(18000))) return true
+        return false
     }
 
-    /** 提交（自动上传优先，失败退回分享）。必须在主线程调用（分享需要）。 */
+    /** ntfy：POST 纯文本到主题，手机装 ntfy 订阅该主题即可收到。 */
+    private fun sendNtfy(context: Context, body: String): Boolean = runCatching {
+        val conn = (java.net.URL("$NTFY_SERVER/$NTFY_TOPIC").openConnection()
+            as java.net.HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 6000
+            readTimeout = 6000
+            doOutput = true
+            setRequestProperty("Content-Type", "text/plain; charset=utf-8")
+            setRequestProperty("Title", "vebk 崩溃 ${versionName(context)}")
+            setRequestProperty("Tags", "boom")
+        }
+        conn.outputStream.use { it.write(body.toByteArray()) }
+        val code = conn.responseCode
+        conn.disconnect()
+        code in 200..299
+    }.getOrDefault(false)
+
+    /** PushPlus：国内可直连，token 在 pushplus.plus 微信扫码获取。 */
+    private fun sendPushPlus(context: Context, body: String): Boolean = runCatching {
+        val payload = org.json.JSONObject()
+            .put("token", PUSHPLUS_TOKEN)
+            .put("title", "vebk 崩溃 ${versionName(context)}")
+            .put("content", body)
+            .put("template", "txt")
+            .toString()
+        val conn = (java.net.URL("https://www.pushplus.plus/send").openConnection()
+            as java.net.HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 6000
+            readTimeout = 8000
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json; charset=utf-8")
+        }
+        conn.outputStream.use { it.write(payload.toByteArray()) }
+        val text = conn.inputStream.bufferedReader().use { it.readText() }
+        conn.disconnect()
+        text.contains("\"code\":200") || text.contains("\"code\": 200")
+    }.getOrDefault(false)
+
+    /** 提交：自动上传优先，失败退回系统分享。主线程调用。 */
     fun submit(context: Context, file: File) {
         markHandled(context, file)
-        if (UPLOAD_TOPIC.isNotBlank()) {
-            // 上传走后台，失败再回到主线程弹分享
-            Thread {
-                if (upload(context, file)) {
-                    AppLog.info("崩溃报告", "已上传")
-                } else {
-                    android.os.Handler(android.os.Looper.getMainLooper()).post {
-                        runCatching { share(context, file) }
-                    }
-                }
-            }.start()
-        } else {
-            share(context, file)
+        val main = android.os.Handler(android.os.Looper.getMainLooper())
+        fun toast(msg: String) = main.post {
+            runCatching {
+                android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show()
+            }
         }
+
+        if (NTFY_TOPIC.isBlank() && PUSHPLUS_TOKEN.isBlank()) {
+            share(context, file)
+            return
+        }
+        toast("正在上传日志…")
+        Thread {
+            val ok = upload(context, file)
+            if (ok) {
+                AppLog.info("崩溃报告", "已上传（ntfy/pushplus）")
+                toast("日志已提交，谢谢！")
+            } else {
+                AppLog.warn("崩溃报告", "上传失败，改用系统分享")
+                toast("上传失败，改成手动发送")
+                main.post { runCatching { share(context, file) } }
+            }
+        }.start()
     }
 
     private fun marker(file: File) = File(file.parentFile, file.name + MARKER)
