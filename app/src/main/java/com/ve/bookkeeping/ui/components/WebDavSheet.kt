@@ -303,7 +303,10 @@ fun WebDavSheet(
                             val existing = runCatching { onListBackups() }.getOrDefault(emptyList())
                             if (existing.isNotEmpty()) {
                                 busy = false
-                                confirmOverwrite = existing.first()
+                                // 优先显示带时间戳的那份，比 vebk-latest.json 更有信息量
+                                confirmOverwrite = existing.firstOrNull {
+                                    it.name != "vebk-latest.json"
+                                } ?: existing.first()
                             } else {
                                 runBackup(cfg)
                             }
