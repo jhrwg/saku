@@ -73,6 +73,7 @@ fun HomePage(
     onRecordClick: (LedgerRecord) -> Unit = {},
     noticeText: String = "",
     onNoticeClick: () -> Unit = {},
+    onOpenRecords: () -> Unit = {},
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val bookRecords = records.filter { it.bookName == bookName }
@@ -112,7 +113,7 @@ fun HomePage(
         )
         OverviewCard(summary)
         Spacer(modifier = Modifier.height(14.dp))
-        RecentTransactionsCard(bookRecords, onRecordClick)
+        RecentTransactionsCard(bookRecords, onRecordClick, onOpenRecords)
         // 给浮动按钮留出空间
         Spacer(modifier = Modifier.height(96.dp))
     }
@@ -278,6 +279,7 @@ private fun OverviewCard(summary: HomeSummary) {
 private fun RecentTransactionsCard(
     records: List<LedgerRecord>,
     onRecordClick: (LedgerRecord) -> Unit,
+    onOpenAll: () -> Unit = {},
 ) {
     val extra = LocalAppExtraColors.current
     val recent = records.sortedByDescending { it.occurredAt }.take(5)
@@ -285,7 +287,7 @@ private fun RecentTransactionsCard(
     SectionCard(
         title = "最近交易",
         trailing = {
-            TextButton(onClick = {}) {
+            TextButton(onClick = onOpenAll) {
                 Text(text = "全部", style = MaterialTheme.typography.labelLarge)
             }
         },
