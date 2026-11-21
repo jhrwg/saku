@@ -195,6 +195,11 @@ fun StatsPage(
         Spacer(modifier = Modifier.height(12.dp))
         TrendCard(stats.bars, stats.barLabels)
 
+        if (stats.weekdayBars.any { it > 0f }) {
+            Spacer(modifier = Modifier.height(12.dp))
+            WeekdayCard(stats.weekdayBars, stats.expense)
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
         AssetTrendCard(records = records, accounts = accounts, proEnabled = proEnabled, onNeedPro = onNeedPro)
 
@@ -423,6 +428,53 @@ private fun TagCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun WeekdayCard(values: List<Float>, total: Double) {
+    val labels = listOf("一", "二", "三", "四", "五", "六", "日")
+    val maxIndex = values.indices.maxByOrNull { values[it] } ?: 0
+    val peak = values.getOrElse(maxIndex) { 0f }
+    SectionCard(
+        title = "星期分布",
+        trailing = {
+            Text(
+                text = if (peak > 0f) "周${labels[maxIndex]}最多" else "—",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+    ) {
+        BarTrend(
+            values = values,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp),
+            barColor = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            labels.forEachIndexed { index, label ->
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (index == maxIndex && peak > 0f) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = "合计 ¥${moneyText(total)}，周末花得多可以看看外卖和娱乐",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
