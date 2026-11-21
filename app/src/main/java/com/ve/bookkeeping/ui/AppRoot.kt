@@ -71,7 +71,7 @@ import com.ve.bookkeeping.ui.components.CrashLogSheet
 import com.ve.bookkeeping.ui.components.DataTransferSheet
 import com.ve.bookkeeping.ui.components.LockScreen
 import com.ve.bookkeeping.ui.components.NotificationSheet
-import com.ve.bookkeeping.ui.components.ProRequiredDialog
+import com.ve.bookkeeping.ui.components.ProGateSheet
 import com.ve.bookkeeping.ui.components.RecordActionSheet
 import com.ve.bookkeeping.ui.components.UpdateSheet
 import com.ve.bookkeeping.ui.components.WebDavSheet
@@ -627,10 +627,10 @@ private fun AppContent(
 
     var actionRecord by remember { mutableStateOf<LedgerRecord?>(null) }
     var actionAccount by remember { mutableStateOf<AccountOption?>(null) }
+    var showProGate by remember { mutableStateOf(false) }
     var adjustAccount by remember { mutableStateOf<AccountOption?>(null) }
     var iconEditAccount by remember { mutableStateOf<AccountOption?>(null) }
     var showAppearance by remember { mutableStateOf(false) }
-    var showWebDavProGate by remember { mutableStateOf(false) }
     val webDavClient = remember { WebDavClient() }
 
     /** 备份成功后把附件图片也传到云端 attachments/ 目录。 */
@@ -937,7 +937,7 @@ private fun AppContent(
                     if (appearance.proEnabled) {
                         routeKey = "webdav"
                     } else {
-                        showWebDavProGate = true
+                        showProGate = true
                     }
                 },
                 onOpenAppearance = { showAppearance = true },
@@ -1901,18 +1901,15 @@ private fun AppContent(
         )
     }
 
-    if (showWebDavProGate) {
-        ProRequiredDialog(
-            title = "WebDAV 备份需要 Pro",
-            message = "开通 Pro 后可使用 WebDAV 云备份：保存配置时自动测一次连接，之后每天首次启动自动备份一次。",
-            onUpgrade = {
-                showWebDavProGate = false
-                mainTab = 3
-                routeKey = "pro"
-            },
-            onDismiss = { showWebDavProGate = false },
-        )
-    }
+    // Pro 门槛统一弹窗（规范：文案固定 + 前往 Pro / 以后再说）
+    ProGateSheet(
+        visible = showProGate,
+        onUpgrade = {
+            showProGate = false
+            routeKey = "pro"
+        },
+        onDismiss = { showProGate = false },
+    )
 }
 
 /** 用 -1 表示「不是编辑模式」，方便放进 rememberSaveable。 */
