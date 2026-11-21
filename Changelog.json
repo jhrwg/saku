@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.28",
-    "version":  "1.1.28",
+    "latest":  "1.1.29",
+    "version":  "1.1.29",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.28/vebk-1.1.28.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.28/vebk-1.1.28.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.28/vebk-1.1.28.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.29/vebk-1.1.29.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.29",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 切换首页/资产时悬浮 Tab 位置上跳（FAB 曾在胶囊内部撑高布局）",
+                                       "Tab 栏改用全屏透明层定位，四个页面位置完全固定",
+                                       "内容延伸到底，无截断留白"
+                                   ]
+                     },
                      {
                          "version":  "1.1.28",
                          "date":  "2026-11-21",
