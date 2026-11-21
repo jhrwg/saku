@@ -298,6 +298,7 @@ fun MainScreen(
                             onRecordClick = onRecordClick,
                             noticeText = noticeText,
                             onNoticeClick = onNoticeClick,
+                            onOpenRecords = onOpenRecords,
                         )
 
                         MainTab.Assets -> AssetsPage(
