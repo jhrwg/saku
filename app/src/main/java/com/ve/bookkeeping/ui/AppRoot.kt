@@ -1089,7 +1089,7 @@ private fun AppContent(
                 proEnabled = appearance.proEnabled,
                 onNeedPro = {
                     editingId = NO_EDITING
-                    routeKey = "pro"
+                    showProGate = true
                 },
                 onSave = { record ->
                     val index = records.indexOfFirst { it.id == record.id }
@@ -1464,7 +1464,7 @@ private fun AppContent(
                     lockConfig = lockSettings.load()
                     unlocked = true
                 },
-                onNeedPro = { routeKey = "pro" },
+                onNeedPro = { showProGate = true },
                 onBack = {
                     backToMain()
                 },
@@ -1635,7 +1635,7 @@ private fun AppContent(
             },
             onNeedPro = {
                 actionRecord = null
-                routeKey = "pro"
+                showProGate = true
             },
             onDismiss = { actionRecord = null },
         )
@@ -1891,7 +1891,7 @@ private fun AppContent(
                     )
                 }
             },
-            onNeedPro = { showAppearance = false; routeKey = "pro" },
+            onNeedPro = { showProGate = true },
             themeMode = UiState.themeMode,
             onThemeMode = { mode ->
                 UiState.themeMode = mode
