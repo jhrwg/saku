@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.6",
-    "version":  "1.2.6",
+    "latest":  "1.2.7",
+    "version":  "1.2.7",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.7",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "新增标签功能：我的页功能区展开第二组里的「标签」",
+                                       "记账页可给账目打标签（可多选/新建），标签随账目一起保存",
+                                       "标签页可查看每个标签的使用次数、新建与删除"
+                                   ]
+                     },
                      {
                          "version":  "1.2.6",
                          "date":  "2026-11-21",
