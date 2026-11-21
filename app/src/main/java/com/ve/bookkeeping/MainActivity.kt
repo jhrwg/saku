@@ -18,6 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         AppLog.install(this)
         AppLog.info("启动", "App 冷启动")
+        // 主线程卡死（ANR）也留一份日志，下次启动时和崩溃一样可一键提交
+        runCatching { com.ve.bookkeeping.data.AnrWatchdog(this).start() }
         // 先把界面偏好读进 UiState，再让主题参与首帧组合：
         // 否则第一帧会用「跟随系统」渲染，看上去像先闪一下系统深色/浅色。
         applyUiPrefs()
