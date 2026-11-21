@@ -1,11 +1,11 @@
 {
-    "latest":  "1.1.38-beta",
-    "version":  "1.1.38-beta",
+    "latest":  "1.1.39-beta",
+    "version":  "1.1.39-beta",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.39-beta/vebk-1.1.39-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.39-beta/vebk-1.1.39-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.39-beta/vebk-1.1.39-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,16 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.39-beta",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "新增长按头像名称右侧「编辑」按钮，底部弹窗编辑资料",
+                                       "可编辑：头像（相册选择）、名称（≤12 字）、个性签名（≤30 字）",
+                                       "名称与签名持久化保存，重启保留",
+                                       "设置页移除「外观」（已在「我的」右上角）"
+                                   ]
+                     },
                      {
                          "version":  "1.1.38-beta",
                          "date":  "2026-11-21",
