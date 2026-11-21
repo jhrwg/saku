@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.30",
-    "version":  "1.1.30",
+    "latest":  "1.1.31",
+    "version":  "1.1.31",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.30/vebk-1.1.30.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.31/vebk-1.1.31.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.31/vebk-1.1.31.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.31/vebk-1.1.31.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,17 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.31",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "PRO 新增「测试版检查更新」开关（启动自检下方）",
+                                       "普通用户只看正式版；PRO 可优先接收测试版",
+                                       "更新弹窗：更新日志为固定高度白底区，可滚动不撑高弹窗",
+                                       "更新弹窗三个按钮：直接下载（国内推荐）/ GitHub 下载 / GitHub 镜像",
+                                       "弹窗内直接下载：下载中只显示进度条，完成后自动安装"
+                                   ]
+                     },
                      {
                          "version":  "1.1.30",
                          "date":  "2026-11-21",
