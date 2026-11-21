@@ -71,6 +71,8 @@ import com.ve.bookkeeping.ui.components.CrashLogSheet
 import com.ve.bookkeeping.ui.components.DataTransferSheet
 import com.ve.bookkeeping.ui.components.LockScreen
 import com.ve.bookkeeping.ui.components.NotificationSheet
+import com.ve.bookkeeping.data.CrashReport
+import com.ve.bookkeeping.ui.components.CrashReportSheet
 import com.ve.bookkeeping.ui.components.ProGateSheet
 import com.ve.bookkeeping.ui.components.RecordActionSheet
 import com.ve.bookkeeping.ui.components.UpdateSheet
@@ -628,6 +630,12 @@ private fun AppContent(
     var actionRecord by remember { mutableStateOf<LedgerRecord?>(null) }
     var actionAccount by remember { mutableStateOf<AccountOption?>(null) }
     var showProGate by remember { mutableStateOf(false) }
+    // 上次运行崩溃过（还没提交过）就提示用户提交日志
+    var pendingCrash by remember { mutableStateOf<java.io.File?>(null) }
+    LaunchedEffect(Unit) {
+        pendingCrash = withContext(Dispatchers.IO) { CrashReport.pending(context) }
+        com.ve.bookkeeping.data.AppLog.info("崩溃检查", "待提交崩溃日志 = ${pendingCrash?.name ?: "无"}")
+    }
     var adjustAccount by remember { mutableStateOf<AccountOption?>(null) }
     var iconEditAccount by remember { mutableStateOf<AccountOption?>(null) }
     var showAppearance by remember { mutableStateOf(false) }
@@ -1898,6 +1906,21 @@ private fun AppContent(
                 UiPrefs(context).themeMode = mode
             },
             onDismiss = { showAppearance = false },
+        )
+    }
+    // 上次运行崩溃过（还没提交过）就提示用户提交日志
+    pendingCrash?.let { crashFile ->
+        CrashReportSheet(
+            crashTime = CrashReport.timeOf(crashFile),
+            summary = CrashReport.summary(crashFile),
+            onSubmit = {
+                CrashReport.submit(context, crashFile)
+                pendingCrash = null
+            },
+            onDismiss = {
+                CrashReport.markHandled(context, crashFile)
+                pendingCrash = null
+            },
         )
     }
 
