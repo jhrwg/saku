@@ -38,7 +38,30 @@ fun DataTransferSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Column {
+                Button(
+                    onClick = onExport,
+                    enabled = !busy && recordCount > 0,
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Text(text = if (busy) "处理中…" else "导出全部账目（CSV）")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = onImport,
+                    enabled = !busy,
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Text(text = "从 CSV 导入（追加）")
+                }
+            }
+        },
+    ) {
         Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -57,25 +80,6 @@ fun DataTransferSheet(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = onExport,
-                enabled = !busy && recordCount > 0,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = if (busy) "处理中…" else "导出全部账目（CSV）")
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-            OutlinedButton(
-                onClick = onImport,
-                enabled = !busy,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = "从 CSV 导入（追加）")
-            }
 
             Spacer(modifier = Modifier.height(10.dp))
             Text(
