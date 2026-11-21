@@ -410,9 +410,9 @@ fun EntryPage(
                         onClick = { openKeypad() },
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Row(
+                    androidx.compose.foundation.layout.FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         AmountChip(text = currency.code)
                         AmountChip(
@@ -421,7 +421,6 @@ fun EntryPage(
                             highlight = categories.any { it.id == selectedCategoryId },
                         )
                         AmountChip(text = fromAccount.name)
-                        Spacer(modifier = Modifier.weight(1f))
                         if (discount > 0) {
                             AmountChip(text = "优惠 -${formatMoney(discount)}", highlight = true)
                         }
@@ -1040,6 +1039,8 @@ private fun AmountSection(
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
                 color = color,
+                maxLines = 1,
+                modifier = Modifier.weight(1f, fill = false),
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
