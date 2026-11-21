@@ -91,7 +91,18 @@ fun AppearanceSheet(
         }
     }
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Button(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Text(text = "完成")
+            }
+        },
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -282,14 +293,6 @@ fun AppearanceSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = "完成")
-            }
         }
     }
 
