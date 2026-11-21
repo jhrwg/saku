@@ -220,7 +220,7 @@ fun MainScreen(
         if (layoutMode != LayoutMode.Compact) {
             // 大屏 / 横屏：左侧图标导轨，替代底部悬浮 Tab
             androidx.compose.material3.NavigationRail(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 1f),
                 modifier = Modifier.fillMaxHeight(),
             ) {
                 tabs.forEachIndexed { index, tab ->
@@ -382,7 +382,8 @@ fun MainScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(32.dp),
-                    color = MaterialTheme.colorScheme.surface,
+                    // 不透明：背景图模式下避免后面账目透出来
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 1f),
                     shadowElevation = 10.dp,
                 ) {
                     Row(
