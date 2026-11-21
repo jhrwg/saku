@@ -639,14 +639,27 @@ private fun AppContent(
         debts = debts.toList(),
     )
 
-    // 本地持久化：账本数据一有变化就落盘（250ms 合并），
-    // 之前一直没有调用 LedgerStore.save，导致重启后数据回到初始状态。
+    // 本地持久化：任何变化立刻落盘；关键操作（记账/删除/恢复）再用 persistNow 同步写一次，
+    // 否则「记完马上清后台」会丢掉最后一笔（之前 250ms 防抖留下的漏洞）。
     LaunchedEffect(Unit) {
         snapshotFlow { currentSnapshot() }
-            .collectLatest { snap ->
-                delay(250)
+            .collect { snap ->
                 withContext(Dispatchers.IO) { runCatching { store.save(snap) } }
             }
+    }
+
+    /** 同步写盘：用于用户刚做完、不能丢的操作。 */
+    fun persistNow() {
+        runCatching { store.save(currentSnapshot()) }
+    }
+
+    // 切到后台 / 锁屏前再兜一次盘，MIUI 这类系统可能随时冻结进程
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) persistNow()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     /**
@@ -1056,6 +1069,7 @@ private fun AppContent(
                         val baseId = (records.maxOfOrNull { it.id } ?: 0L) + 1
                         records.addAll(0, expandInstallments(record, baseId))
                     }
+                    persistNow()
                     // 超支提醒：一旦跨过预算就发一条（同一天不重复刷）
                     runCatching {
                         if (appearance.notificationsEnabled && budget.monthlyLimit > 0) {
@@ -1239,6 +1253,11 @@ private fun AppContent(
                     if (restored == null) {
                         false
                     } else {
+                        // 覆盖前先把本机数据另存一份，后悔了还能找回来
+                        runCatching {
+                            File(context.filesDir, "ledger.before-restore.json")
+                                .writeText(store.encode(currentSnapshot()))
+                        }
                         records.clear()
                         records.addAll(restored.records)
                         accounts.clear()
@@ -1248,6 +1267,17 @@ private fun AppContent(
                         selectedBook = restored.selectedBook
                         recurringRules.clear()
                         recurringRules.addAll(restored.recurringRules)
+                        // 之前漏了预算 / 回收站 / 车贷房贷 / 借入借出，恢复后对不上
+                        budget = restored.budget
+                        trash.clear()
+                        trash.addAll(restored.trash)
+                        loans.clear()
+                        loans.addAll(restored.loans)
+                        debts.clear()
+                        debts.addAll(restored.debts)
+                        // 账本列表坏了会导致首页只剩空：兜一下底
+                        if (books.isEmpty()) books.add(DemoData.ledgerBooks.first())
+                        if (books.none { it == selectedBook }) selectedBook = books.first()
 
                         // 附件：本地缺的从云端拉回来
                         runCatching {
@@ -1277,6 +1307,7 @@ private fun AppContent(
 
                         defaultAccountId = null
                         settingsStore.saveDefaultAccount(null)
+                        persistNow()
                         true
                     }
                 } , onDismiss = { mainTab = 3; routeKey = "main" },
@@ -1388,9 +1419,16 @@ private fun AppContent(
                         record
                     }
                     records.add(0, restored)
+                    persistNow()
                 },
-                onDeleteForever = { record -> trash.removeAll { it.id == record.id } },
-                onClear = { trash.clear() },
+                onDeleteForever = { record ->
+                    trash.removeAll { it.id == record.id }
+                    persistNow()
+                },
+                onClear = {
+                    trash.clear()
+                    persistNow()
+                },
                 onBack = {
                     mainTab = 3
                     routeKey = "main"
@@ -1439,6 +1477,7 @@ private fun AppContent(
                     records.removeAll { it.id == record.id }
                     trash.removeAll { it.id == record.id }
                     trash.add(0, record)
+                    persistNow()
                 },
                 records = records,
                 accounts = accounts,
@@ -1634,6 +1673,7 @@ private fun AppContent(
                     trash.removeAll { it.id == record.id }
                     trash.add(0, records[index])
                     records.removeAt(index)
+                    persistNow()
                 }
                 actionRecord = null
             },
