@@ -1,11 +1,11 @@
 {
-    "latest": "1.3.10-beta",
-    "version": "1.3.10-beta",
+    "latest": "1.3.11-beta",
+    "version": "1.3.11-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.11-beta/vebk-1.3.11-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.11-beta/vebk-1.3.11-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.11-beta/vebk-1.3.11-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,19 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.3.11-beta",
+            "date": "2026-11-21",
+            "notes": [
+                "新增",
+                "• 背景图从 3 张增加到 8 张：新增粉霞、赤陶、海雾、薄荷、沙岩",
+                "• 每张背景图都配了对应主题色，选背景会自动切过去（原有 3 张也适配了）",
+                "调整",
+                "• 新增「青绿」主题色，主题色共 9 套",
+                "• 背景图选择改成 3 列宫格，8 张一屏看全",
+                "• 背景图模式下底部 Tab 栏改为不透明，避免账目从栏后透出来"
+            ]
+        },
         {
             "version": "1.3.10-beta",
             "date": "2026-11-21",
