@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,7 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Category
-import androidx.compose.material.icons.rounded.Cloud
+import androidx.compose.material.icons.rounded.CloudSync
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.House
@@ -81,7 +82,6 @@ fun ProfilePage(
     books: List<String>,
     categoryCount: Int,
     recurringCount: Int,
-    webDavConfigured: Boolean,
     proEnabled: Boolean,
     appVersion: String,
     updateStatus: String?,
@@ -119,7 +119,7 @@ fun ProfilePage(
     onAvatarPicked: (String) -> Unit = {},
     userName: String = "折耳根记账",
     userBio: String = "记录你的一点一滴",
-    onSaveProfile: (String, String, String) -> Unit = { _, _, _ -> },
+    onSaveProfile: (String, String, String) -> Unit,
 ) {
     val activeDays = activeDayCount(records)
     val total = records.size
@@ -146,6 +146,14 @@ fun ProfilePage(
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f),
             )
+            IconButton(onClick = onOpenWebDav) {
+                Icon(
+                    imageVector = Icons.Rounded.CloudSync,
+                    contentDescription = "云备份",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
             IconButton(onClick = onOpenAppearance) {
                 Icon(
                     imageVector = Icons.Rounded.Palette,
@@ -208,11 +216,7 @@ fun ProfilePage(
             FunctionTileRow(
                 tiles = listOf(
                     Triple(Icons.Rounded.ReceiptLong, "全部记录", "$total 笔") to onOpenRecords,
-                    Triple(
-                        Icons.Rounded.Cloud,
-                        "云备份",
-                        if (webDavConfigured) "已配置" else "未配置",
-                    ) to onOpenWebDav,
+                    Triple(Icons.Rounded.Sell, "标签", "打标签") to onOpenTags,
                     Triple(Icons.Rounded.SyncAlt, "导入导出", "CSV") to onOpenTransfer,
                     Triple(Icons.Rounded.DeleteSweep, "回收站", "可恢复") to onOpenTrash,
                 ),
@@ -235,7 +239,6 @@ fun ProfilePage(
                 Spacer(modifier = Modifier.height(8.dp))
                 FunctionTileRow(
                     tiles = listOf(
-                        Triple(Icons.Rounded.Sell, "标签", "打标签") to onOpenTags,
                         Triple(Icons.Rounded.AccountBalanceWallet, "借入借出", "待收待还") to onOpenDebts,
                     ),
                 )
@@ -617,6 +620,8 @@ private fun ProfileEditSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .imePadding()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 28.dp),
         ) {
@@ -697,6 +702,7 @@ private fun ProfileEditSheet(
                 ) { Text(text = "取消") }
                 androidx.compose.material3.Button(
                     onClick = {
+                        com.ve.bookkeeping.data.AppLog.info("资料", "点击保存 name=$name bio=$bio")
                         onSave(
                             name.trim().ifBlank { "折耳根记账" },
                             bio.trim().ifBlank { "记录你的一点一滴" },
