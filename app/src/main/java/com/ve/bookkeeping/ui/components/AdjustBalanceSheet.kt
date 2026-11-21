@@ -86,7 +86,19 @@ fun AdjustBalanceSheet(
     val target = amountText.trim().toDoubleOrNull()
     val diff = target?.minus(currentBalance)
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Button(
+                onClick = { target?.let { onConfirm(mode, it) } },
+                enabled = target != null,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Text(text = "确认修改")
+            }
+        },
+    ) {
             Text(
                 text = "修改余额 · $accountName",
                 style = MaterialTheme.typography.titleMedium,
@@ -172,13 +184,5 @@ fun AdjustBalanceSheet(
             }
 
             Spacer(modifier = Modifier.height(14.dp))
-            Button(
-                onClick = { target?.let { onConfirm(mode, it) } },
-                enabled = target != null,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = "确认修改")
-            }
         }
 }
