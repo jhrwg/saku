@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.25",
-    "version":  "1.1.25",
+    "latest":  "1.1.26",
+    "version":  "1.1.26",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.25/vebk-1.1.25.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.25/vebk-1.1.25.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.25/vebk-1.1.25.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.26",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "悬浮 Tab 栏改为透明底叠加，页面内容可从下方穿出",
+                                       "缩小公告宽度，避免挤到左侧标题",
+                                       "更新弹窗三通道下载（Gitee / GitHub / 镜像）"
+                                   ]
+                     },
                      {
                          "version":  "1.1.25",
                          "date":  "2026-11-21",
