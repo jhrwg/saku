@@ -1,11 +1,11 @@
 {
-    "latest": "1.3.9-beta",
-    "version": "1.3.9-beta",
+    "latest": "1.3.10-beta",
+    "version": "1.3.10-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.9-beta/vebk-1.3.9-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.9-beta/vebk-1.3.9-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.9-beta/vebk-1.3.9-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.10-beta/vebk-1.3.10-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,15 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.3.10-beta",
+            "date": "2026-11-21",
+            "notes": [
+                "调整",
+                "• 「我的」页功能区改为自动补位：展开后功能按顺序排满 4 列，不会在前面留空",
+                "• 发版流程改为「先传安装包 → 校验直链 → 再发更新通知」，避免提示有更新却下载失败"
+            ]
+        },
         {
             "version": "1.3.9-beta",
             "date": "2026-11-21",
