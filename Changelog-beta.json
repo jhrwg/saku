@@ -1,11 +1,11 @@
 {
-    "latest":  "1.1.32-beta",
-    "version":  "1.1.32-beta",
+    "latest":  "1.1.33-beta",
+    "version":  "1.1.33-beta",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.32-beta/vebk-1.1.32-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.32-beta/vebk-1.1.32-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.32-beta/vebk-1.1.32-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.33-beta",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "测试版：验证更新弹窗（固定高度日志区 + 三下载按钮）",
+                                       "验证测试版通道：PRO 开启后启动自检与手动检查均取测试版"
+                                   ]
+                     },
                      {
                          "version":  "1.1.32-beta",
                          "date":  "2026-11-21",
