@@ -1,11 +1,11 @@
 {
-    "latest":  "1.1.33-beta",
-    "version":  "1.1.33-beta",
+    "latest":  "1.1.34-beta",
+    "version":  "1.1.34-beta",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.33-beta/vebk-1.1.33-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.34-beta/vebk-1.1.34-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.34-beta/vebk-1.1.34-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.34-beta/vebk-1.1.34-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,14 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.34-beta",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 带 -beta 后缀的版本号无法识别，导致开启测试版后检查更新没反应",
+                                       "版本比较支持 -beta / -rc / +build 后缀"
+                                   ]
+                     },
                      {
                          "version":  "1.1.33-beta",
                          "date":  "2026-11-21",
