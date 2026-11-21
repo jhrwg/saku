@@ -411,7 +411,7 @@ private fun TagCard(
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                if (stat.share >= 0.005f) {
+                if (stat.share >= 0.02f) {
                     LinearProgressIndicator(
                         progress = { stat.share.coerceIn(0f, 1f) },
                         modifier = Modifier
