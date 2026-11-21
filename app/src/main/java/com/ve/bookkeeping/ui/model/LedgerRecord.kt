@@ -269,7 +269,13 @@ fun accountBalances(
     base: List<AccountOption>,
 ): List<AccountOption> {
     val deltas = mutableMapOf<String, Double>()
-    records.forEach { record ->
+    // 账户可以设置「余额起始时间」：更早的账目仍留在流水里，但不参与该账户的余额推算
+    val startAt = base.associate { it.id to it.balanceStartAt }
+    records.filter { record ->
+        val from = startAt[record.fromAccount.id] ?: 0L
+        val to = record.toAccount?.let { startAt[it.id] } ?: 0L
+        record.occurredAt >= from && record.occurredAt >= to
+    }.forEach { record ->
         when (record.type) {
             EntryType.Expense ->
                 deltas.merge(record.fromAccount.id, -record.amount, Double::plus)
