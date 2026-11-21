@@ -1,11 +1,11 @@
 {
-    "latest": "1.3.13-beta",
-    "version": "1.3.13-beta",
+    "latest": "1.3.14-beta",
+    "version": "1.3.14-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.13-beta/vebk-1.3.13-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.14-beta/vebk-1.3.14-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.14-beta/vebk-1.3.14-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.14-beta/vebk-1.3.14-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,16 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.3.14-beta",
+            "date": "2026-11-22",
+            "notes": [
+                "调整",
+                "• 全部底部弹窗迁移到统一骨架：高度不超过半屏、内容可滚、按钮固定",
+                "• 涉及外观、币种选择、分类选择、记录操作、账户类型、通知、导入导出、更新、更新日志、编辑资料、测试版提示",
+                "• 所有 Pro 拦截统一走「该功能需开启 Pro 权益」弹窗，不再直接跳页面"
+            ]
+        },
         {
             "version": "1.3.13-beta",
             "date": "2026-11-22",
