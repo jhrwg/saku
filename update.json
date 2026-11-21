@@ -1,10 +1,10 @@
 {
-    "latest":  "1.1.26",
-    "version":  "1.1.26",
+    "latest":  "1.1.27",
+    "version":  "1.1.27",
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.26/vebk-1.1.26.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.27/vebk-1.1.27.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.27/vebk-1.1.27.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.27/vebk-1.1.27.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -12,6 +12,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.27",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "修复 悬浮 Tab 遮挡右下角「记一笔」按钮：FAB 移到 Tab 之上层",
+                                       "修复 内容无法滚到悬浮 Tab 下方：去掉多余底部留白",
+                                       "更新弹窗三通道下载（Gitee / GitHub / 镜像）"
+                                   ]
+                     },
                      {
                          "version":  "1.1.26",
                          "date":  "2026-11-21",
