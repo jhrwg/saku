@@ -199,7 +199,13 @@ fun AppearanceSheet(
 
             if (backgroundEnabled) {
                 Spacer(modifier = Modifier.height(10.dp))
-                // 8 张内置背景 + 1 张自选，按 3 列排；每张背景都带一个推荐主题色
+                Text(
+                    text = "背景图自带配色，不会改动上面的主题色",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                // 8 张内置背景 + 1 张自选，按 3 列排
                 val cells = builtInBackgroundList.indices.toList() + CUSTOM_BACKGROUND_INDEX
                 cells.chunked(3).forEach { row ->
                     Row(
