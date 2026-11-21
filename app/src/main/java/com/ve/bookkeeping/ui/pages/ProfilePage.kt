@@ -2,6 +2,8 @@
 
 package com.ve.bookkeeping.ui.pages
 
+import com.ve.bookkeeping.ui.components.AppSheet
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -596,18 +598,11 @@ private fun ProfileEditSheet(
         if (path.isBlank()) null else runCatching { android.graphics.BitmapFactory.decodeFile(path) }.getOrNull()
     }
 
-    androidx.compose.material3.ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
+    AppSheet(onDismiss = onDismiss) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 28.dp),
+                .padding(bottom = 4.dp),
         ) {
             Text(
                 text = "编辑资料",
