@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.ve.bookkeeping.R
+import com.ve.bookkeeping.ui.components.AppSheet
 import com.ve.bookkeeping.ui.components.SectionCard
 import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.Flag
@@ -430,12 +431,11 @@ fun ProPage(
     }
 
     if (showBetaWarning) {
-        ModalBottomSheet(onDismissRequest = { showBetaWarning = false }) {
+        AppSheet(onDismiss = { showBetaWarning = false }) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 28.dp),
+                    .padding(bottom = 4.dp),
             ) {
                 Text(
                     text = "开启测试版前请先了解风险",
