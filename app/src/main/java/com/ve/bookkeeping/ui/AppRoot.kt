@@ -109,7 +109,6 @@ import com.ve.bookkeeping.ui.model.installmentDate
 import androidx.compose.animation.animateColorAsState
 import com.ve.bookkeeping.ui.pages.DownloaderPage
 import com.ve.bookkeeping.ui.pages.FeedbackPage
-import com.ve.bookkeeping.ui.pages.SettingsPage
 import com.ve.bookkeeping.ui.components.AccountIconPickerDialog
 import androidx.compose.ui.draw.clipToBounds
 import com.ve.bookkeeping.ui.pages.TagsPage
@@ -145,8 +144,6 @@ sealed interface AppRoute {
     data object Licenses : AppRoute
 
     data object Loans : AppRoute
-
-    data object Settings : AppRoute
 
     data object Downloader : AppRoute
 
@@ -377,8 +374,6 @@ private fun AppContent(
         routeKey == "licenses" -> AppRoute.Licenses
 
         routeKey == "loans" -> AppRoute.Loans
-
-        routeKey == "settings" -> AppRoute.Settings
 
         routeKey == "downloader" -> AppRoute.Downloader
 
@@ -975,7 +970,6 @@ private fun AppContent(
                 onOpenSecurity = { routeKey = "security" },
                 onOpenTrash = { routeKey = "trash" },
                 onOpenAbout = { routeKey = "about" },
-                onOpenSettings = { routeKey = "settings" },
                 onOpenFeedback = { routeKey = "feedback" },
                 onOpenTags = { routeKey = "tags" },
                 onOpenDebts = { routeKey = "debts" },
@@ -1316,38 +1310,6 @@ private fun AppContent(
             AppRoute.Downloader -> DownloaderPage(
                 url = downloadUrl,
                 versionLabel = downloadVersion,
-                onBack = {
-                    mainTab = 3
-                    routeKey = "main"
-                },
-            )
-
-            AppRoute.Settings -> SettingsPage(
-                fontSizeLabel = when (UiState.fontScale) {
-                    UiPrefs.FONT_SMALL -> "小"
-                    UiPrefs.FONT_LARGE -> "大"
-                    UiPrefs.FONT_XLARGE -> "特大"
-                    else -> "标准"
-                },
-                crashCount = crashCount,
-                onOpenNotifications = { showNotifications = true },
-                onOpenSecurity = { routeKey = "security" },
-                onOpenCrashLog = {
-                    crashText = CrashLogger.latest(context)
-                    crashCount = CrashLogger.logs(context).size
-                    showCrashLog = true
-                },
-                onCycleFontScale = {
-                    val prefs = UiPrefs(context)
-                    val next = when (prefs.fontScale) {
-                        UiPrefs.FONT_SMALL -> UiPrefs.FONT_NORMAL
-                        UiPrefs.FONT_NORMAL -> UiPrefs.FONT_LARGE
-                        UiPrefs.FONT_LARGE -> UiPrefs.FONT_XLARGE
-                        else -> UiPrefs.FONT_SMALL
-                    }
-                    prefs.fontScale = next
-                    UiState.fontScale = next
-                },
                 onBack = {
                     mainTab = 3
                     routeKey = "main"
