@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -167,48 +168,95 @@ fun UpdateSheet(
     AppSheet(
         onDismiss = { if (!downloading) onDismiss() },
         footer = {
-            Column {
-                TextButton(onClick = onOpenChangelog, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "查看历史更新日志", style = MaterialTheme.typography.labelMedium)
-                }
-                if (!info.force) {
-                    TextButton(
-                        onClick = onDismiss,
-                        enabled = !downloading,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(text = "稍后再说", style = MaterialTheme.typography.labelMedium)
+            if (downloading || apkFile != null) {
+                // 下载中：进度固定在底部，避免按钮被误点
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = if (apkFile != null) Icons.Rounded.CheckCircle else Icons.Rounded.Download,
+                            contentDescription = null,
+                            tint = if (apkFile != null) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = statusText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.fillMaxWidth().height(8.dp),
+                    )
+                    if (error != null) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(
+                            onClick = { apkFile?.let { install(it) } },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(text = "重新安装") }
+                    }
+                }
+            } else {
+                // 三个下载通道：悬浮固定在底部，不随更新日志滚动
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { info.directUrl?.let { startDownload(it) } },
+                        enabled = !info.directUrl.isNullOrBlank(),
+                        modifier = Modifier.weight(1f).height(46.dp),
+                        shape = RoundedCornerShape(14.dp),
+                    ) { Text(text = "GitHub", style = MaterialTheme.typography.labelLarge) }
+                    OutlinedButton(
+                        onClick = {
+                            val url = info.mirrorUrl ?: info.directUrl
+                            url?.let { startDownload(it) }
+                        },
+                        enabled = !(info.mirrorUrl ?: info.directUrl).isNullOrBlank(),
+                        modifier = Modifier.weight(1f).height(46.dp),
+                        shape = RoundedCornerShape(14.dp),
+                    ) { Text(text = "在线", style = MaterialTheme.typography.labelLarge) }
+                    Button(
+                        onClick = { info.giteeUrl?.let { startDownload(it) } },
+                        enabled = !info.giteeUrl.isNullOrBlank(),
+                        modifier = Modifier.weight(1f).height(46.dp),
+                        shape = RoundedCornerShape(14.dp),
+                    ) { Text(text = "Gitee", style = MaterialTheme.typography.labelLarge) }
                 }
             }
         },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                                .padding(bottom = 4.dp),
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = "发现新版本 v${info.version}",
+                text = "发现新版本",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = if (currentVersion == info.version) "当前已是最新" else "当前版本 v$currentVersion",
+                text = "现版 v$currentVersion → 新版 v${info.version}",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            // 更新日志：固定高度白底区域，超长时内部滚动（不撑高弹窗）
+            Spacer(modifier = Modifier.height(10.dp))
+            // 日志区：固定高度、内部滚动，不影响底部按钮
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.fillMaxWidth().height(180.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.6f),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant,
+                ),
+                modifier = Modifier.fillMaxWidth().height(176.dp),
             ) {
                 Text(
-                    text = info.changelog,
+                    text = info.changelog.ifBlank { "本次更新没有写日志" },
                     style = MaterialTheme.typography.bodySmall,
                     lineHeight = 21.sp,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -219,107 +267,35 @@ fun UpdateSheet(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            if (downloading || apkFile != null) {
-                // 下载中/已下载：只显示进度
+            error?.let {
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = if (apkFile != null) Icons.Rounded.CheckCircle else Icons.Rounded.Download,
+                        imageVector = Icons.Rounded.ErrorOutline,
                         contentDescription = null,
-                        tint = if (apkFile != null) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(16.dp),
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = statusText,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier.fillMaxWidth().height(8.dp),
-                )
-                if (error != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = error ?: "",
+                        text = it,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.error,
                     )
-                    TextButton(
-                        onClick = { apkFile?.let { install(it) } },
-                        modifier = Modifier.fillMaxWidth(),
-                    ) { Text(text = "重新安装") }
                 }
-            } else {
-                Button(
-                    onClick = {
-                        val url = info.giteeUrl ?: info.directUrl ?: info.mirrorUrl
-                        if (url.isNullOrBlank()) {
-                            error = "作者还没填下载地址"
-                        } else {
-                            startDownload(url)
-                        }
-                    },
-                    enabled = !info.giteeUrl.isNullOrBlank(),
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Download,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp),
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "直接下载（国内推荐）", style = MaterialTheme.typography.titleSmall)
-                }
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    OutlinedButton(
-                        onClick = {
-                            info.directUrl?.let { startDownload(it) }
-                        },
-                        enabled = !info.directUrl.isNullOrBlank(),
-                        modifier = Modifier.weight(1f).height(44.dp),
-                        shape = RoundedCornerShape(14.dp),
-                    ) { Text(text = "GitHub 下载", style = MaterialTheme.typography.labelLarge) }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    OutlinedButton(
-                        onClick = {
-                            info.mirrorUrl?.let { startDownload(it) }
-                        },
-                        enabled = !info.mirrorUrl.isNullOrBlank(),
-                        modifier = Modifier.weight(1f).height(44.dp),
-                        shape = RoundedCornerShape(14.dp),
-                    ) { Text(text = "GitHub 镜像", style = MaterialTheme.typography.labelLarge) }
+            // 次要操作：历史日志 / 稍后（不能挤占底部三个下载按钮）
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = onOpenChangelog) {
+                    Text(text = "查看历史更新日志", style = MaterialTheme.typography.labelMedium)
                 }
-
-                error?.let {
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Rounded.ErrorOutline,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.size(16.dp),
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.error,
-                        )
+                if (!info.force) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(onClick = onDismiss) {
+                        Text(text = "稍后再说", style = MaterialTheme.typography.labelMedium)
                     }
                 }
-
             }
         }
     }
