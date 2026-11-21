@@ -114,7 +114,6 @@ fun MainScreen(
     defaultAccountId: String?,
     categoryCount: Int,
     recurringCount: Int,
-    webDavConfigured: Boolean,
     onSelectBook: (String) -> Unit,
     onAddBook: (String) -> Unit,
     onStartEntry: (Double) -> Unit,
@@ -177,6 +176,14 @@ fun MainScreen(
         onPageChanged(pagerState.currentPage)
     }
 
+    // 外部改了要显示的 tab（例如从二级页面返回原来的那一页）时，把 pager 也切过去
+    LaunchedEffect(initialPage) {
+        val target = initialPage.coerceIn(0, tabs.lastIndex)
+        if (pagerState.currentPage != target) {
+            pagerState.scrollToPage(target)
+        }
+    }
+
     var showAddBookDialog by remember { mutableStateOf(false) }
     var showBookProGate by remember { mutableStateOf(false) }
     var showKeypad by remember { mutableStateOf(false) }
@@ -220,17 +227,8 @@ fun MainScreen(
                     androidx.compose.material3.NavigationRailItem(
                         selected = selected,
                         onClick = {
-                            if (pagerState.currentPage != index) {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(
-                                        page = index,
-                                        animationSpec = spring(
-                                            dampingRatio = 0.85f,
-                                            stiffness = Spring.StiffnessMediumLow,
-                                        ),
-                                    )
-                                }
-                            }
+                            // 跨多页直接跳过去：逐页滚过去要滚三四个屏幕，体感很卡
+                            switchToPage(pagerState, index, scope)
                         },
                         icon = {
                             Icon(
@@ -270,7 +268,7 @@ fun MainScreen(
                         .fillMaxSize()
                         // 离中心越远越模糊，进出都像从雾里升起/消散
                         .blur(
-                            radius = 16.dp * distance,
+                            radius = 6.dp * distance,
                             edgeTreatment = BlurredEdgeTreatment.Unbounded,
                         )
                         .graphicsLayer {
@@ -328,7 +326,6 @@ fun MainScreen(
                             books = books,
                             categoryCount = categoryCount,
                             recurringCount = recurringCount,
-                            webDavConfigured = webDavConfigured,
                             proEnabled = proEnabled,
                             appVersion = appVersion,
                             updateStatus = updateStatus,
@@ -343,6 +340,9 @@ fun MainScreen(
                             onOpenTags = onOpenTags,
                             onOpenDebts = onOpenDebts,
                             avatarPath = avatarPath,
+                            userName = userName,
+                            userBio = userBio,
+                            onSaveProfile = onSaveProfile,
                             onAvatarPicked = onAvatarPicked,
                             onOpenTrash = onOpenTrash,
                             onOpenAbout = onOpenAbout,
@@ -394,17 +394,7 @@ fun MainScreen(
                             val selected = pagerState.currentPage == index
                             Surface(
                                 onClick = {
-                                    if (pagerState.currentPage != index) {
-                                        scope.launch {
-                                            pagerState.animateScrollToPage(
-                                                page = index,
-                                                animationSpec = spring(
-                                                    dampingRatio = 0.85f,
-                                                    stiffness = Spring.StiffnessMediumLow,
-                                                ),
-                                            )
-                                        }
-                                    }
+                                    switchToPage(pagerState, index, scope)
                                 },
                                 shape = RoundedCornerShape(50),
                                 color = if (selected) {
@@ -539,16 +529,30 @@ fun MainScreen(
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * 切换底部 Tab。
+ *
+ * 相邻页用弹簧动效（有前后关系的连贯感）；跨两页以上直接落位，
+ * 否则要连续滚过好几个整屏（首页 → 我的），又慢又卡。
+ */
+private fun switchToPage(
+    pagerState: androidx.compose.foundation.pager.PagerState,
+    index: Int,
+    scope: kotlinx.coroutines.CoroutineScope,
+) {
+    if (pagerState.currentPage == index) return
+    val distance = kotlin.math.abs(pagerState.currentPage - index)
+    scope.launch {
+        if (distance <= 1) {
+            pagerState.animateScrollToPage(
+                page = index,
+                animationSpec = androidx.compose.animation.core.spring(
+                    dampingRatio = 0.85f,
+                    stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow,
+                ),
+            )
+        } else {
+            pagerState.scrollToPage(index)
+        }
+    }
+}
