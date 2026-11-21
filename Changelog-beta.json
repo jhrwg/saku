@@ -1,11 +1,11 @@
 {
-    "latest":  "1.1.37-beta",
-    "version":  "1.1.37-beta",
+    "latest":  "1.1.38-beta",
+    "version":  "1.1.38-beta",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.37-beta/vebk-1.1.37-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.1.38-beta/vebk-1.1.38-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,17 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.1.38-beta",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "「我的」页按新稿重做：顶部外观+设置按钮、资料卡（头像/名称/一句话+天数·账本·记录数三格）",
+                                       "PRO 横幅改为通栏显示",
+                                       "功能区改为两行四列宫格：分类/周期记账/预算/车贷房贷 + 全部记录/云备份/导入导出/回收站",
+                                       "更多精简为：检查更新 / 更新日志 / 意见反馈 / 关于",
+                                       "通知与外观设置收进右上角「设置」页"
+                                   ]
+                     },
                      {
                          "version":  "1.1.37-beta",
                          "date":  "2026-11-21",
