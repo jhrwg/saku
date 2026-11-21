@@ -15,6 +15,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -43,7 +44,18 @@ fun NotificationSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val presets = listOf(8 to 0, 12 to 0, 18 to 0, 20 to 0, 21 to 30)
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            OutlinedButton(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth().height(46.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Text(text = "完成")
+            }
+        },
+    ) {
         Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,13 +151,6 @@ fun NotificationSheet(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = "完成")
-            }
         }
     }
 }
