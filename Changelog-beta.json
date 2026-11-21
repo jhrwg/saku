@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.7",
-    "version":  "1.2.7",
+    "latest":  "1.2.8",
+    "version":  "1.2.8",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.7-beta/vebk-1.2.7-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.8-beta/vebk-1.2.8-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.8",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "全部记录支持批量操作：长按任意一条进入多选",
+                                       "批量选择后可全选/取消，一键删除（进回收站）",
+                                       "批量模式下自动禁用左滑，避免误删"
+                                   ]
+                     },
                      {
                          "version":  "1.2.7",
                          "date":  "2026-11-21",
