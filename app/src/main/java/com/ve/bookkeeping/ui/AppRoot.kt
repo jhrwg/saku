@@ -60,6 +60,8 @@ import com.ve.bookkeeping.data.WebDavConfig
 import com.ve.bookkeeping.data.WebDavResult
 import com.ve.bookkeeping.data.WebDavSettings
 import com.ve.bookkeeping.ui.components.AccountActionSheet
+import com.ve.bookkeeping.ui.components.AdjustBalanceSheet
+import com.ve.bookkeeping.ui.components.BalanceAdjustMode
 import com.ve.bookkeeping.ui.components.AppBackgroundLayer
 import com.ve.bookkeeping.ui.components.AppearanceSheet
 import com.ve.bookkeeping.ui.components.CUSTOM_BACKGROUND_INDEX
@@ -75,6 +77,7 @@ import com.ve.bookkeeping.ui.components.WebDavSheet
 import com.ve.bookkeeping.ui.components.todayStamp
 import com.ve.bookkeeping.ui.components.formatMoney
 import com.ve.bookkeeping.ui.model.AccountOption
+import com.ve.bookkeeping.ui.model.accountBalances
 import com.ve.bookkeeping.ui.model.AccountType
 import com.ve.bookkeeping.ui.model.BudgetConfig
 import com.ve.bookkeeping.ui.model.EntryCategory
@@ -623,6 +626,7 @@ private fun AppContent(
 
     var actionRecord by remember { mutableStateOf<LedgerRecord?>(null) }
     var actionAccount by remember { mutableStateOf<AccountOption?>(null) }
+    var adjustAccount by remember { mutableStateOf<AccountOption?>(null) }
     var iconEditAccount by remember { mutableStateOf<AccountOption?>(null) }
     var showAppearance by remember { mutableStateOf(false) }
     var showWebDavProGate by remember { mutableStateOf(false) }
@@ -691,10 +695,14 @@ private fun AppContent(
      * 2. 否则用上次记账的账户；
      * 3. 都没有就用第一个账户。
      */
+    // 当前余额 = 初始余额 + 账目影响；对外一律用这一份，避免和资产页对不上
+    fun liveAccounts(): List<AccountOption> = accountBalances(records, accounts)
+
     fun preferredAccount(): AccountOption {
-        val byDefault = accounts.firstOrNull { it.id == defaultAccountId }
-        val byLast = accounts.firstOrNull { it.id == lastAccountId }
-        return byDefault ?: byLast ?: accounts.firstOrNull() ?: DemoData.NoAccount
+        val live = liveAccounts()
+        val byDefault = live.firstOrNull { it.id == defaultAccountId }
+        val byLast = live.firstOrNull { it.id == lastAccountId }
+        return byDefault ?: byLast ?: live.firstOrNull() ?: DemoData.NoAccount
     }
 
     // 周期记账：启动时把错过的日期补记上
@@ -1065,7 +1073,7 @@ private fun AppContent(
                 expenseCategories = expenseCategories,
                 incomeCategories = incomeCategories,
                 transferCategories = transferCategories,
-                accounts = accounts,
+                accounts = liveAccounts(),
                 defaultAccount = preferredAccount(),
                 onAddCategory = { type, name -> addCategory(type, name, null) },
                 onAddSubCategory = { type, name, parentId -> addCategory(type, name, parentId) },
@@ -1134,6 +1142,9 @@ private fun AppContent(
                 currencies = DemoData.currencies,
                 editAccount = current.editingAccountId?.let { id ->
                     accounts.firstOrNull { it.id == id }
+                },
+                currentBalance = current.editingAccountId?.let { id ->
+                    accountBalances(records, accounts).firstOrNull { it.id == id }?.balance
                 },
                 onSave = { account ->
                     val index = accounts.indexOfFirst { it.id == account.id }
@@ -1706,10 +1717,92 @@ private fun AppContent(
         )
     }
 
+    adjustAccount?.let { account ->
+        val live = accountBalances(records, accounts).firstOrNull { it.id == account.id }
+        AdjustBalanceSheet(
+            accountName = account.name,
+            currentBalance = live?.balance ?: account.balance,
+            initialBalance = accounts.firstOrNull { it.id == account.id }?.balance ?: account.balance,
+            onConfirm = { mode, target ->
+                val index = accounts.indexOfFirst { it.id == account.id }
+                if (index >= 0) {
+                    val current = live?.balance ?: accounts[index].balance
+                    val delta = target - current
+                    when (mode) {
+                        BalanceAdjustMode.DifferenceRecord -> {
+                            if (kotlin.math.abs(delta) >= 0.005) {
+                                val isIncome = delta > 0
+                                val categories = if (isIncome) incomeCategories else expenseCategories
+                                val category = categories.lastOrNull() ?: categories.first()
+                                val record = LedgerRecord(
+                                    id = (records.maxOfOrNull { it.id } ?: 0L) + 1,
+                                    bookName = selectedBook,
+                                    type = if (isIncome) EntryType.Income else EntryType.Expense,
+                                    amount = kotlin.math.abs(delta),
+                                    category = category,
+                                    fromAccount = accounts[index],
+                                    note = "修改余额补记",
+                                    currency = DemoData.currencies.first(),
+                                    occurredAt = System.currentTimeMillis(),
+                                )
+                                records.add(0, record)
+                            }
+                        }
+                        BalanceAdjustMode.DifferenceTransfer -> {
+                            if (kotlin.math.abs(delta) >= 0.005) {
+                                val transferCategory = transferCategories.firstOrNull()
+                                    ?: expenseCategories.first()
+                                val record = if (delta > 0) {
+                                    // 从「无账户」转进来：只加余额，不动别的账户
+                                    LedgerRecord(
+                                        id = (records.maxOfOrNull { it.id } ?: 0L) + 1,
+                                        bookName = selectedBook,
+                                        type = EntryType.Transfer,
+                                        amount = delta,
+                                        category = transferCategory,
+                                        fromAccount = DemoData.NoAccount,
+                                        toAccount = accounts[index],
+                                        note = "修改余额补记",
+                                        currency = DemoData.currencies.first(),
+                                        occurredAt = System.currentTimeMillis(),
+                                    )
+                                } else {
+                                    LedgerRecord(
+                                        id = (records.maxOfOrNull { it.id } ?: 0L) + 1,
+                                        bookName = selectedBook,
+                                        type = EntryType.Transfer,
+                                        amount = -delta,
+                                        category = transferCategory,
+                                        fromAccount = accounts[index],
+                                        toAccount = null,
+                                        note = "修改余额补记",
+                                        currency = DemoData.currencies.first(),
+                                        occurredAt = System.currentTimeMillis(),
+                                    )
+                                }
+                                records.add(0, record)
+                            }
+                        }
+                        BalanceAdjustMode.ResetCurrent ->
+                            accounts[index] = accounts[index].copy(
+                                balance = target,
+                                balanceStartAt = System.currentTimeMillis(),
+                            )
+                        BalanceAdjustMode.SetInitial ->
+                            accounts[index] = accounts[index].copy(balance = target)
+                    }
+                }
+                adjustAccount = null
+            },
+            onDismiss = { adjustAccount = null },
+        )
+    }
+
     actionAccount?.let { account ->
         AccountActionSheet(
             account = account,
             isDefault = account.id == defaultAccountId,
+            initialBalance = accounts.firstOrNull { it.id == account.id }?.balance ?: account.balance,
             onSetDefault = {
                 val next = if (defaultAccountId == account.id) null else account.id
                 defaultAccountId = next
@@ -1718,6 +1811,10 @@ private fun AppContent(
             },
             onChangeIcon = {
                 iconEditAccount = account
+                actionAccount = null
+            },
+            onAdjustBalance = {
+                adjustAccount = account
                 actionAccount = null
             },
             onMoveUp = {
