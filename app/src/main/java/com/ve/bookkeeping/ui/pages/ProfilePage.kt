@@ -220,21 +220,18 @@ fun ProfilePage(
             )
 
             if (expandedFunctions) {
-                Spacer(modifier = Modifier.height(8.dp))
-                FunctionTileRow(
-                    tiles = listOf(
-                        ProfileTile(Icons.Rounded.NotificationsActive, "通知", onOpenNotifications),
-                        ProfileTile(Icons.Rounded.Lock, "安全", onOpenSecurity),
-                        ProfileTile(Icons.Rounded.BugReport, "日志", onOpenCrashLog),
-                    ),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                FunctionTileRow(
-                    tiles = listOf(
-                        ProfileTile(Icons.Rounded.AccountBalanceWallet, "借入借出", onOpenDebts),
-                        ProfileTile(Icons.Rounded.CurrencyExchange, "汇率", onOpenRates),
-                    ),
-                )
+                // 展开的功能合并成一个列表再按 4 个一行排，前面不会留空位；
+                // 最后一行不满的位置由 FunctionTileRow 在末尾补空。
+                listOf(
+                    ProfileTile(Icons.Rounded.NotificationsActive, "通知", onOpenNotifications),
+                    ProfileTile(Icons.Rounded.Lock, "安全", onOpenSecurity),
+                    ProfileTile(Icons.Rounded.BugReport, "日志", onOpenCrashLog),
+                    ProfileTile(Icons.Rounded.AccountBalanceWallet, "借入借出", onOpenDebts),
+                    ProfileTile(Icons.Rounded.CurrencyExchange, "汇率", onOpenRates),
+                ).chunked(4).forEach { row ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    FunctionTileRow(tiles = row)
+                }
             }
         }
 
