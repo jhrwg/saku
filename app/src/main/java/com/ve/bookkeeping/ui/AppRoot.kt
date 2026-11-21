@@ -61,6 +61,7 @@ import com.ve.bookkeeping.data.WebDavResult
 import com.ve.bookkeeping.data.WebDavSettings
 import com.ve.bookkeeping.ui.components.AccountActionSheet
 import com.ve.bookkeeping.ui.components.AdjustBalanceSheet
+import com.ve.bookkeeping.ui.components.LogCenterSheet
 import com.ve.bookkeeping.ui.components.BalanceAdjustMode
 import com.ve.bookkeeping.ui.components.AppBackgroundLayer
 import com.ve.bookkeeping.ui.components.AppearanceSheet
@@ -1522,70 +1523,7 @@ private fun AppContent(
     }
 
     if (showCrashLog) {
-        val logText = remember(logFilter, logRevision, showCrashLog) {
-            AppLog.text(context, logFilter)
-        }
-        val logCount = remember(logFilter, logRevision, showCrashLog) {
-            AppLog.count(context, logFilter)
-        }
-        CrashLogSheet(
-            logText = logText.ifBlank { null },
-            count = logCount,
-            filter = logFilter,
-            onFilterChange = { logFilter = it },
-            onShare = {
-                runCatching {
-                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 日志")
-                        putExtra(android.content.Intent.EXTRA_TEXT, logText)
-                    }
-                    context.startActivity(
-                        android.content.Intent.createChooser(intent, "发送日志"),
-                    )
-                }
-            },
-            onShareTxt = {
-                runCatching {
-                    val dir = java.io.File(context.cacheDir, "logs").apply { mkdirs() }
-                    val stamp = java.text.SimpleDateFormat(
-                        "yyyyMMdd-HHmmss",
-                        java.util.Locale.CHINA,
-                    ).format(java.util.Date())
-                    val file = java.io.File(dir, "vebk-log-$stamp.txt")
-                    file.writeText(logText)
-
-                    val uri = androidx.core.content.FileProvider.getUriForFile(
-                        context,
-                        "${context.packageName}.fileprovider",
-                        file,
-                    )
-                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 日志")
-                        putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
-                    context.startActivity(
-                        android.content.Intent.createChooser(intent, "发送日志"),
-                    )
-                }
-            },
-            onCopy = {
-                runCatching {
-                    val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
-                        as? android.content.ClipboardManager
-                    clipboard?.setPrimaryClip(
-                        android.content.ClipData.newPlainText("日志", logText),
-                    )
-                }
-            },
-            onClear = {
-                AppLog.clear(context)
-                logRevision += 1
-            },
-            onDismiss = { showCrashLog = false },
-        )
+        LogCenterSheet(onDismiss = { showCrashLog = false })
     }
 
     if (showTransfer) {
