@@ -87,6 +87,7 @@ import com.ve.bookkeeping.ui.pages.CategoryManagePage
 import com.ve.bookkeeping.ui.pages.CreateAccountPage
 import com.ve.bookkeeping.ui.pages.EntryPage
 import com.ve.bookkeeping.ui.pages.ProPage
+import com.ve.bookkeeping.ui.pages.RatesPage
 import com.ve.bookkeeping.ui.pages.RecordsPage
 import com.ve.bookkeeping.ui.pages.RecurringPage
 import com.ve.bookkeeping.ui.pages.SecurityPage
@@ -151,6 +152,8 @@ sealed interface AppRoute {
     data object WebDav : AppRoute
 
     data object Tags : AppRoute
+
+    data object Rates : AppRoute
 
     data object Debts : AppRoute
 
@@ -402,6 +405,8 @@ private fun AppContent(
         routeKey == "webdav" -> AppRoute.WebDav
 
         routeKey == "tags" -> AppRoute.Tags
+
+        routeKey == "rates" -> AppRoute.Rates
 
         routeKey == "debts" -> AppRoute.Debts
 
@@ -941,7 +946,7 @@ private fun AppContent(
                     UiPrefs.FONT_XLARGE -> "特大"
                     else -> "标准"
                 },
-                materialYouLabel = if (UiState.materialYou) "已开启 · PRO" else "跟随壁纸（PRO）",
+                materialYouLabel = if (UiState.materialYou) "已开启 · Pro" else "跟随壁纸（Pro）",
                 onToggleMaterialYou = {
                     if (!appearance.proEnabled) {
                         mainTab = 3
@@ -994,6 +999,7 @@ private fun AppContent(
                 onOpenAbout = { routeKey = "about" },
                 onOpenFeedback = { routeKey = "feedback" },
                 onOpenTags = { routeKey = "tags" },
+                onOpenRates = { routeKey = "rates" },
                 onOpenDebts = { routeKey = "debts" },
                 noticeText = if (notice.enabled) notice.text else "",
                 onNoticeClick = {
@@ -1191,6 +1197,10 @@ private fun AppContent(
                 onBack = {
                     backToMain()
                 },
+            )
+
+            AppRoute.Rates -> RatesPage(
+                onBack = { backToMain() },
             )
 
             AppRoute.Tags -> TagsPage(
@@ -1857,8 +1867,8 @@ private fun AppContent(
 
     if (showWebDavProGate) {
         ProRequiredDialog(
-            title = "WebDAV 备份需要 PRO",
-            message = "开通 PRO 后可使用 WebDAV 云备份：保存配置时自动测一次连接，之后每天首次启动自动备份一次。",
+            title = "WebDAV 备份需要 Pro",
+            message = "开通 Pro 后可使用 WebDAV 云备份：保存配置时自动测一次连接，之后每天首次启动自动备份一次。",
             onUpgrade = {
                 showWebDavProGate = false
                 mainTab = 3
