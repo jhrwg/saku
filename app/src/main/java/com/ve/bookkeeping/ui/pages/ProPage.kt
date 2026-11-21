@@ -208,7 +208,7 @@ private fun BenefitTile(benefit: ProBenefit, modifier: Modifier = Modifier) {
 private val PRO_BENEFITS = listOf(
     ProBenefit(Icons.Rounded.Insights, "账本不限量", "多账本随意建，账目独立"),
     ProBenefit(Icons.Rounded.Cloud, "WebDAV 备份", "连接测试、手动 / 每日自动备份"),
-    ProBenefit(Icons.Rounded.Palette, "自定义主题", "8 套单色 + 自选色 / 自选背景"),
+    ProBenefit(Icons.Rounded.Palette, "自定义主题", "9 套单色 + 8 张背景 + 自选色 / 自选图"),
     ProBenefit(Icons.Rounded.Savings, "预算全套", "周 / 月 / 年预算、滚动结转、每日额度"),
     ProBenefit(Icons.Rounded.Flag, "储蓄目标", "本期结余 / 目标进度"),
     ProBenefit(Icons.Rounded.ReceiptLong, "退款 · 报销标记", "标记后不计入收支与预算"),
