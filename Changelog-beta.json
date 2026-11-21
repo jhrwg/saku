@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.5",
-    "version":  "1.2.5",
+    "latest":  "1.2.6",
+    "version":  "1.2.6",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.5-beta/vebk-1.2.5-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.5-beta/vebk-1.2.5-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.5-beta/vebk-1.2.5-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.6-beta/vebk-1.2.6-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -13,6 +13,15 @@
                    "link":  ""
                },
     "releases":  [
+                     {
+                         "version":  "1.2.6",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "新增「日历」页：底部 Tab 位于资产与统计之间",
+                                       "月视图展示每天收支，可切上下月；点某天查看当天明细",
+                                       "日历格子内显示当天支出或收入简额（超万显示 x.x万）"
+                                   ]
+                     },
                      {
                          "version":  "1.2.5",
                          "date":  "2026-11-21",
