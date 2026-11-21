@@ -26,6 +26,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.ve.bookkeeping.data.BiometricUnlock
 import com.ve.bookkeeping.data.LockConfig
 import com.ve.bookkeeping.data.LockSettings
+import com.ve.bookkeeping.data.LogFilter
 import com.ve.bookkeeping.data.LockType
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
+import com.ve.bookkeeping.data.AppLog
 import com.ve.bookkeeping.data.AppSettings
 import com.ve.bookkeeping.data.AppearanceSettings
 import com.ve.bookkeeping.data.ChangelogGroups
@@ -62,7 +64,6 @@ import com.ve.bookkeeping.ui.components.AppBackgroundLayer
 import com.ve.bookkeeping.ui.components.AppearanceSheet
 import com.ve.bookkeeping.ui.components.CUSTOM_BACKGROUND_INDEX
 import com.ve.bookkeeping.ui.components.ChangelogSheet
-import com.ve.bookkeeping.data.CrashLogger
 import com.ve.bookkeeping.ui.components.CrashLogSheet
 import com.ve.bookkeeping.ui.components.DataTransferSheet
 import com.ve.bookkeeping.ui.components.LockScreen
@@ -344,6 +345,27 @@ private fun AppContent(
     var createTypeOrdinal by rememberSaveable { mutableIntStateOf(-1) }
     var editingAccountId by rememberSaveable { mutableStateOf("") }
     var mainTab by rememberSaveable { mutableIntStateOf(0) }
+    // 进入二级页面前记下所在的 tab，返回时回到这一页，而不是固定跳首页
+    var routeOriginTab by rememberSaveable { mutableIntStateOf(0) }
+    var prevRouteKey by remember { mutableStateOf("main") }
+    LaunchedEffect(routeKey) {
+        val from = prevRouteKey
+        prevRouteKey = routeKey
+        if (from == "main" && routeKey != "main") {
+            routeOriginTab = mainTab
+        }
+    }
+
+    /** 返回上一级：回到进入子页面时所在的 tab（而不是固定跳首页）。 */
+    fun backToMain() {
+        mainTab = routeOriginTab
+        routeKey = "main"
+    }
+
+    // 记录页面跳转，排查「返回跳错页」时能看出从哪来、去哪
+    LaunchedEffect(routeKey) {
+        AppLog.info("页面", "跳转 route=$routeKey fromTab=$routeOriginTab 当前tab=$mainTab")
+    }
 
     val route: AppRoute = when {
         routeKey == "entry" ->
@@ -443,8 +465,9 @@ private fun AppContent(
 
     /* 崩溃日志 */
     var showCrashLog by remember { mutableStateOf(false) }
-    var crashCount by remember { mutableStateOf(CrashLogger.logs(context).size) }
-    var crashText by remember { mutableStateOf<String?>(null) }
+    var logFilter by remember { mutableStateOf(LogFilter.All) }
+    // 清空/刷新日志时 +1，触发重新读取
+    var logRevision by remember { mutableIntStateOf(0) }
 
     /* 锁屏：数字密码 / 手势 / 指纹 */
     val lockSettings = remember { LockSettings(context) }
@@ -876,7 +899,6 @@ private fun AppContent(
                 defaultAccountId = defaultAccountId,
                 categoryCount = expenseCategories.size + incomeCategories.size + transferCategories.size,
                 recurringCount = recurringRules.size,
-                webDavConfigured = webDavConfig.isConfigured,
                 initialPage = mainTab,
                 onSelectBook = { selectedBook = it },
                 onAddBook = { name ->
@@ -990,6 +1012,7 @@ private fun AppContent(
                 userName = UiState.userName,
                 userBio = UiState.userBio,
                 onSaveProfile = { name, bio, path ->
+                    AppLog.info("资料", "写入 userName=$name userBio=$bio avatar=$path")
                     val prefs = UiPrefs(context)
                     prefs.userName = name
                     prefs.userBio = bio
@@ -1011,11 +1034,11 @@ private fun AppContent(
                     }
                 },
                 onOpenCrashLog = {
-                    crashText = CrashLogger.latest(context)
-                    crashCount = CrashLogger.logs(context).size
+                    logFilter = LogFilter.All
+                    logRevision += 1
                     showCrashLog = true
                 },
-                crashCount = crashCount,
+                crashCount = AppLog.count(context, LogFilter.All),
                 budgetSummary = if (budget.isSet) {
                     "本月预算 ¥${formatMoney(budget.monthlyLimit)}"
                 } else {
@@ -1051,7 +1074,6 @@ private fun AppContent(
                 proEnabled = appearance.proEnabled,
                 onNeedPro = {
                     editingId = NO_EDITING
-                    mainTab = 3
                     routeKey = "pro"
                 },
                 onSave = { record ->
@@ -1064,6 +1086,10 @@ private fun AppContent(
                         records.addAll(0, expandInstallments(record, baseId))
                     }
                     persistNow()
+                    AppLog.info(
+                        "记账",
+                        "保存 ${record.type.name} ¥${record.amount} ${record.category.label} 账户=${record.fromAccount.name}",
+                    )
                     // 超支提醒：一旦跨过预算就发一条（同一天不重复刷）
                     runCatching {
                         if (appearance.notificationsEnabled && budget.monthlyLimit > 0) {
@@ -1089,13 +1115,11 @@ private fun AppContent(
                         settingsStore.saveLastAccount(record.fromAccount.id)
                     }
                     editingId = NO_EDITING
-                    mainTab = 0
-                    routeKey = "main"
+                    backToMain()
                 },
                 onBack = {
                     editingId = NO_EDITING
-                    mainTab = 0
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1108,12 +1132,10 @@ private fun AppContent(
                 onSave = { account ->
                     val index = accounts.indexOfFirst { it.id == account.id }
                     if (index >= 0) accounts[index] = account else accounts.add(account)
-                    mainTab = 1
-                    routeKey = "main"
+                    backToMain()
                 },
                 onBack = {
-                    mainTab = 1
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1146,8 +1168,7 @@ private fun AppContent(
                     onSettingsChange(appearance.copy(proEnabled = false))
                 },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1155,8 +1176,7 @@ private fun AppContent(
                 appVersion = appVersion,
                 proEnabled = appearance.proEnabled,
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1169,8 +1189,7 @@ private fun AppContent(
                 },
                 onDelete = { debt -> debts.removeAll { it.id == debt.id } },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1194,8 +1213,7 @@ private fun AppContent(
                     }
                 },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1304,15 +1322,14 @@ private fun AppContent(
                         persistNow()
                         true
                     }
-                } , onDismiss = { mainTab = 3; routeKey = "main" },
+                } , onDismiss = { backToMain() },
             )
 
             AppRoute.Downloader -> DownloaderPage(
                 url = downloadUrl,
                 versionLabel = downloadVersion,
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1347,8 +1364,7 @@ private fun AppContent(
                 },
                 onDelete = { loan -> loans.removeAll { it.id == loan.id } },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1357,8 +1373,7 @@ private fun AppContent(
                 onOpenPrivacy = { routeKey = "privacy" },
                 onOpenLicenses = { routeKey = "licenses" },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1382,6 +1397,7 @@ private fun AppContent(
                     }
                     records.add(0, restored)
                     persistNow()
+                    AppLog.info("恢复", "从回收站恢复 ${restored.category.label} ¥${restored.amount}")
                 },
                 onDeleteForever = { record ->
                     trash.removeAll { it.id == record.id }
@@ -1392,8 +1408,7 @@ private fun AppContent(
                     persistNow()
                 },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1429,8 +1444,7 @@ private fun AppContent(
                 },
                 onNeedPro = { routeKey = "pro" },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1440,6 +1454,7 @@ private fun AppContent(
                     trash.removeAll { it.id == record.id }
                     trash.add(0, record)
                     persistNow()
+                    AppLog.info("删除", "记录 ${record.category.label} ¥${record.amount} 移入回收站")
                 },
                 records = records,
                 accounts = accounts,
@@ -1447,8 +1462,7 @@ private fun AppContent(
                 initialTag = pendingTagFilter,
                 onBack = {
                     pendingTagFilter = null
-                    mainTab = 0
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1458,12 +1472,10 @@ private fun AppContent(
                 expenseCategories = expenseCategories.filter { it.parentId == null },
                 onSave = { next ->
                     budget = next
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
 
@@ -1481,8 +1493,7 @@ private fun AppContent(
                 },
                 onDelete = { rule -> recurringRules.removeAll { it.id == rule.id } },
                 onBack = {
-                    mainTab = 3
-                    routeKey = "main"
+                    backToMain()
                 },
             )
         }
@@ -1490,65 +1501,67 @@ private fun AppContent(
     }
 
     if (showCrashLog) {
+        val logText = remember(logFilter, logRevision, showCrashLog) {
+            AppLog.text(context, logFilter)
+        }
+        val logCount = remember(logFilter, logRevision, showCrashLog) {
+            AppLog.count(context, logFilter)
+        }
         CrashLogSheet(
-            logText = crashText,
-            count = crashCount,
+            logText = logText.ifBlank { null },
+            count = logCount,
+            filter = logFilter,
+            onFilterChange = { logFilter = it },
             onShare = {
-                crashText?.let { text ->
-                    runCatching {
-                        val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 崩溃日志")
-                            putExtra(android.content.Intent.EXTRA_TEXT, text)
-                        }
-                        context.startActivity(
-                            android.content.Intent.createChooser(intent, "发送崩溃日志"),
-                        )
+                runCatching {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 日志")
+                        putExtra(android.content.Intent.EXTRA_TEXT, logText)
                     }
+                    context.startActivity(
+                        android.content.Intent.createChooser(intent, "发送日志"),
+                    )
                 }
             },
             onShareTxt = {
-                crashText?.let { text ->
-                    runCatching {
-                        val dir = java.io.File(context.cacheDir, "crash_logs").apply { mkdirs() }
-                        val stamp = java.text.SimpleDateFormat(
-                            "yyyyMMdd-HHmmss",
-                            java.util.Locale.CHINA,
-                        ).format(java.util.Date())
-                        val file = java.io.File(dir, "vebk-crash-$stamp.txt")
-                        file.writeText(text)
+                runCatching {
+                    val dir = java.io.File(context.cacheDir, "logs").apply { mkdirs() }
+                    val stamp = java.text.SimpleDateFormat(
+                        "yyyyMMdd-HHmmss",
+                        java.util.Locale.CHINA,
+                    ).format(java.util.Date())
+                    val file = java.io.File(dir, "vebk-log-$stamp.txt")
+                    file.writeText(logText)
 
-                        val uri = androidx.core.content.FileProvider.getUriForFile(
-                            context,
-                            "${context.packageName}.fileprovider",
-                            file,
-                        )
-                        val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 崩溃日志")
-                            putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                            addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        }
-                        context.startActivity(
-                            android.content.Intent.createChooser(intent, "发送崩溃日志"),
-                        )
+                    val uri = androidx.core.content.FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file,
+                    )
+                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(android.content.Intent.EXTRA_SUBJECT, "折耳根记账 日志")
+                        putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
+                    context.startActivity(
+                        android.content.Intent.createChooser(intent, "发送日志"),
+                    )
                 }
             },
             onCopy = {
-                crashText?.let { text ->
-                    val clipboard =
-                        context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
-                            as? android.content.ClipboardManager
+                runCatching {
+                    val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
+                        as? android.content.ClipboardManager
                     clipboard?.setPrimaryClip(
-                        android.content.ClipData.newPlainText("崩溃日志", text),
+                        android.content.ClipData.newPlainText("日志", logText),
                     )
                 }
             },
             onClear = {
-                CrashLogger.clear(context)
-                crashCount = 0
-                crashText = null
+                AppLog.clear(context)
+                logRevision += 1
             },
             onDismiss = { showCrashLog = false },
         )
@@ -1636,6 +1649,7 @@ private fun AppContent(
                     trash.add(0, records[index])
                     records.removeAt(index)
                     persistNow()
+                    AppLog.info("删除", "记录 ${record.category.label} ¥${record.amount} 移入回收站")
                 }
                 actionRecord = null
             },
@@ -1662,7 +1676,6 @@ private fun AppContent(
             },
             onNeedPro = {
                 actionRecord = null
-                mainTab = 3
                 routeKey = "pro"
             },
             onDismiss = { actionRecord = null },
@@ -1832,7 +1845,7 @@ private fun AppContent(
                     )
                 }
             },
-            onNeedPro = { showAppearance = false; mainTab = 3; routeKey = "pro" },
+            onNeedPro = { showAppearance = false; routeKey = "pro" },
             themeMode = UiState.themeMode,
             onThemeMode = { mode ->
                 UiState.themeMode = mode
