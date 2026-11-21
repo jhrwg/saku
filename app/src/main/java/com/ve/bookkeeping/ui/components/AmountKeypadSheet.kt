@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Backspace
@@ -79,6 +80,7 @@ fun InlineAmountKeypad(
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
     keyHeight: Dp = 46.dp,
+    columns: Int = 3,
 ) {
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     Column(
@@ -87,7 +89,7 @@ fun InlineAmountKeypad(
             .padding(horizontal = 16.dp)
             .padding(top = 6.dp),
     ) {
-        keypadKeys.chunked(3).forEach { rowKeys ->
+        keypadKeys.chunked(columns).forEach { rowKeys ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -105,6 +107,9 @@ fun InlineAmountKeypad(
                         },
                     )
                 }
+                repeat(columns - rowKeys.size) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -116,7 +121,6 @@ fun InlineAmountKeypad(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f),
             )
-            TextButton(onClick = { onKey("⌫") }) { Text(text = "退格") }
             TextButton(onClick = onDone) { Text(text = "收起") }
         }
     }
@@ -141,6 +145,9 @@ fun AmountKeypadSheet(
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     val amount = amountText.toDoubleOrNull() ?: 0.0
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    // 横屏等矮屏：键矮一点 + 内容可滚动，保证「完成」能点到
+    val shortScreen = androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp < 520
+    val keyHeight = if (shortScreen) 38.dp else 54.dp
 
     fun press(key: String) {
         val next = keypadPress(amountText, key) ?: return
@@ -156,6 +163,7 @@ fun AmountKeypadSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(androidx.compose.foundation.rememberScrollState())
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 24.dp),
         ) {
@@ -211,6 +219,7 @@ fun AmountKeypadSheet(
                         KeypadKey(
                             label = key,
                             modifier = Modifier.weight(1f),
+                            height = keyHeight,
                             onClick = { press(key) },
                         )
                     }
