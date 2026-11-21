@@ -96,7 +96,49 @@ fun LogCenterSheet(
         }
     }
 
-    AppSheet(onDismiss = onDismiss) {
+    AppSheet(
+        onDismiss = onDismiss,
+        footer = {
+            Column {
+                Button(
+                    onClick = { exportTxt() },
+                    enabled = logText.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth().height(46.dp),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Text(text = "导出 txt 文件")
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = {
+                            val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
+                                as? android.content.ClipboardManager
+                            clipboard?.setPrimaryClip(
+                                android.content.ClipData.newPlainText("日志", header() + logText),
+                            )
+                        },
+                        enabled = logText.isNotBlank(),
+                        modifier = Modifier.weight(1f).height(44.dp),
+                        shape = RoundedCornerShape(14.dp),
+                    ) {
+                        Text(text = "复制全文")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            AppLog.clear(context)
+                            revision += 1
+                        },
+                        enabled = count > 0,
+                        modifier = Modifier.weight(1f).height(44.dp),
+                        shape = RoundedCornerShape(14.dp),
+                    ) {
+                        Text(text = "清空日志", color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        },
+    ) {
             Text(
                 text = "日志",
                 style = MaterialTheme.typography.titleMedium,
@@ -154,42 +196,5 @@ fun LogCenterSheet(
                 color = MaterialTheme.colorScheme.onSurface,
             )
 
-            Spacer(modifier = Modifier.height(14.dp))
-            Button(
-                onClick = { exportTxt() },
-                enabled = logText.isNotBlank(),
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-            ) {
-                Text(text = "导出 txt 文件")
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(
-                    onClick = {
-                        val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
-                            as? android.content.ClipboardManager
-                        clipboard?.setPrimaryClip(
-                            android.content.ClipData.newPlainText("日志", header() + logText),
-                        )
-                    },
-                    enabled = logText.isNotBlank(),
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp),
-                ) {
-                    Text(text = "复制全文")
-                }
-                OutlinedButton(
-                    onClick = {
-                        AppLog.clear(context)
-                        revision += 1
-                    },
-                    enabled = count > 0,
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp),
-                ) {
-                    Text(text = "清空日志", color = MaterialTheme.colorScheme.error)
-                }
-            }
         }
 }
