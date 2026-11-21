@@ -187,7 +187,6 @@ fun EntryPage(
     var childPickerFor by remember { mutableStateOf<EntryCategory?>(null) }
     var addChildFor by remember { mutableStateOf<EntryCategory?>(null) }
 
-    var showAmountKeypad by remember { mutableStateOf(false) }
     var showFeeKeypad by remember { mutableStateOf(false) }
     var showAccountPicker by remember { mutableStateOf(false) }
     var showToAccountPicker by remember { mutableStateOf(false) }
@@ -240,8 +239,11 @@ fun EntryPage(
 
     var lastSaveAt by remember { mutableStateOf(0L) }
 
-    // —— 金额输入：竖屏用内嵌键盘（点了立刻改数字），矮屏退回底部面板 ——
-    val canInlineKeypad = LocalConfiguration.current.screenHeightDp >= 520
+    // —— 金额输入：内嵌键盘，点了立刻改数字；矮屏用 4 列小键，避免吃掉整屏 ——
+    val configuration = LocalConfiguration.current
+    val shortScreen = configuration.screenHeightDp < 520
+    val keypadColumns = if (shortScreen) 4 else 3
+    val keypadKeyHeight = if (shortScreen) 34.dp else 46.dp
     var keypadOpen by rememberSaveable { mutableStateOf(false) }
     var amountInput by rememberSaveable { mutableStateOf(editableAmount(amount)) }
 
@@ -306,11 +308,13 @@ fun EntryPage(
         bottomBar = {
             Surface(color = MaterialTheme.colorScheme.surface) {
                 Column(modifier = Modifier.navigationBarsPadding()) {
-                    if (keypadOpen && canInlineKeypad) {
+                    if (keypadOpen) {
                         InlineAmountKeypad(
                             amountText = amountInput,
                             onKey = { pressAmountKey(it) },
                             onDone = { keypadOpen = false },
+                            keyHeight = keypadKeyHeight,
+                            columns = keypadColumns,
                         )
                     }
                     Button(
@@ -403,9 +407,7 @@ fun EntryPage(
                         symbol = currency.symbol,
                         amountText = formatMoney(amount),
                         color = amountColor,
-                        onClick = {
-                            if (canInlineKeypad) openKeypad() else showAmountKeypad = true
-                        },
+                        onClick = { openKeypad() },
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
@@ -817,19 +819,6 @@ fun EntryPage(
                 discount = value.coerceAtMost(base - 0.01).coerceAtLeast(0.0)
                 amount = (base - discount).coerceAtLeast(0.01)
                 showDiscountKeypad = false
-            },
-        )
-    }
-
-    if (showAmountKeypad) {
-        AmountKeypadSheet(
-            title = "修改金额",
-            subtitle = type.label,
-            initialAmount = amount,
-            onDismiss = { showAmountKeypad = false },
-            onDone = { value ->
-                amount = value
-                showAmountKeypad = false
             },
         )
     }
