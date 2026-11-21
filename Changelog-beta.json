@@ -1,11 +1,11 @@
 {
-    "latest": "1.2.24",
-    "version": "1.2.24",
+    "latest": "1.2.25",
+    "version": "1.2.25",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.24-beta/vebk-1.2.24-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.2.25-beta/vebk-1.2.25-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.2.25-beta/vebk-1.2.25-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.25-beta/vebk-1.2.25-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,25 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.2.25",
+            "date": "2026-11-21",
+            "notes": [
+                "修复",
+                "• 编辑资料点保存没反应（保存动作没接到页面上），现在改完立刻生效、重启也还在",
+                "• 记录页左滑删除后列表不刷新，删掉的账目还挂在列表里",
+                "• 从二级页面返回时跳到首页 / 统计等无关页面，现在会回到你进来的那一页",
+                "调整",
+                "• 云备份入口移到我的页右上角，和外观、设置一样的纯图标",
+                "• 首页公告仍是跑马灯滚动，长文案会完整滚完",
+                "优化",
+                "• 首页切到我的页这类跨页切换不再逐页滚动，直接切过去，明显更快",
+                "• 页面切换的模糊效果减弱，滑动和切换更跟手",
+                "新增",
+                "• 日志改成全量记录：启动、记账、删除、恢复、页面跳转、崩溃都会记下来",
+                "• 日志弹窗可选择「全部 / 崩溃 / 运行」，支持导出 txt 一键发送"
+            ]
+        },
         {
             "version": "1.2.24",
             "date": "2026-11-21",
