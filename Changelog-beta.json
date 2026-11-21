@@ -1,11 +1,11 @@
 {
-    "latest":  "1.2.14",
-    "version":  "1.2.14",
+    "latest":  "1.2.15",
+    "version":  "1.2.15",
     "beta":  true,
     "pan":  "https://pan.baidu.com/s/你的链接",
-    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.14-beta/vebk-1.2.14-beta.apk",
-    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.14-beta/vebk-1.2.14-beta.apk",
-    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.14-beta/vebk-1.2.14-beta.apk",
+    "gitee":  "https://gitee.com/yijiang772/saku/releases/download/v1.2.15-beta/vebk-1.2.15-beta.apk",
+    "direct":  "https://github.com/jhrwg/saku/releases/download/v1.2.15-beta/vebk-1.2.15-beta.apk",
+    "mirror":  "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.2.15-beta/vebk-1.2.15-beta.apk",
     "force":  false,
     "notice":  {
                    "enabled":  true,
@@ -14,7 +14,18 @@
                },
     "releases":  [
                      {
-                         "version":  "1.2.14",
+                         "version":  "1.2.15",
+                         "date":  "2026-11-21",
+                         "notes":  [
+                                       "记账页金额改为内嵌数字键盘：点一下数字，金额和大字立刻变（竖屏）",
+                                       "修复记账页标签列表一直为空：现在建好标签立刻出现，弹窗文案也改成「新建标签 / 标签名称」",
+                                       "记录页新增标签筛选，会记住上次选的标签",
+                                       "统计页新增「标签支出」卡片：按标签看金额、占比、笔数",
+                                       "首页公告胶囊长文本不再裁字，改为省略号收起"
+                                   ]
+                     },
+                     {
+                         "version":  "1.2.15",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页「明细」合并成一张卡：账户、日期 / 时间 / 币种、备注、标签都在里面",
@@ -22,7 +33,7 @@
                                    ]
                      },
                      {
-                         "version":  "1.2.14",
+                         "version":  "1.2.15",
                          "date":  "2026-11-21",
                          "notes":  [
                                        "记账页保存按钮显示金额（如「保存 ¥128.00」），保存前一眼可核对"
