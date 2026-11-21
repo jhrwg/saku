@@ -14,8 +14,8 @@ android {
         applicationId = "com.ve.bookkeeping"
         minSdk = 24
         targetSdk = 37
-        versionCode = 89
-        versionName = "1.2.25"
+        versionCode = 90
+        versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
