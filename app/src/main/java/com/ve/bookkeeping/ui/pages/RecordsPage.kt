@@ -118,11 +118,14 @@ fun RecordsPage(
     val timeFilter = TimeFilter.entries[timeOrdinal]
     val extra = LocalAppExtraColors.current
     // 所有记录里出现过的标签，用于筛选
-    val availableTags = remember(records) {
-        records.flatMap { it.tags }.distinct().sorted()
+    val source = records.toList()
+    val availableTags = remember(source) {
+        source.flatMap { it.tags }.distinct().sorted()
     }
 
-    val filtered = remember(records, query, type, timeFilter, accountId, tagFilter) {
+    // 注意：records 是同一个 SnapshotStateList 实例，用它当 remember 的 key 不会在
+    // 增删记录时失效（左滑删除后列表不刷新就是这个原因），所以上面先取了内容快照 source。
+    val filtered = remember(source, query, type, timeFilter, accountId, tagFilter) {
         val now = Calendar.getInstance()
         val (start, end) = when (timeFilter) {
             TimeFilter.All -> Long.MIN_VALUE to Long.MAX_VALUE
@@ -158,7 +161,7 @@ fun RecordsPage(
         }
 
         val keyword = query.trim()
-        records
+        source
             .filter { record ->
                 record.occurredAt in start until end &&
                     (type == null || record.type == type) &&
