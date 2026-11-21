@@ -79,6 +79,7 @@ fun RecordsPage(
     onRecordClick: (LedgerRecord) -> Unit,
     onDeleteRecord: (LedgerRecord) -> Unit = {},
     onBack: () -> Unit,
+    initialTag: String? = null,
     modifier: Modifier = Modifier,
 ) {
     BackHandler(onBack = onBack)
@@ -93,7 +94,7 @@ fun RecordsPage(
         mutableStateOf(filterPrefs.getString("account", null))
     }
     var tagFilter by rememberSaveable {
-        mutableStateOf(filterPrefs.getString("tag", null))
+        mutableStateOf(initialTag ?: filterPrefs.getString("tag", null))
     }
     var selectedIds by rememberSaveable { mutableStateOf(emptySet<Long>()) }
     var batchMode by rememberSaveable { mutableStateOf(false) }
@@ -456,6 +457,10 @@ private fun RecordRow(
                         if (record.attachments.isNotEmpty()) {
                             append(" · 附件")
                             append(record.attachments.size)
+                        }
+                        if (record.tags.isNotEmpty()) {
+                            append(" · ")
+                            append(record.tags.joinToString(" ") { "#$it" })
                         }
                     },
                     style = MaterialTheme.typography.labelSmall,
