@@ -152,7 +152,7 @@ private fun ProActionBar(
                     )
                 } else {
                     Text(
-                        text = "我已付款，开启 PRO",
+                        text = "开启 PRO（免费）",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -258,7 +258,7 @@ fun ProPage(
             color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
-            text = "一次支持，长期使用",
+            text = "喜欢就继续用，打赏随意",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -282,7 +282,7 @@ fun ProPage(
         }
 
         Spacer(modifier = Modifier.height(14.dp))
-        SectionCard(title = "如何开通") {
+        SectionCard(title = "开通说明") {
             Row(verticalAlignment = Alignment.Top) {
                 Icon(
                     imageVector = Icons.Rounded.Verified,
@@ -291,13 +291,21 @@ fun ProPage(
                     modifier = Modifier.size(20.dp),
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    text = "本版本采用诚信付款：扫描下方任意一个收款码完成付款，" +
-                        "然后直接点最下方的按钮即可开启 PRO，无需审核、不用等待。",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = 19.sp,
-                )
+                Column(modifier = Modifier.weight(1f)) {
+                    listOf(
+                        "本软件由 AI 辅助开发，纯属做一个自己喜欢的记账软件，毕竟现在是 AI 时代了。",
+                        "软件不可能弄成付费的，如果用的习惯，随便打赏一点就好，几毛几分都无所谓。",
+                        "无论是否打赏，均可通过点击下方底部按钮开启 Pro 模式。",
+                    ).forEachIndexed { index, paragraph ->
+                        if (index > 0) Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = paragraph,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 19.sp,
+                        )
+                    }
+                }
             }
         }
 
