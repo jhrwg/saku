@@ -306,13 +306,13 @@ private fun BillCard(
     SectionCard(title = "信用卡账单") {
         if (!proEnabled) {
             Text(
-                text = "账单管理是 PRO 权益：本期应还、最低还款、还款日提醒。",
+                text = "账单管理是 Pro 权益：本期应还、最低还款、还款日提醒。",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = onNeedPro, shape = RoundedCornerShape(14.dp)) {
-                Text(text = "开通 PRO 查看")
+                Text(text = "开通 Pro 查看")
             }
             return@SectionCard
         }
