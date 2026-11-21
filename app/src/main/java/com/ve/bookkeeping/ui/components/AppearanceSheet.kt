@@ -199,72 +199,84 @@ fun AppearanceSheet(
 
             if (backgroundEnabled) {
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    builtInBackgrounds.forEachIndexed { index, res ->
-                        BackgroundThumb(
-                            selected = backgroundIndex == index,
-                            label = builtInBackgroundNames[index],
-                            modifier = Modifier.weight(1f),
-                            onClick = { onSelectBuiltIn(index) },
-                        ) {
-                            Image(
-                                painter = painterResource(res),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxWidth().height(104.dp),
-                            )
-                        }
-                    }
-                    BackgroundThumb(
-                        selected = backgroundIndex == CUSTOM_BACKGROUND_INDEX,
-                        label = if (proEnabled) "自选" else "Pro",
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            if (!proEnabled) {
-                                onNeedPro()
-                            } else {
-                                pickImage.launch(
-                                    PickVisualMediaRequest(
-                                        ActivityResultContracts.PickVisualMedia.ImageOnly,
-                                    ),
-                                )
-                            }
-                        },
+                // 8 张内置背景 + 1 张自选，按 3 列排；每张背景都带一个推荐主题色
+                val cells = builtInBackgroundList.indices.toList() + CUSTOM_BACKGROUND_INDEX
+                cells.chunked(3).forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(104.dp)
-                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            if (customBitmap != null) {
-                                Image(
-                                    bitmap = customBitmap.asImageBitmap(),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxWidth().height(104.dp),
-                                )
-                            } else {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Icon(
-                                        imageVector = if (proEnabled) {
-                                            Icons.Rounded.AddPhotoAlternate
-                                        } else {
-                                            Icons.Rounded.Lock
+                        row.forEach { index ->
+                            Box(modifier = Modifier.weight(1f)) {
+                                if (index == CUSTOM_BACKGROUND_INDEX) {
+                                    BackgroundThumb(
+                                        selected = backgroundIndex == CUSTOM_BACKGROUND_INDEX,
+                                        label = if (proEnabled) "自选" else "Pro",
+                                        onClick = {
+                                            if (!proEnabled) {
+                                                onNeedPro()
+                                            } else {
+                                                pickImage.launch(
+                                                    PickVisualMediaRequest(
+                                                        ActivityResultContracts.PickVisualMedia.ImageOnly,
+                                                    ),
+                                                )
+                                            }
                                         },
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        text = if (proEnabled) "选图片" else "Pro",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(96.dp)
+                                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                            contentAlignment = Alignment.Center,
+                                        ) {
+                                            if (customBitmap != null) {
+                                                Image(
+                                                    bitmap = customBitmap.asImageBitmap(),
+                                                    contentDescription = null,
+                                                    contentScale = ContentScale.Crop,
+                                                    modifier = Modifier.fillMaxWidth().height(96.dp),
+                                                )
+                                            } else {
+                                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                                    Icon(
+                                                        imageVector = if (proEnabled) {
+                                                            Icons.Rounded.AddPhotoAlternate
+                                                        } else {
+                                                            Icons.Rounded.Lock
+                                                        },
+                                                        contentDescription = null,
+                                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    )
+                                                    Spacer(modifier = Modifier.height(4.dp))
+                                                    Text(
+                                                        text = if (proEnabled) "选图片" else "Pro",
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    val item = builtInBackgroundList[index]
+                                    BackgroundThumb(
+                                        selected = backgroundIndex == index,
+                                        label = item.name,
+                                        onClick = { onSelectBuiltIn(index) },
+                                    ) {
+                                        Image(
+                                            painter = painterResource(item.res),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier.fillMaxWidth().height(96.dp),
+                                        )
+                                    }
                                 }
                             }
                         }
+                        repeat(3 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
                     }
                 }
             }
