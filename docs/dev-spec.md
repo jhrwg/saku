@@ -33,7 +33,8 @@ PageScaffold(
 | --- | --- |
 | 高度上限 | **不超过屏幕高度的一半**（`maxHeight = 屏高 × 0.5`），横屏按实际高度自适配 |
 | 内容过多 | 弹窗内部**可滚动**，不要顶出屏幕 |
-| 按钮位置 | 有按钮时**固定在弹窗底部**，不随内容滚动（滚动区只包内容） |
+| 按钮位置 | 弹窗里有按钮时，按钮是**悬浮按钮**：固定在弹窗底部、带阴影浮在内容之上，**不能随滚动** |
+| 按钮写法 | 按钮放进 `AppSheet(footer = { ... })`，不要写在内容里；footer 自带圆角 + 阴影 + 上方渐隐 |
 | 圆角与配色 | 统一 `RoundedCornerShape` + `surfaceContainerLow`，与现有弹窗一致 |
 
 结构示意：
@@ -41,9 +42,8 @@ PageScaffold(
 ```
 ModalBottomSheet
  └ Column(heightIn(max = 屏高 * 0.5))
-     ├ 标题 / 说明（固定）
-     ├ 滚动区（weight(1f) + verticalScroll）
-     └ 按钮区（固定，放在滚动区外面）
+     ├ 滚动区（标题 / 说明 / 列表，weight(1f) + verticalScroll）
+     └ 悬浮按钮区（固定，圆角 + 阴影，浮在内容之上）
 ```
 
 实现统一走 `AppSheet` / `AppSheetBody`（见 `ui/components/SheetHost.kt`），不要自己写高度。
@@ -111,7 +111,7 @@ ProGateSheet(
 ## 六、自查清单
 
 - [ ] 独立页左上角没有返回按钮，系统返回能回上一页
-- [ ] 底部弹窗高度 ≤ 屏高一半，内容多时内部可滚，按钮固定
+- [ ] 底部弹窗高度 ≤ 屏高一半，内容多时内部可滚，按钮是悬浮按钮固定在底部
 - [ ] Pro 拦截统一是底部弹窗，文案「该功能需开启 Pro 权益」+ 前往 Pro / 以后再说
 - [ ] 测试版号 = 正式版补丁号 +1 且带 `-beta`，`versionCode` +1
 - [ ] 先上传包、后改 Changelog
