@@ -164,7 +164,25 @@ fun UpdateSheet(
         }
     }
 
-    AppSheet(onDismiss = { if (!downloading) onDismiss() }) {
+    AppSheet(
+        onDismiss = { if (!downloading) onDismiss() },
+        footer = {
+            Column {
+                TextButton(onClick = onOpenChangelog, modifier = Modifier.fillMaxWidth()) {
+                    Text(text = "查看历史更新日志", style = MaterialTheme.typography.labelMedium)
+                }
+                if (!info.force) {
+                    TextButton(
+                        onClick = onDismiss,
+                        enabled = !downloading,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(text = "稍后再说", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+        },
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -302,15 +320,6 @@ fun UpdateSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(2.dp))
-                TextButton(onClick = onOpenChangelog, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "查看历史更新日志", style = MaterialTheme.typography.labelMedium)
-                }
-                if (!info.force) {
-                    TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                        Text(text = "稍后再说", style = MaterialTheme.typography.labelMedium)
-                    }
-                }
             }
         }
     }
