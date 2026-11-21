@@ -92,8 +92,11 @@ import com.ve.bookkeeping.ui.pages.SecurityPage
 import com.ve.bookkeeping.ui.theme.ThemePalette
 import com.ve.bookkeeping.ui.theme.ZheErGenBookkeepingTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.runtime.snapshotFlow
 import java.io.File
 import java.util.Calendar
 import com.ve.bookkeeping.ui.model.budgetProgress
@@ -433,6 +436,8 @@ private fun AppContent(
 
     var budget by remember { mutableStateOf(snapshot?.budget ?: BudgetConfig()) }
     var lastBudgetNoticeDay by remember { mutableStateOf<String?>(null) }
+    // 统计页点标签 → 记录页带上这个标签筛选
+    var pendingTagFilter by remember { mutableStateOf<String?>(null) }
 
     var backupSchedule by remember { mutableStateOf(webDavSettings.schedule()) }
     var backupIntervalHours by remember { mutableIntStateOf(webDavSettings.intervalHours()) }
@@ -633,6 +638,16 @@ private fun AppContent(
         loans = loans.toList(),
         debts = debts.toList(),
     )
+
+    // 本地持久化：账本数据一有变化就落盘（250ms 合并），
+    // 之前一直没有调用 LedgerStore.save，导致重启后数据回到初始状态。
+    LaunchedEffect(Unit) {
+        snapshotFlow { currentSnapshot() }
+            .collectLatest { snap ->
+                delay(250)
+                withContext(Dispatchers.IO) { runCatching { store.save(snap) } }
+            }
+    }
 
     /**
      * 记账时默认用哪个账户：
@@ -849,6 +864,7 @@ private fun AppContent(
                 selectedBook = selectedBook,
                 records = records,
                 accounts = accounts,
+                debts = debts,
                 defaultAccountId = defaultAccountId,
                 categoryCount = expenseCategories.size + incomeCategories.size + transferCategories.size,
                 recurringCount = recurringRules.size,
@@ -926,6 +942,10 @@ private fun AppContent(
                 onOpenPro = { routeKey = "pro" },
                 onOpenRecurring = { routeKey = "recurring" },
                 onOpenRecords = { routeKey = "records" },
+                onOpenRecordsWithTag = { tag ->
+                    pendingTagFilter = tag
+                    routeKey = "records"
+                },
                 onOpenBudget = {
                     if (appearance.proEnabled) {
                         routeKey = "budget"
@@ -1414,7 +1434,9 @@ private fun AppContent(
                 records = records,
                 accounts = accounts,
                 onRecordClick = { actionRecord = it },
+                initialTag = pendingTagFilter,
                 onBack = {
+                    pendingTagFilter = null
                     mainTab = 0
                     routeKey = "main"
                 },
