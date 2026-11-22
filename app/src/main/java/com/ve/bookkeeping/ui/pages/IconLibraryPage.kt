@@ -3,6 +3,7 @@
 package com.ve.bookkeeping.ui.pages
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,16 +24,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudDownload
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,11 +44,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.ve.bookkeeping.data.IconPrefs
+import com.ve.bookkeeping.ui.components.AppSheet
 import com.ve.bookkeeping.ui.components.PageScaffold
 import com.ve.bookkeeping.ui.components.SectionCard
 import com.ve.bookkeeping.ui.model.AppIcon
+import com.ve.bookkeeping.ui.model.EntryCategory
 import com.ve.bookkeeping.ui.model.IconCatalog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,11 +60,18 @@ import java.io.File
 
 /**
  * 图标库（方案 C）：
- * - 内置 80+ 图标，零包体积（全部复用 Materials Rounded），断网也能用；
- * - 「联网图标」从仓库清单拉取，点选后下载 PNG 缓存到本地，不增加包体积。
+ * - 内置图标零包体积，断网可用；
+ * - 联网图标从公开仓库按需下载，支持单选 / 多选批量下载；
+ * - 下载中在图标上盖一层半透明遮罩 + 圆形进度，下载完自动显示图标；
+ * - 选中图标可直接设为某个分类的图标。
  */
 @Composable
-fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun IconLibraryPage(
+    categories: List<EntryCategory>,
+    onBack: () -> Unit,
+    onIconChanged: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -67,18 +79,27 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var remote by remember { mutableStateOf<List<AppIcon>>(emptyList()) }
     var loading by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
-    var downloaded by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var cached by remember { mutableStateOf<Set<String>>(emptySet()) }
+    // 本地缓存里的图标（含 id 与中文名），不需要联网就能列出来
+    var localExtra by remember { mutableStateOf<List<AppIcon>>(emptyList()) }
+    var selecting by remember { mutableStateOf(false) }
+    val selected = remember { mutableStateMapOf<String, Boolean>() }
+    val progress = remember { mutableStateMapOf<String, Float>() }
+    var assignTarget by remember { mutableStateOf<AppIcon?>(null) }
 
-    fun loadCache() {
-        downloaded = runCatching {
-            File(context.filesDir, "icons").listFiles()
-                ?.map { it.nameWithoutExtension }
-                ?.toSet()
-                .orEmpty()
-        }.getOrDefault(emptySet())
+    fun refreshCache() {
+        val files = RemoteIcons.cachedFiles(context)
+        val ids = files.map { it.nameWithoutExtension }.toSet()
+        cached = ids
+        // 有清单就用清单里的中文名，没有就退回 id
+        val known = remote.associateBy { it.id }
+        localExtra = ids.map { id ->
+            known[id] ?: AppIcon(id = id, label = id, group = "已下载")
+        }.sortedBy { it.label }
     }
 
-    LaunchedEffect(Unit) { loadCache() }
+    LaunchedEffect(Unit) { refreshCache() }
+    BackHandler(onBack = onBack)
 
     fun fetchRemote() {
         if (loading) return
@@ -89,25 +110,37 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
             loading = false
             result.onSuccess { list ->
                 remote = list
-                message = if (list.isEmpty()) "清单是空的，先在仓库里加图标吧" else "已载入 ${list.size} 个联网图标"
-            }.onFailure {
-                message = "拉不到清单（检查网络或仓库地址）：${it.message}"
-            }
+                refreshCache()
+                val pending = list.count { it.id !in cached }
+                message = when {
+                    list.isEmpty() -> "清单是空的，先在仓库里加图标吧"
+                    pending == 0 -> "已是最新，全部图标都在本地了"
+                    else -> "有 $pending 个图标可下载"
+                }
+            }.onFailure { message = "拉不到清单：${it.message}" }
         }
     }
 
-    fun download(icon: AppIcon) {
+    fun downloadOne(icon: AppIcon, onDone: (() -> Unit)? = null) {
+        if (progress.containsKey(icon.id)) return
+        progress[icon.id] = 0.01f
         scope.launch {
-            val ok = withContext(Dispatchers.IO) {
-                runCatching { RemoteIcons.download(context, icon) }.getOrDefault(false)
+            withContext(Dispatchers.IO) {
+                runCatching { RemoteIcons.download(context, icon, onProgress = { p -> progress[icon.id] = p }) }
             }
-            message = if (ok) {
-                loadCache()
-                "已下载「${icon.label}」，可离线使用"
-            } else {
-                "下载失败，稍后再试"
-            }
+            progress.remove(icon.id)
+            refreshCache()
+            onDone?.invoke()
         }
+    }
+
+    fun downloadSelected() {
+        val targets = remote.filter { selected[it.id] == true && it.id !in cached }
+        if (targets.isEmpty()) return
+        message = "正在下载 ${targets.size} 个图标…"
+        targets.forEach { icon -> downloadOne(icon) }
+        selected.clear()
+        selecting = false
     }
 
     val filtered = remember(query) {
@@ -118,7 +151,7 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
 
     PageScaffold(
         title = "图标",
-        subtitle = "内置 ${IconCatalog.builtIn.size} 个可直接用；联网图标按需下载，不占安装包",
+        subtitle = "内置 ${IconCatalog.builtIn.size} 个；联网图标按需下载，不占安装包",
         onBack = onBack,
         scrollable = false,
         modifier = modifier,
@@ -135,13 +168,30 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            SectionCard(title = "内置图标") {
-                IconGrid(
-                    icons = filtered,
-                    onClick = { icon ->
-                        message = "「${icon.label}」已就绪，可在分类编辑里选用"
-                    },
+            SectionCard(title = "本地图标（内置 ${IconCatalog.builtIn.size} + 已下载）") {
+                Text(
+                    text = "点一下图标 → 选一个分类，立刻换上；下载过的图标也会出现在这里",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                IconGrid(icons = filtered, onClick = { assignTarget = it })
+                if (localExtra.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    localExtra.chunked(5).forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            row.forEach { icon ->
+                                Box(modifier = Modifier.weight(1f)) {
+                                    LocalImageCell(icon = icon, onClick = { assignTarget = icon })
+                                }
+                            }
+                            repeat(5 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
+                        }
+                    }
+                }
                 if (filtered.isEmpty()) {
                     Text(
                         text = "没有匹配的图标，换个关键词试试",
@@ -154,12 +204,15 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(12.dp))
             SectionCard(title = "联网图标") {
                 Text(
-                    text = "从仓库清单按需下载，下载后离线可用，不会打进安装包。",
+                    text = "下载后离线可用，不会打进安装包。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Button(
                         onClick = { fetchRemote() },
                         enabled = !loading,
@@ -175,11 +228,35 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
                         Text(text = if (loading) "正在拉取…" else "获取图标清单")
                     }
                     if (remote.isNotEmpty()) {
-                        TextButton(onClick = { remote = emptyList(); message = null }) {
-                            Text(text = "清空")
+                        TextButton(onClick = {
+                            selecting = !selecting
+                            if (!selecting) selected.clear()
+                        }) {
+                            Text(text = if (selecting) "取消多选" else "多选")
                         }
                     }
                 }
+
+                if (selecting) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "已选 ${selected.count { it.value }} 个",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        TextButton(
+                            onClick = {
+                                val pending = remote.filter { it.id !in cached }
+                                val allSelected = pending.isNotEmpty() && pending.all { selected[it.id] == true }
+                                pending.forEach { selected[it.id] = !allSelected }
+                            },
+                        ) { Text(text = "全选未下载") }
+                        TextButton(onClick = { downloadSelected() }) { Text(text = "下载选中") }
+                    }
+                }
+
                 message?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -188,6 +265,7 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
+
                 if (remote.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(10.dp))
                     remote.chunked(5).forEach { row ->
@@ -199,8 +277,19 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
                                 Box(modifier = Modifier.weight(1f)) {
                                     RemoteIconCell(
                                         icon = icon,
-                                        cached = icon.id in downloaded,
-                                        onClick = { download(icon) },
+                                        cached = icon.id in cached,
+                                        progress = progress[icon.id],
+                                        selecting = selecting,
+                                        checked = selected[icon.id] == true,
+                                        onClick = {
+                                            if (selecting) {
+                                                selected[icon.id] = !(selected[icon.id] ?: false)
+                                            } else if (icon.id !in cached) {
+                                                downloadOne(icon)
+                                            } else {
+                                                assignTarget = icon.copy(remoteUrl = null)
+                                            }
+                                        },
                                     )
                                 }
                             }
@@ -211,6 +300,19 @@ fun IconLibraryPage(onBack: () -> Unit, modifier: Modifier = Modifier) {
             }
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+
+    assignTarget?.let { icon ->
+        IconAssignSheet(
+            icon = icon,
+            categories = categories,
+            onDismiss = { assignTarget = null },
+            onPick = { category ->
+                IconPrefs.setCategoryIcon(context, category.id, icon.id)
+                assignTarget = null
+                message = "「${category.label}」的图标已换成「${icon.label}」（重开应用生效）"
+            },
+        )
     }
 }
 
@@ -235,9 +337,7 @@ private fun IconGrid(icons: List<AppIcon>, onClick: (AppIcon) -> Unit) {
 private fun IconCell(icon: AppIcon, onClick: () -> Unit) {
     val vector: ImageVector? = icon.vector
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(enabled = vector != null) { onClick() },
+        modifier = Modifier.fillMaxWidth().clickable(enabled = vector != null) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -257,13 +357,6 @@ private fun IconCell(icon: AppIcon, onClick: () -> Unit) {
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(22.dp),
                 )
-            } else {
-                Icon(
-                    imageVector = Icons.Rounded.CloudDownload,
-                    contentDescription = icon.label,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(18.dp),
-                )
             }
         }
         Spacer(modifier = Modifier.height(3.dp))
@@ -277,10 +370,17 @@ private fun IconCell(icon: AppIcon, onClick: () -> Unit) {
 }
 
 @Composable
-private fun RemoteIconCell(icon: AppIcon, cached: Boolean, onClick: () -> Unit) {
+private fun RemoteIconCell(
+    icon: AppIcon,
+    cached: Boolean,
+    progress: Float?,
+    selecting: Boolean,
+    checked: Boolean,
+    onClick: () -> Unit,
+) {
     val context = LocalContext.current
     val bitmap = remember(icon.id, cached) {
-        if (!cached) null else RemoteIcons.load(context, icon)
+        if (!cached) null else RemoteIcons.load(context, icon.id)
     }
     Column(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
@@ -310,6 +410,49 @@ private fun RemoteIconCell(icon: AppIcon, cached: Boolean, onClick: () -> Unit) 
                     modifier = Modifier.size(18.dp),
                 )
             }
+
+            // 下载中：半透明遮罩 + 圆形进度
+            if (progress != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.45f),
+                            RoundedCornerShape(12.dp),
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        progress = { progress.coerceIn(0f, 1f) },
+                        modifier = Modifier.size(24.dp),
+                        strokeWidth = 2.5.dp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        trackColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.25f),
+                    )
+                }
+            }
+
+            if (selecting) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            if (checked) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            } else {
+                                MaterialTheme.colorScheme.scrim.copy(alpha = 0.18f)
+                            },
+                            RoundedCornerShape(12.dp),
+                        ),
+                    contentAlignment = Alignment.TopEnd,
+                ) {
+                    Text(
+                        text = if (checked) "✓" else "",
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(2.dp),
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(3.dp))
         Text(
@@ -321,15 +464,76 @@ private fun RemoteIconCell(icon: AppIcon, cached: Boolean, onClick: () -> Unit) 
     }
 }
 
+/** 选一个分类套用这个图标。 */
+@Composable
+private fun IconAssignSheet(
+    icon: AppIcon,
+    categories: List<EntryCategory>,
+    onDismiss: () -> Unit,
+    onPick: (EntryCategory) -> Unit,
+) {
+    AppSheet(onDismiss = onDismiss) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            icon.vector?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = "把「${icon.label}」用到哪个分类？",
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        categories.chunked(3).forEach { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                row.forEach { category ->
+                    Box(modifier = Modifier.weight(1f)) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f),
+                                    RoundedCornerShape(12.dp),
+                                )
+                                .clickable { onPick(category) }
+                                .padding(vertical = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Icon(
+                                imageVector = category.icon,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = category.label,
+                                style = MaterialTheme.typography.labelSmall,
+                                maxLines = 1,
+                            )
+                        }
+                    }
+                }
+                repeat(3 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
+            }
+        }
+    }
+}
+
 /**
- * 联网图标：清单与图片都放在仓库里。
- * 先试 Gitee（国内快），失败再试 GitHub。
+ * 联网图标：清单与图片都放在**公开**的 saku 仓库。
  */
 object RemoteIcons {
 
     private const val MANIFEST_PATH = "icons/manifest.json"
 
-    // 清单放在**公开**的 saku 仓库（源码仓库是私有的，匿名读不到 raw）
     private val mirrors = listOf(
         "https://gitee.com/yijiang772/saku/raw/master/",
         "https://raw.githubusercontent.com/jhrwg/saku/main/",
@@ -361,37 +565,117 @@ object RemoteIcons {
             list += AppIcon(
                 id = item.optString("id"),
                 label = item.optString("label", item.optString("id")),
-                group = item.optString("group", "联网"),
-                remoteUrl = (
-                    item.optString("url").ifBlank { null }
-                        ?: item.optString("path").ifBlank { null }?.let { lastBase + it }
-                    ),
+                group = item.optString("group", "其他"),
+                scope = item.optString("scope", "category"),
+                remoteUrl = item.optString("url").ifBlank { null }
+                    ?: item.optString("path").ifBlank { null }?.let { lastBase + it },
             )
         }
         return list
     }
 
-    fun download(context: Context, icon: AppIcon): Boolean {
+    /** 本地已缓存的图标文件（png 或 svg），不需要联网就能列出来。 */
+    fun cachedFiles(context: Context): List<File> =
+        File(context.filesDir, "icons").listFiles()
+            ?.filter { it.isFile && (it.name.endsWith(".png") || it.name.endsWith(".svg")) }
+            ?.sortedBy { it.name }
+            .orEmpty()
+
+    fun isCached(context: Context, iconId: String): Boolean =
+        File(File(context.filesDir, "icons"), "$iconId.png").exists() ||
+            File(File(context.filesDir, "icons"), "$iconId.svg").exists()
+
+    fun download(context: Context, icon: AppIcon, onProgress: (Float) -> Unit = {}): Boolean {
         val url = icon.remoteUrl ?: return false
+        val ext = if (url.substringBefore('?').endsWith(".svg", true)) "svg" else "png"
         val dir = File(context.filesDir, "icons").apply { mkdirs() }
-        val target = File(dir, "${icon.id}.png")
+        val target = File(dir, "${icon.id}.$ext")
         val client = okhttp3.OkHttpClient.Builder()
             .connectTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .build()
         client.newCall(okhttp3.Request.Builder().url(url).build()).execute().use { resp ->
             if (!resp.isSuccessful) return false
-            val bytes = resp.body?.bytes() ?: return false
+            val body = resp.body ?: return false
+            val total = body.contentLength().coerceAtLeast(0L)
+            val bytes = body.byteStream().use { input ->
+                val out = java.io.ByteArrayOutputStream()
+                val buffer = ByteArray(8 * 1024)
+                var read: Int
+                var received = 0L
+                while (input.read(buffer).also { read = it } != -1) {
+                    out.write(buffer, 0, read)
+                    received += read
+                    if (total > 0) onProgress((received.toFloat() / total).coerceIn(0.02f, 1f))
+                }
+                out.toByteArray()
+            }
             target.writeBytes(bytes)
             return true
         }
     }
 
-    fun load(context: Context, icon: AppIcon): androidx.compose.ui.graphics.ImageBitmap? {
-        val file = File(File(context.filesDir, "icons"), "${icon.id}.png")
-        if (!file.exists()) return null
-        return runCatching {
-            android.graphics.BitmapFactory.decodeFile(file.absolutePath)?.asImageBitmap()
-        }.getOrNull()
+    /** 读本地图标：png 直接解码，svg 用 androidsvg 渲染。 */
+    fun load(context: Context, iconId: String, sizePx: Int = 96): androidx.compose.ui.graphics.ImageBitmap? {
+        val dir = File(context.filesDir, "icons")
+        val png = File(dir, "$iconId.png")
+        if (png.exists()) {
+            return runCatching {
+                android.graphics.BitmapFactory.decodeFile(png.absolutePath)?.asImageBitmap()
+            }.getOrNull()
+        }
+        val svg = File(dir, "$iconId.svg")
+        if (svg.exists()) {
+            return runCatching {
+                val picture = com.caverock.androidsvg.SVG.getFromInputStream(svg.inputStream())
+                picture.documentWidth = sizePx.toFloat()
+                picture.documentHeight = sizePx.toFloat()
+                val bitmap = android.graphics.Bitmap.createBitmap(
+                    sizePx, sizePx, android.graphics.Bitmap.Config.ARGB_8888,
+                )
+                val canvas = android.graphics.Canvas(bitmap)
+                picture.renderToCanvas(canvas)
+                bitmap.asImageBitmap()
+            }.getOrNull()
+        }
+        return null
+    }
+}
+
+/** 已下载到本地的图标（png/svg 可能是银行 logo，只在账户上用）。 */
+@Composable
+private fun LocalImageCell(icon: AppIcon, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val bitmap = remember(icon.id) { RemoteIcons.load(context, icon.id) }
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .clickable(enabled = icon.scope != "account") { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(46.dp)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f),
+                    RoundedCornerShape(12.dp),
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (bitmap != null) {
+                androidx.compose.foundation.Image(
+                    bitmap = bitmap,
+                    contentDescription = icon.label,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(3.dp))
+        Text(
+            text = icon.label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+        )
     }
 }
