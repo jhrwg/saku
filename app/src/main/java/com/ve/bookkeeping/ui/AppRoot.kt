@@ -1244,6 +1244,7 @@ private fun AppContent(
             AppRoute.Icons -> com.ve.bookkeeping.ui.pages.IconLibraryPage(
                 categories = (expenseCategories + incomeCategories + transferCategories)
                     .filter { it.parentId == null },
+                accounts = liveAccounts(),
                 onIconChanged = { /* IconPrefs.version 已经是状态，无需额外刷新 */ },
                 onBack = { backToMain() },
             )
