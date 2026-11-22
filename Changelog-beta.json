@@ -1,11 +1,11 @@
 {
-    "latest": "1.4.2-beta",
-    "version": "1.4.2-beta",
+    "latest": "1.4.3-beta",
+    "version": "1.4.3-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.2-beta/vebk-1.4.2-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.2-beta/vebk-1.4.2-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.2-beta/vebk-1.4.2-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,21 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.4.3-beta",
+            "date": "2026-11-22",
+            "notes": [
+                "测试版 1.4.3-beta",
+                "",
+                "新增",
+                "• 资产页账户「更换图标」现在会打开图标选择器：内置图标 + 图标库里已下载的银行/支付图标",
+                "• 分类编辑的图标列表改为读取图标库（下载过的图标会实时出现在里面）",
+                "修复",
+                "• 图标库里显示 net_ 这种英文 id 的问题：清单会缓存到本地，名字统一显示中文",
+                "",
+                "该日志由AI编写，正确内容请等待正式版。"
+            ]
+        },
         {
             "version": "1.4.2-beta",
             "date": "2026-11-22",
