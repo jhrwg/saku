@@ -241,6 +241,7 @@ fun AccountRow(
     icon: ImageVector,
     tint: Color,
     accountId: String? = null,
+    iconId: String? = null,
     name: String,
     subtitle: String,
     amount: String,
@@ -264,6 +265,7 @@ fun AccountRow(
                     AccountIconView(
                         accountId = accountId,
                         fallback = icon,
+                        iconId = iconId,
                         tint = tint,
                         size = 22.dp,
                     )
