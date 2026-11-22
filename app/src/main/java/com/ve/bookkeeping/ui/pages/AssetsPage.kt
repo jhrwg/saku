@@ -401,6 +401,7 @@ private fun AccountsCard(
             accounts.forEach { account ->
                 AccountRow(
                     accountId = account.id,
+                    iconId = account.iconId,
                     icon = account.icon,
                     tint = if (account.balance < 0) {
                         extra.expense
