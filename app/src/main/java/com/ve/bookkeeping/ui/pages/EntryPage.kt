@@ -69,6 +69,7 @@ import com.ve.bookkeeping.ui.components.AccountPickerSheet
 import com.ve.bookkeeping.ui.components.AddCategoryDialog
 import com.ve.bookkeeping.ui.components.AllCategoriesSheet
 import com.ve.bookkeeping.ui.components.AmountKeypadSheet
+import kotlinx.coroutines.launch
 import com.ve.bookkeeping.ui.components.CurrencyPickerSheet
 import com.ve.bookkeeping.ui.components.InlineAmountKeypad
 import com.ve.bookkeeping.ui.components.editableAmount
@@ -524,6 +525,39 @@ fun EntryPage(
                         onClick = { showCurrencyPicker = true },
                     )
                 }
+                // 非人民币时给出汇率，并允许就地更新（不用跑去汇率页）
+                if (currency.code != "CNY") {
+                    val context = androidx.compose.ui.platform.LocalContext.current
+                    val scope = androidx.compose.runtime.rememberCoroutineScope()
+                    // 读一下 rates 让它参与重组：刷新完成后自动更新数字
+                    val liveRates = com.ve.bookkeeping.data.ExchangeRates.rates
+                    val rate = liveRates[currency.code] ?: currency.rateToCny
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "1 ${currency.code} ≈ ¥${formatMoney(rate)}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = "更新汇率",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .clickable {
+                                    scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                                        com.ve.bookkeeping.data.ExchangeRates.refresh(context)
+                                    }
+                                }
+                                .padding(horizontal = 10.dp, vertical = 4.dp),
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     value = note,
@@ -916,6 +950,24 @@ fun EntryPage(
                 selectedCategoryId = created.id
                 showAddCategory = false
             },
+        )
+    }
+
+    // 长按一级分类 → 新建它的子分类（以前只记了状态，没有弹窗，所以点了没反应）
+    addChildFor?.let { parent ->
+        AddCategoryDialog(
+            onDismiss = { addChildFor = null },
+            onConfirm = { name ->
+                val created = onAddSubCategory?.invoke(type, name, parent.id)
+                if (created != null) {
+                    pinnedCategoryId = created.id
+                    selectedCategoryId = created.id
+                }
+                addChildFor = null
+            },
+            title = "新建「${parent.label}」的子分类",
+            fieldLabel = "子分类名称",
+            placeholder = "例如：早餐 / 打车",
         )
     }
 
