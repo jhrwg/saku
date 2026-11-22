@@ -68,6 +68,7 @@ import java.io.File
 @Composable
 fun IconLibraryPage(
     categories: List<EntryCategory>,
+    accounts: List<com.ve.bookkeeping.ui.model.AccountOption> = emptyList(),
     onBack: () -> Unit,
     onIconChanged: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -86,6 +87,7 @@ fun IconLibraryPage(
     val selected = remember { mutableStateMapOf<String, Boolean>() }
     val progress = remember { mutableStateMapOf<String, Float>() }
     var assignTarget by remember { mutableStateOf<AppIcon?>(null) }
+    var accountTarget by remember { mutableStateOf<AppIcon?>(null) }
 
     fun refreshCache() {
         val files = RemoteIcons.cachedFiles(context)
@@ -201,6 +203,33 @@ fun IconLibraryPage(
                 }
             }
 
+            // 银行 / 支付 logo：只能用在账户上
+            val bankIcons = localExtra.filter { it.scope == "account" }
+            if (bankIcons.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                SectionCard(title = "账户图标（银行 / 支付 ${bankIcons.size} 个）") {
+                    Text(
+                        text = "这些 logo 只能用在账户上：点一下 → 选一个账户换上。",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    bankIcons.chunked(5).forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            row.forEach { icon ->
+                                Box(modifier = Modifier.weight(1f)) {
+                                    LocalImageCell(icon = icon, onClick = { accountTarget = icon })
+                                }
+                            }
+                            repeat(5 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
+                        }
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(12.dp))
             SectionCard(title = "联网图标") {
                 Text(
@@ -300,6 +329,19 @@ fun IconLibraryPage(
             }
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+
+    accountTarget?.let { icon ->
+        AccountAssignSheet(
+            icon = icon,
+            accounts = accounts,
+            onDismiss = { accountTarget = null },
+            onPick = { account ->
+                IconPrefs.setAccountIcon(context, account.id, icon.id)
+                accountTarget = null
+                message = "「${account.name}」的图标已换成「${icon.label}」"
+            },
+        )
     }
 
     assignTarget?.let { icon ->
@@ -648,8 +690,7 @@ private fun LocalImageCell(icon: AppIcon, onClick: () -> Unit) {
     val context = LocalContext.current
     val bitmap = remember(icon.id) { RemoteIcons.load(context, icon.id) }
     Column(
-        modifier = Modifier.fillMaxWidth()
-            .clickable(enabled = icon.scope != "account") { onClick() },
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -677,5 +718,52 @@ private fun LocalImageCell(icon: AppIcon, onClick: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
         )
+    }
+}
+
+/** 选一个账户套用这个图标。 */
+@Composable
+private fun AccountAssignSheet(
+    icon: AppIcon,
+    accounts: List<com.ve.bookkeeping.ui.model.AccountOption>,
+    onDismiss: () -> Unit,
+    onPick: (com.ve.bookkeeping.ui.model.AccountOption) -> Unit,
+) {
+    val context = LocalContext.current
+    val bitmap = remember(icon.id) { RemoteIcons.load(context, icon.id, 128) }
+    AppSheet(onDismiss = onDismiss) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (bitmap != null) {
+                androidx.compose.foundation.Image(
+                    bitmap = bitmap,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = "把「${icon.label}」用到哪个账户？",
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        accounts.forEach { account ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onPick(account) }
+                    .padding(vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = account.icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = account.name, style = MaterialTheme.typography.bodyMedium)
+            }
+        }
     }
 }
