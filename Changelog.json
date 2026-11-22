@@ -1,10 +1,10 @@
 {
-    "latest": "1.4.0",
-    "version": "1.4.0",
+    "latest": "1.4.5",
+    "version": "1.4.5",
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.0/vebk-1.4.0.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.0/vebk-1.4.0.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.0/vebk-1.4.0.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.5/vebk-1.4.5.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.5/vebk-1.4.5.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.5/vebk-1.4.5.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,21 +13,10 @@
     },
     "releases": [
         {
-            "version": "1.4.0",
+            "version": "1.4.5",
             "date": "2026-11-22",
             "notes": [
-                "新增",
-                "• 图标功能",
-                "• 崩溃日志在线提交",
-                "",
-                "优化",
-                "• 多币种页优化，并增加汇率显示",
-                "• 分类可进行二次编辑",
-                "• 资产账户可更换更多图标",
-                "• 背景图配色优化",
-                "• 统一部分页面、弹窗",
-                "• 下载弹窗布局优化",
-                "• 优化日志记录"
+                "修复了图标功能引用带来的bug"
             ]
         }
     ]
