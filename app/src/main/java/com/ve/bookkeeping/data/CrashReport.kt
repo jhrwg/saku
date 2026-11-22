@@ -49,7 +49,11 @@ object CrashReport {
     /** 还没提交过的崩溃文件（最新一条）。 */
     fun pending(context: Context): File? =
         AppLog.files(context)
-            .firstOrNull { it.name.startsWith("crash-") && !marker(it).exists() }
+            .filter { it.name.startsWith("crash-") && !marker(it).exists() }
+            // 旧版本看门狗误报的「主线程阻塞」不算崩溃，不再打扰用户
+            .firstOrNull { file ->
+                runCatching { !file.readText().contains("ANR 看门狗") }.getOrDefault(true)
+            }
 
     /** 标记为已处理（提交过或用户点了以后再说）。 */
     fun markHandled(context: Context, file: File) {
@@ -229,22 +233,32 @@ object CrashReport {
 }
 
 /**
- * 卡顿（ANR）看门狗：主线程超过 [TIMEOUT_MS] 没心跳就记一份日志，
- * 下次启动时和崩溃一样会提示用户提交。
+ * 主线程卡顿看门狗（保守版）。
+ *
+ * 上一版误报：App 在后台/息屏时主线程本来就停在 `nativePollOnce`（空闲等待消息），
+ * 却被当成了「卡死」。现在只在下面三件事同时成立时才记录：
+ * 1. 心跳间隔超过阈值；
+ * 2. 主线程栈里**没有** `nativePollOnce`（即不是空闲等待）；
+ * 3. 连续两次采样都是这样。
+ *
+ * 另外卡顿只记 WARN 日志，不再生成崩溃文件 —— 避免下次启动弹「崩溃报告」打扰用户。
  */
-class AnrWatchdog(private val context: Context, private val timeoutMs: Long = 8000) {
+class AnrWatchdog(private val context: Context, private val timeoutMs: Long = 6000) {
+
+    private val mainThread = android.os.Looper.getMainLooper().thread
 
     @Volatile
-    private var tick = System.nanoTime()
+    private var tick = android.os.SystemClock.elapsedRealtime()
 
-    /** 上次上报时间，防止同一次卡顿反复刷日志。 */
+    private var strikes = 0
+
     private var lastReportAt = 0L
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
 
     private val ticker = object : Runnable {
         override fun run() {
-            tick = System.nanoTime()
+            tick = android.os.SystemClock.elapsedRealtime()
             handler.postDelayed(this, 1000)
         }
     }
@@ -254,23 +268,28 @@ class AnrWatchdog(private val context: Context, private val timeoutMs: Long = 80
         Thread {
             while (true) {
                 Thread.sleep(timeoutMs / 2)
-                val last = tick
-                val gap = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - last)
-                val nowMs = System.currentTimeMillis()
-                // 只有「心跳真的停了」才算卡死；5 分钟内只报一次，避免刷屏
-                if (gap in (timeoutMs + 1)..(timeoutMs * 6) && nowMs - lastReportAt > 300_000) {
-                    lastReportAt = nowMs
-                    val trace = android.os.Looper.getMainLooper().thread.stackTrace
-                        .joinToString("\n") { "  at $it" }
-                    AppLog.warn("卡顿", "主线程阻塞 ${gap}ms\n$trace")
-                    // 顺便写一条崩溃文件，复用「启动后提示提交」的通道
-                    AppLog.crash(
-                        context,
-                        RuntimeException("主线程阻塞 ${gap}ms"),
-                        "ANR 看门狗",
-                    )
-                    tick = System.nanoTime()
+                val gap = android.os.SystemClock.elapsedRealtime() - tick
+                if (gap <= timeoutMs) {
+                    strikes = 0
+                    continue
                 }
+                val stack = runCatching { mainThread.stackTrace }.getOrDefault(emptyArray())
+                // 空闲等待消息（nativePollOnce）说明没卡，只是没消息可处理
+                val idle = stack.any { it.methodName.contains("nativePollOnce") }
+                if (idle || stack.isEmpty()) {
+                    strikes = 0
+                    tick = android.os.SystemClock.elapsedRealtime()
+                    continue
+                }
+                strikes++
+                if (strikes < 2) continue
+                val now = System.currentTimeMillis()
+                if (now - lastReportAt < 300_000) continue
+                lastReportAt = now
+                strikes = 0
+                val trace = stack.joinToString("\n") { "  at $it" }
+                AppLog.warn("卡顿", "主线程忙了 ${gap}ms（未生成崩溃报告）\n$trace")
+                tick = android.os.SystemClock.elapsedRealtime()
             }
         }.apply { isDaemon = true; name = "anr-watchdog" }.start()
     }
