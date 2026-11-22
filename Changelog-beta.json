@@ -9,7 +9,7 @@
     "force": false,
     "notice": {
         "enabled": true,
-        "text": "欢迎使用折耳根记账，有问题可在「我的 → 意见反馈」里告诉我",
+        "text": "1.4.6版本已发布，可前往“我的”页查看更新日志",
         "link": ""
     },
     "releases": [
