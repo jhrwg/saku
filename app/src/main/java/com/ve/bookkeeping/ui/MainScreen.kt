@@ -471,8 +471,9 @@ fun MainScreen(
                             scaleY = fabScaleAnim.value
                         },
                     shape = RoundedCornerShape(18.dp),
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    // 换主题色后不再是高饱和实心块，统一用浅色容器 + 主色图标
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
