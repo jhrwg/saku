@@ -268,6 +268,12 @@ class AnrWatchdog(private val context: Context, private val timeoutMs: Long = 60
         Thread {
             while (true) {
                 Thread.sleep(timeoutMs / 2)
+                // 后台/息屏不采样：那种「没心跳」是正常的
+                if (!AppForeground.isVisible) {
+                    strikes = 0
+                    tick = android.os.SystemClock.elapsedRealtime()
+                    continue
+                }
                 val gap = android.os.SystemClock.elapsedRealtime() - tick
                 if (gap <= timeoutMs) {
                     strikes = 0
