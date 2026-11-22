@@ -1914,7 +1914,10 @@ private fun AppContent(
             crashTime = CrashReport.timeOf(crashFile),
             summary = CrashReport.summary(crashFile),
             onSubmit = {
-                CrashReport.submit(context, crashFile)
+                CrashReport.submit(context, crashFile) {
+                    // 远程通道都失效时，让用户走问卷反馈
+                    routeKey = "feedback"
+                }
                 pendingCrash = null
             },
             onDismiss = {
