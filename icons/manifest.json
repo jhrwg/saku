@@ -1,186 +1,420 @@
 {
-  "version": 1,
-  "note": "联网图标清单：App 里「我的 → 图标 → 联网图标」按需下载，不占安装包",
+  "version": 2,
+  "note": "联网图标：Material Symbols Rounded 渲染，与内置图标同风格；App 内按需下载，不占安装包",
   "icons": [
     {
-      "id": "net_coffee",
-      "label": "咖啡·联机",
+      "id": "net_bank",
+      "label": "银行",
+      "group": "账户",
+      "path": "icons/png/net_bank.png"
+    },
+    {
+      "id": "net_wallet",
+      "label": "钱包",
+      "group": "账户",
+      "path": "icons/png/net_wallet.png"
+    },
+    {
+      "id": "net_credit_card",
+      "label": "银行卡",
+      "group": "账户",
+      "path": "icons/png/net_credit_card.png"
+    },
+    {
+      "id": "net_payments",
+      "label": "支付",
+      "group": "账户",
+      "path": "icons/png/net_payments.png"
+    },
+    {
+      "id": "net_qrpay",
+      "label": "扫码付",
+      "group": "账户",
+      "path": "icons/png/net_qrpay.png"
+    },
+    {
+      "id": "net_savings",
+      "label": "储蓄",
+      "group": "账户",
+      "path": "icons/png/net_savings.png"
+    },
+    {
+      "id": "net_exchange",
+      "label": "换汇",
+      "group": "账户",
+      "path": "icons/png/net_exchange.png"
+    },
+    {
+      "id": "net_receipt",
+      "label": "账单",
+      "group": "账户",
+      "path": "icons/png/net_receipt.png"
+    },
+    {
+      "id": "net_restaurant",
+      "label": "餐饮",
       "group": "餐饮",
-      "path": "icons/png/coffee.png"
+      "path": "icons/png/net_restaurant.png"
     },
     {
-      "id": "net_bowl",
-      "label": "碗筷·联机",
+      "id": "net_cafe",
+      "label": "咖啡",
       "group": "餐饮",
-      "path": "icons/png/bowl.png"
+      "path": "icons/png/net_cafe.png"
     },
     {
-      "id": "net_bus",
-      "label": "公交·联机",
+      "id": "net_cake2",
+      "label": "蛋糕",
+      "group": "餐饮",
+      "path": "icons/png/net_cake2.png"
+    },
+    {
+      "id": "net_pizza",
+      "label": "披萨",
+      "group": "餐饮",
+      "path": "icons/png/net_pizza.png"
+    },
+    {
+      "id": "net_ramen",
+      "label": "面食",
+      "group": "餐饮",
+      "path": "icons/png/net_ramen.png"
+    },
+    {
+      "id": "net_bar",
+      "label": "酒吧",
+      "group": "餐饮",
+      "path": "icons/png/net_bar.png"
+    },
+    {
+      "id": "net_grocery",
+      "label": "超市",
+      "group": "餐饮",
+      "path": "icons/png/net_grocery.png"
+    },
+    {
+      "id": "net_takeout",
+      "label": "外卖",
+      "group": "餐饮",
+      "path": "icons/png/net_takeout.png"
+    },
+    {
+      "id": "net_bus2",
+      "label": "公交",
       "group": "交通",
-      "path": "icons/png/bus.png"
+      "path": "icons/png/net_bus2.png"
     },
     {
-      "id": "net_leaf",
-      "label": "叶子·联机",
-      "group": "生活",
-      "path": "icons/png/leaf.png"
-    },
-    {
-      "id": "net_coin",
-      "label": "硬币·联机",
-      "group": "财务",
-      "path": "icons/png/coin.png"
-    },
-    {
-      "id": "net_star",
-      "label": "星星·联机",
-      "group": "其他",
-      "path": "icons/png/star.png"
-    },
-    {
-      "id": "net_umbrella",
-      "label": "雨伞·联机",
-      "group": "生活",
-      "path": "icons/png/umbrella2.png"
-    },
-    {
-      "id": "net_house",
-      "label": "房子·联机",
-      "group": "居住",
-      "path": "icons/png/house.png"
-    },
-    {
-      "id": "net_bulb",
-      "label": "灯泡·联机",
-      "group": "居住",
-      "path": "icons/png/bulb.png"
-    },
-    {
-      "id": "net_drop",
-      "label": "水滴·联机",
-      "group": "居住",
-      "path": "icons/png/drop.png"
-    },
-    {
-      "id": "net_card",
-      "label": "公交卡·联机",
+      "id": "net_subway",
+      "label": "地铁",
       "group": "交通",
-      "path": "icons/png/card.png"
+      "path": "icons/png/net_subway.png"
     },
     {
-      "id": "net_pill",
-      "label": "药丸·联机",
+      "id": "net_taxi2",
+      "label": "打车",
+      "group": "交通",
+      "path": "icons/png/net_taxi2.png"
+    },
+    {
+      "id": "net_car2",
+      "label": "汽车",
+      "group": "交通",
+      "path": "icons/png/net_car2.png"
+    },
+    {
+      "id": "net_plane",
+      "label": "机票",
+      "group": "交通",
+      "path": "icons/png/net_plane.png"
+    },
+    {
+      "id": "net_bike2",
+      "label": "单车",
+      "group": "交通",
+      "path": "icons/png/net_bike2.png"
+    },
+    {
+      "id": "net_fuel",
+      "label": "加油",
+      "group": "交通",
+      "path": "icons/png/net_fuel.png"
+    },
+    {
+      "id": "net_charge",
+      "label": "充电",
+      "group": "交通",
+      "path": "icons/png/net_charge.png"
+    },
+    {
+      "id": "net_home2",
+      "label": "住房",
+      "group": "居住",
+      "path": "icons/png/net_home2.png"
+    },
+    {
+      "id": "net_apartment2",
+      "label": "公寓",
+      "group": "居住",
+      "path": "icons/png/net_apartment2.png"
+    },
+    {
+      "id": "net_power",
+      "label": "电费",
+      "group": "居住",
+      "path": "icons/png/net_power.png"
+    },
+    {
+      "id": "net_water",
+      "label": "水费",
+      "group": "居住",
+      "path": "icons/png/net_water.png"
+    },
+    {
+      "id": "net_wifi2",
+      "label": "宽带",
+      "group": "居住",
+      "path": "icons/png/net_wifi2.png"
+    },
+    {
+      "id": "net_gas",
+      "label": "燃气",
+      "group": "居住",
+      "path": "icons/png/net_gas.png"
+    },
+    {
+      "id": "net_furniture",
+      "label": "家具",
+      "group": "居住",
+      "path": "icons/png/net_furniture.png"
+    },
+    {
+      "id": "net_clean",
+      "label": "保洁",
+      "group": "居住",
+      "path": "icons/png/net_clean.png"
+    },
+    {
+      "id": "net_hospital2",
+      "label": "医院",
       "group": "医疗",
-      "path": "icons/png/pill.png"
+      "path": "icons/png/net_hospital2.png"
     },
     {
-      "id": "net_run",
-      "label": "跑步·联机",
-      "group": "运动",
-      "path": "icons/png/run.png"
+      "id": "net_medicine",
+      "label": "药品",
+      "group": "医疗",
+      "path": "icons/png/net_medicine.png"
     },
     {
-      "id": "net_work_sit",
-      "label": "办公·联机",
-      "group": "工作",
-      "path": "icons/png/work_sit.png"
+      "id": "net_health",
+      "label": "体检",
+      "group": "医疗",
+      "path": "icons/png/net_health.png"
     },
     {
-      "id": "net_book2",
-      "label": "书本·联机",
+      "id": "net_vaccine",
+      "label": "疫苗",
+      "group": "医疗",
+      "path": "icons/png/net_vaccine.png"
+    },
+    {
+      "id": "net_school2",
+      "label": "学费",
       "group": "教育",
-      "path": "icons/png/book2.png"
+      "path": "icons/png/net_school2.png"
     },
     {
-      "id": "net_pencil",
-      "label": "铅笔·联机",
-      "group": "文具",
-      "path": "icons/png/pencil.png"
+      "id": "net_course",
+      "label": "课程",
+      "group": "教育",
+      "path": "icons/png/net_course.png"
     },
     {
-      "id": "net_phone2",
-      "label": "手机·联机",
-      "group": "通讯",
-      "path": "icons/png/phone2.png"
+      "id": "net_lab",
+      "label": "实验",
+      "group": "教育",
+      "path": "icons/png/net_lab.png"
     },
     {
-      "id": "net_cloud",
-      "label": "云·联机",
-      "group": "网络",
-      "path": "icons/png/cloud.png"
+      "id": "net_exam",
+      "label": "考试",
+      "group": "教育",
+      "path": "icons/png/net_exam.png"
     },
     {
-      "id": "net_gift",
-      "label": "礼物盒·联机",
-      "group": "购物",
-      "path": "icons/png/gift.png"
-    },
-    {
-      "id": "net_wheat",
-      "label": "麦穗·联机",
-      "group": "收入",
-      "path": "icons/png/wheat.png"
-    },
-    {
-      "id": "net_chart",
-      "label": "图表·联机",
-      "group": "收入",
-      "path": "icons/png/chart.png"
-    },
-    {
-      "id": "net_bed",
-      "label": "床·联机",
-      "group": "住宿",
-      "path": "icons/png/bed.png"
-    },
-    {
-      "id": "net_camera",
-      "label": "相机·联机",
+      "id": "net_movie2",
+      "label": "电影",
       "group": "娱乐",
-      "path": "icons/png/camera.png"
+      "path": "icons/png/net_movie2.png"
     },
     {
-      "id": "net_headset",
-      "label": "耳机·联机",
+      "id": "net_music2",
+      "label": "音乐",
       "group": "娱乐",
-      "path": "icons/png/headset.png"
+      "path": "icons/png/net_music2.png"
     },
     {
-      "id": "net_lamp",
-      "label": "台灯·联机",
-      "group": "家居",
-      "path": "icons/png/lamp.png"
+      "id": "net_game",
+      "label": "游戏",
+      "group": "娱乐",
+      "path": "icons/png/net_game.png"
     },
     {
-      "id": "net_paw",
-      "label": "爪印·联机",
-      "group": "宠物",
-      "path": "icons/png/paw.png"
+      "id": "net_party",
+      "label": "聚会",
+      "group": "娱乐",
+      "path": "icons/png/net_party.png"
     },
     {
-      "id": "net_medkit",
-      "label": "药箱·联机",
-      "group": "医疗",
-      "path": "icons/png/medkit.png"
+      "id": "net_photo",
+      "label": "摄影",
+      "group": "娱乐",
+      "path": "icons/png/net_photo.png"
     },
     {
-      "id": "net_ticket",
-      "label": "机票·联机",
-      "group": "交通",
-      "path": "icons/png/ticket.png"
+      "id": "net_headset2",
+      "label": "耳机",
+      "group": "娱乐",
+      "path": "icons/png/net_headset2.png"
     },
     {
-      "id": "net_star2",
-      "label": "星星2·联机",
+      "id": "net_ticket2",
+      "label": "门票",
+      "group": "娱乐",
+      "path": "icons/png/net_ticket2.png"
+    },
+    {
+      "id": "net_gym",
+      "label": "健身",
+      "group": "健康",
+      "path": "icons/png/net_gym.png"
+    },
+    {
+      "id": "net_soccer",
+      "label": "球类",
+      "group": "健康",
+      "path": "icons/png/net_soccer.png"
+    },
+    {
+      "id": "net_swim",
+      "label": "游泳",
+      "group": "健康",
+      "path": "icons/png/net_swim.png"
+    },
+    {
+      "id": "net_spa2",
+      "label": "按摩",
+      "group": "健康",
+      "path": "icons/png/net_spa2.png"
+    },
+    {
+      "id": "net_park2",
+      "label": "公园",
+      "group": "健康",
+      "path": "icons/png/net_park2.png"
+    },
+    {
+      "id": "net_pet",
+      "label": "宠物",
       "group": "其他",
-      "path": "icons/png/star2.png"
+      "path": "icons/png/net_pet.png"
     },
     {
-      "id": "net_transfer",
-      "label": "转账·联机",
-      "group": "财务",
-      "path": "icons/png/transfer.png"
+      "id": "net_baby2",
+      "label": "母婴",
+      "group": "其他",
+      "path": "icons/png/net_baby2.png"
+    },
+    {
+      "id": "net_work2",
+      "label": "工资",
+      "group": "其他",
+      "path": "icons/png/net_work2.png"
+    },
+    {
+      "id": "net_phone3",
+      "label": "话费",
+      "group": "其他",
+      "path": "icons/png/net_phone3.png"
+    },
+    {
+      "id": "net_subscribe",
+      "label": "订阅",
+      "group": "其他",
+      "path": "icons/png/net_subscribe.png"
+    },
+    {
+      "id": "net_fine",
+      "label": "罚款",
+      "group": "其他",
+      "path": "icons/png/net_fine.png"
+    },
+    {
+      "id": "net_repair",
+      "label": "维修",
+      "group": "其他",
+      "path": "icons/png/net_repair.png"
+    },
+    {
+      "id": "net_logistics",
+      "label": "快递",
+      "group": "其他",
+      "path": "icons/png/net_logistics.png"
+    },
+    {
+      "id": "net_donate",
+      "label": "捐赠",
+      "group": "其他",
+      "path": "icons/png/net_donate.png"
+    },
+    {
+      "id": "net_giftcard",
+      "label": "礼品卡",
+      "group": "其他",
+      "path": "icons/png/net_giftcard.png"
+    },
+    {
+      "id": "net_gift2",
+      "label": "礼物",
+      "group": "其他",
+      "path": "icons/png/net_gift2.png"
+    },
+    {
+      "id": "net_tag",
+      "label": "标签",
+      "group": "其他",
+      "path": "icons/png/net_tag.png"
+    },
+    {
+      "id": "net_shop",
+      "label": "小店",
+      "group": "其他",
+      "path": "icons/png/net_shop.png"
+    },
+    {
+      "id": "net_wash",
+      "label": "洗护",
+      "group": "其他",
+      "path": "icons/png/net_wash.png"
+    },
+    {
+      "id": "net_smoke",
+      "label": "烟酒",
+      "group": "其他",
+      "path": "icons/png/net_smoke.png"
+    },
+    {
+      "id": "net_beer",
+      "label": "啤酒",
+      "group": "其他",
+      "path": "icons/png/net_beer.png"
+    },
+    {
+      "id": "net_math",
+      "label": "杂项",
+      "group": "其他",
+      "path": "icons/png/net_math.png"
     }
   ]
 }
