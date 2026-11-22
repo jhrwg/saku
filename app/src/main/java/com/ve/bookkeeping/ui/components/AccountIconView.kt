@@ -28,6 +28,7 @@ import com.ve.bookkeeping.ui.pages.RemoteIcons
 fun AccountIconView(
     accountId: String,
     fallback: ImageVector,
+    iconId: String? = null,
     tint: Color,
     size: Dp = 20.dp,
     modifier: Modifier = Modifier,
@@ -37,8 +38,11 @@ fun AccountIconView(
     val context = LocalContext.current
     // 读一下版本号，换图标后立即重组
     val version = IconPrefs.version
-    val bitmap = remember(accountId, version) {
-        IconPrefs.accountIcon(context, accountId)?.let { RemoteIcons.load(context, it, 128) }
+    val bitmap = remember(accountId, iconId, version) {
+        // 账户自身的 iconId 若指向已下载的图片图标（银行 logo），直接用图片
+        val fromAccount = iconId?.takeIf { !it.startsWith("acct_") }
+            ?.let { RemoteIcons.load(context, it, 128) }
+        fromAccount ?: IconPrefs.accountIcon(context, accountId)?.let { RemoteIcons.load(context, it, 128) }
     }
 
     Box(
