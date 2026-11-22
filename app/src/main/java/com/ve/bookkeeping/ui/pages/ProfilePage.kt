@@ -115,6 +115,7 @@ fun ProfilePage(
     onOpenRecurring: () -> Unit,
     onOpenFeedback: () -> Unit,
     onOpenTags: () -> Unit,
+    onOpenIcons: () -> Unit,
     onOpenRates: () -> Unit,
     onOpenDebts: () -> Unit,
     modifier: Modifier = Modifier,
@@ -216,6 +217,7 @@ fun ProfilePage(
                 tiles = listOf(
                     ProfileTile(Icons.Rounded.ReceiptLong, "全部记录", onOpenRecords),
                     ProfileTile(Icons.Rounded.Sell, "标签", onOpenTags),
+                    ProfileTile(Icons.Rounded.Palette, "图标", onOpenIcons),
                     ProfileTile(Icons.Rounded.SyncAlt, "导入导出", onOpenTransfer),
                     ProfileTile(Icons.Rounded.DeleteSweep, "回收站", onOpenTrash),
                 ),
