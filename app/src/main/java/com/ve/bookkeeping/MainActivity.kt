@@ -52,5 +52,14 @@ class MainActivity : ComponentActivity() {
         com.ve.bookkeeping.data.UiState.userName = prefs.userName
         com.ve.bookkeeping.data.UiState.userBio = prefs.userBio
     }
-}
 
+    override fun onResume() {
+        super.onResume()
+        com.ve.bookkeeping.data.AppForeground.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        com.ve.bookkeeping.data.AppForeground.onPause()
+    }
+}
