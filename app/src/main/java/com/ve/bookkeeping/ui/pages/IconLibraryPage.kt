@@ -329,9 +329,10 @@ object RemoteIcons {
 
     private const val MANIFEST_PATH = "icons/manifest.json"
 
+    // 清单放在**公开**的 saku 仓库（源码仓库是私有的，匿名读不到 raw）
     private val mirrors = listOf(
-        "https://gitee.com/yijiang772/vebk/raw/main/",
-        "https://raw.githubusercontent.com/jhrwg/vebk/main/",
+        "https://gitee.com/yijiang772/saku/raw/master/",
+        "https://raw.githubusercontent.com/jhrwg/saku/main/",
     )
 
     private var lastBase: String = mirrors.first()
