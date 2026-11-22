@@ -25,6 +25,20 @@ object IconPrefs {
     fun categoryIcon(context: Context, categoryId: String): String? =
         prefs(context).getString(KEY_CATEGORY + categoryId, null)
 
+    /** 分类改名（内置分类也能改）：分类 id → 自定义名称。 */
+    fun categoryName(context: Context, categoryId: String): String? =
+        prefs(context).getString("name_" + categoryId, null)
+
+    fun setCategoryName(context: Context, categoryId: String, name: String) {
+        prefs(context).edit().putString("name_" + categoryId, name).apply()
+        versionState.value++
+    }
+
+    fun clearCategoryName(context: Context, categoryId: String) {
+        prefs(context).edit().remove("name_" + categoryId).apply()
+        versionState.value++
+    }
+
     fun accountIcon(context: Context, accountId: String): String? =
         prefs(context).getString(KEY_ACCOUNT + accountId, null)
 
