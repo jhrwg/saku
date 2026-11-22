@@ -71,6 +71,9 @@ import com.ve.bookkeeping.ui.components.CrashLogSheet
 import com.ve.bookkeeping.ui.components.DataTransferSheet
 import com.ve.bookkeeping.ui.components.LockScreen
 import com.ve.bookkeeping.ui.components.NotificationSheet
+import com.ve.bookkeeping.data.CategoryIconStore
+import com.ve.bookkeeping.data.IconPrefs
+import com.ve.bookkeeping.ui.model.IconCatalog
 import com.ve.bookkeeping.data.CrashReport
 import com.ve.bookkeeping.ui.components.CrashReportSheet
 import com.ve.bookkeeping.ui.components.ProGateSheet
@@ -594,14 +597,28 @@ private fun AppContent(
         ?.map { it.second }
         .orEmpty()
 
-    val expenseCategories = remember {
-        mutableStateListOf(*(customOf(EntryType.Expense) + DemoData.expenseCategories).toTypedArray())
+    // 图标覆盖：改完立刻生效，不需要重启（IconPrefs.version 是 Compose 状态）
+    val iconVersion = IconPrefs.version
+    fun applyIconOverrides(list: List<EntryCategory>): List<EntryCategory> =
+        list.map { c ->
+            val vec = IconPrefs.categoryIcon(context, c.id)?.let { IconCatalog.find(it)?.vector }
+            if (vec != null) c.copy(icon = vec) else c
+        }
+
+    val expenseCategories = remember(iconVersion) {
+        mutableStateListOf(
+            *(applyIconOverrides(customOf(EntryType.Expense) + DemoData.expenseCategories)).toTypedArray(),
+        )
     }
-    val incomeCategories = remember {
-        mutableStateListOf(*(customOf(EntryType.Income) + DemoData.incomeCategories).toTypedArray())
+    val incomeCategories = remember(iconVersion) {
+        mutableStateListOf(
+            *(applyIconOverrides(customOf(EntryType.Income) + DemoData.incomeCategories)).toTypedArray(),
+        )
     }
-    val transferCategories = remember {
-        mutableStateListOf(*(customOf(EntryType.Transfer) + DemoData.transferCategories).toTypedArray())
+    val transferCategories = remember(iconVersion) {
+        mutableStateListOf(
+            *(applyIconOverrides(customOf(EntryType.Transfer) + DemoData.transferCategories)).toTypedArray(),
+        )
     }
     var customCategorySeq by remember {
         mutableIntStateOf(
@@ -1225,6 +1242,9 @@ private fun AppContent(
             )
 
             AppRoute.Icons -> com.ve.bookkeeping.ui.pages.IconLibraryPage(
+                categories = (expenseCategories + incomeCategories + transferCategories)
+                    .filter { it.parentId == null },
+                onIconChanged = { /* IconPrefs.version 已经是状态，无需额外刷新 */ },
                 onBack = { backToMain() },
             )
 
