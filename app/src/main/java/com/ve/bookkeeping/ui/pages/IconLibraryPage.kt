@@ -94,10 +94,10 @@ fun IconLibraryPage(
         val ids = files.map { it.nameWithoutExtension }.toSet()
         cached = ids
         // 有清单就用清单里的中文名，没有就退回 id
-        val known = remote.associateBy { it.id }
-        localExtra = ids.map { id ->
-            known[id] ?: AppIcon(id = id, label = id, group = "已下载")
-        }.sortedBy { it.label }
+        // 内置 + 已下载统统进「本地图标」，名字用缓存清单里的中文
+        localExtra = RemoteIcons.localIcons(context)
+            .filter { it.id !in IconCatalog.builtIn.map { b -> b.id } }
+            .sortedBy { it.label }
     }
 
     LaunchedEffect(Unit) { refreshCache() }
@@ -112,6 +112,7 @@ fun IconLibraryPage(
             loading = false
             result.onSuccess { list ->
                 remote = list
+                runCatching { RemoteIcons.saveCached(context, list) }
                 refreshCache()
                 val pending = list.count { it.id !in cached }
                 message = when {
@@ -583,6 +584,71 @@ object RemoteIcons {
 
     private var lastBase: String = mirrors.first()
 
+    private const val CACHE_NAME = "manifest.json"
+
+    /** 把清单缓存到本地：断网也能拿到中文名，不再出现 net_ 这种 id。 */
+    private fun cacheManifest(context: Context, raw: String) {
+        runCatching { File(File(context.filesDir, "icons").apply { mkdirs() }, CACHE_NAME).writeText(raw) }
+    }
+
+    fun saveCached(context: Context, list: List<AppIcon>) {
+        val arr = org.json.JSONArray()
+        list.forEach { icon ->
+            arr.put(
+                JSONObject()
+                    .put("id", icon.id)
+                    .put("label", icon.label)
+                    .put("group", icon.group)
+                    .put("scope", icon.scope)
+                    .put("path", icon.remoteUrl ?: ""),
+            )
+        }
+        cacheManifest(context, JSONObject().put("version", 6).put("icons", arr).toString())
+    }
+
+    fun cachedManifest(context: Context): org.json.JSONObject? = runCatching {
+        val f = File(File(context.filesDir, "icons"), CACHE_NAME)
+        if (!f.exists()) null else org.json.JSONObject(f.readText())
+    }.getOrNull()
+
+    /** id → 中文名（来自缓存清单）。 */
+    fun labelOf(context: Context, id: String): String? = runCatching {
+        val arr = cachedManifest(context)?.optJSONArray("icons") ?: return null
+        for (i in 0 until arr.length()) {
+            val item = arr.optJSONObject(i) ?: continue
+            if (item.optString("id") == id) return item.optString("label", id)
+        }
+        null
+    }.getOrNull()
+
+    /**
+     * 本地图标（内置 + 已下载），下载过的带中文名。
+     * 供图标页、分类编辑、账户图标选择共用。
+     */
+    fun localIcons(context: Context, scope: String? = null): List<AppIcon> {
+        val out = mutableListOf<AppIcon>()
+        out += com.ve.bookkeeping.ui.model.IconCatalog.builtIn
+        cachedFiles(context).forEach { f ->
+            val id = f.nameWithoutExtension
+            val isBank = id.startsWith("bank_")
+            val iconScope = if (isBank) "account" else "category"
+            if (scope != null && scope != iconScope) return@forEach
+            out += AppIcon(
+                id = id,
+                label = labelOf(context, id) ?: fallbackLabel(id),
+                group = if (isBank) "银行 / 支付" else "已下载",
+                scope = iconScope,
+            )
+        }
+        return out
+    }
+
+    private fun fallbackLabel(id: String): String = when {
+        id.startsWith("bank_") -> "银行图标"
+        id.startsWith("net_") -> "已下载图标"
+        else -> id
+    }
+
     fun fetch(): List<AppIcon> {
         val body = mirrors.firstNotNullOfOrNull { base ->
             lastBase = base
@@ -600,6 +666,7 @@ object RemoteIcons {
         } ?: return emptyList()
 
         val root = runCatching { JSONObject(body) }.getOrNull() ?: return emptyList()
+        // 缓存清单（这里没有 context，交给调用方保存；见 rememberManifest）
         val array = root.optJSONArray("icons") ?: return emptyList()
         val list = mutableListOf<AppIcon>()
         for (i in 0 until array.length()) {
