@@ -32,8 +32,17 @@ object CrashReport {
     /** ntfy 服务器：默认官方；自建（国内 VPS）时改成自己的地址。 */
     const val NTFY_SERVER = "https://ntfy.sh"
 
-    /** 可选：PushPlus（国内可直连，微信收推送）的 token；留空则不启用。 */
-    const val PUSHPLUS_TOKEN = ""
+    /**
+     * 可选：PushPlus token（国内可直连，微信收推送）。
+     * 注意：PushPlus 要求账号实名认证后才能发消息，未实名会返回 code 905。
+     */
+    const val PUSHPLUS_TOKEN = "9fd85dd18d7641ee906d83efcca64ae2"
+
+    /**
+     * 可选：企业微信群机器人 webhook 的 key（消息里的 `key=` 后面那串）。
+     * 国内直连最稳、不需要实名认证，推荐用这个。
+     */
+    const val WECOM_KEY = ""
 
     private const val MARKER = ".reported"
 
@@ -108,10 +117,32 @@ object CrashReport {
      */
     fun upload(context: Context, file: File): Boolean {
         val body = buildText(context, file)
-        if (NTFY_TOPIC.isNotBlank() && sendNtfy(context, body.take(3500))) return true
+        if (WECOM_KEY.isNotBlank() && sendWeCom(body.take(2000))) return true
         if (PUSHPLUS_TOKEN.isNotBlank() && sendPushPlus(context, body.take(18000))) return true
+        if (NTFY_TOPIC.isNotBlank() && sendNtfy(context, body.take(3500))) return true
         return false
     }
+
+    /** 企业微信群机器人：国内直连、无需实名。文本上限约 2048 字节。 */
+    private fun sendWeCom(body: String): Boolean = runCatching {
+        val payload = org.json.JSONObject()
+            .put("msgtype", "text")
+            .put("text", org.json.JSONObject().put("content", body))
+            .toString()
+        val conn = (java.net.URL(
+            "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=$WECOM_KEY",
+        ).openConnection() as java.net.HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 6000
+            readTimeout = 8000
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json; charset=utf-8")
+        }
+        conn.outputStream.use { it.write(payload.toByteArray()) }
+        val text = conn.inputStream.bufferedReader().use { it.readText() }
+        conn.disconnect()
+        text.contains("\"errcode\":0") || text.contains("\"errcode\": 0")
+    }.getOrDefault(false)
 
     /** ntfy：POST 纯文本到主题，手机装 ntfy 订阅该主题即可收到。 */
     private fun sendNtfy(context: Context, body: String): Boolean = runCatching {
@@ -153,8 +184,11 @@ object CrashReport {
         text.contains("\"code\":200") || text.contains("\"code\": 200")
     }.getOrDefault(false)
 
-    /** 提交：自动上传优先，失败退回系统分享。主线程调用。 */
-    fun submit(context: Context, file: File) {
+    /**
+     * 提交：自动上传优先；全部通道失效时回调 [onFallback]（进入反馈页走问卷）。
+     * 主线程调用。
+     */
+    fun submit(context: Context, file: File, onFallback: () -> Unit = {}) {
         markHandled(context, file)
         val main = android.os.Handler(android.os.Looper.getMainLooper())
         fun toast(msg: String) = main.post {
@@ -163,8 +197,8 @@ object CrashReport {
             }
         }
 
-        if (NTFY_TOPIC.isBlank() && PUSHPLUS_TOKEN.isBlank()) {
-            share(context, file)
+        if (NTFY_TOPIC.isBlank() && PUSHPLUS_TOKEN.isBlank() && WECOM_KEY.isBlank()) {
+            onFallback()
             return
         }
         toast("正在上传日志…")
@@ -174,9 +208,9 @@ object CrashReport {
                 AppLog.info("崩溃报告", "已上传（ntfy/pushplus）")
                 toast("日志已提交，谢谢！")
             } else {
-                AppLog.warn("崩溃报告", "上传失败，改用系统分享")
-                toast("上传失败，改成手动发送")
-                main.post { runCatching { share(context, file) } }
+                AppLog.warn("崩溃报告", "上传失败，转为问卷反馈")
+                toast("自动上传失败，已打开意见反馈")
+                main.post(onFallback)
             }
         }.start()
     }
