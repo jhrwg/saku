@@ -260,11 +260,11 @@ private fun CategoryRow(
             modifier = Modifier.size(32.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector = category.icon,
-                contentDescription = null,
+            com.ve.bookkeeping.ui.components.CategoryIconView(
+                categoryId = category.id,
+                fallback = category.icon,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
+                size = 20.dp,
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
