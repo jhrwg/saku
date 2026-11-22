@@ -400,6 +400,7 @@ private fun AccountsCard(
             GroupHeader(type = type, accounts = accounts, visible = visible)
             accounts.forEach { account ->
                 AccountRow(
+                    accountId = account.id,
                     icon = account.icon,
                     tint = if (account.balance < 0) {
                         extra.expense
