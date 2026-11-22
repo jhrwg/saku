@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "note": "联网图标：分类图标（Material Symbols Rounded 渲染）+ 银行/支付 logo（仅用于账户图标）",
+  "version": 4,
+  "note": "联网图标：分类图标（Material Symbols Rounded）+ 账户用银行/支付图标（已裁成方形，仅标记）",
   "icons": [
     {
       "id": "net_bank",
@@ -489,161 +489,119 @@
       "id": "bank_abchina",
       "label": "农业银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_abchina.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_alipay",
-      "label": "支付宝",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_alipay.svg",
+      "path": "icons/png/bank_abchina.png",
       "scope": "account"
     },
     {
       "id": "bank_bankcomm",
       "label": "交通银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_bankcomm.svg",
+      "path": "icons/png/bank_bankcomm.png",
       "scope": "account"
     },
     {
       "id": "bank_bankofbeijing",
       "label": "北京银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_bankofbeijing.svg",
+      "path": "icons/png/bank_bankofbeijing.png",
       "scope": "account"
     },
     {
       "id": "bank_boc",
       "label": "中国银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_boc.svg",
+      "path": "icons/png/bank_boc.png",
       "scope": "account"
     },
     {
       "id": "bank_ccb",
       "label": "建设银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_ccb.svg",
+      "path": "icons/png/bank_ccb.png",
       "scope": "account"
     },
     {
       "id": "bank_cebbank",
       "label": "光大银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_cebbank.svg",
+      "path": "icons/png/bank_cebbank.png",
       "scope": "account"
     },
     {
       "id": "bank_cgbchina",
       "label": "广发银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_cgbchina.svg",
+      "path": "icons/png/bank_cgbchina.png",
       "scope": "account"
     },
     {
       "id": "bank_cib",
       "label": "兴业银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_cib.svg",
+      "path": "icons/png/bank_cib.png",
       "scope": "account"
     },
     {
       "id": "bank_citicbank",
       "label": "中信银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_citicbank.svg",
+      "path": "icons/png/bank_citicbank.png",
       "scope": "account"
     },
     {
       "id": "bank_cmbc",
       "label": "民生银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_cmbc.svg",
+      "path": "icons/png/bank_cmbc.png",
       "scope": "account"
     },
     {
       "id": "bank_cmbchina",
       "label": "招商银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_cmbchina.svg",
+      "path": "icons/png/bank_cmbchina.png",
       "scope": "account"
     },
     {
       "id": "bank_czbank",
       "label": "浙商银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_czbank.svg",
+      "path": "icons/png/bank_czbank.png",
       "scope": "account"
     },
     {
       "id": "bank_hxb",
       "label": "华夏银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_hxb.svg",
+      "path": "icons/png/bank_hxb.png",
       "scope": "account"
     },
     {
       "id": "bank_hzbank",
       "label": "杭州银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_hzbank.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_icbc",
-      "label": "工商银行",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_icbc.svg",
+      "path": "icons/png/bank_hzbank.png",
       "scope": "account"
     },
     {
       "id": "bank_nbcb",
       "label": "宁波银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_nbcb.svg",
+      "path": "icons/png/bank_nbcb.png",
       "scope": "account"
     },
     {
       "id": "bank_njcb",
       "label": "南京银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_njcb.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_pingan",
-      "label": "平安银行",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_pingan.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_psbc",
-      "label": "邮储银行",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_psbc.svg",
+      "path": "icons/png/bank_njcb.png",
       "scope": "account"
     },
     {
       "id": "bank_spdb",
       "label": "浦发银行",
       "group": "银行 / 支付",
-      "path": "icons/bank/bank_spdb.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_unionpay",
-      "label": "银联",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_unionpay.svg",
-      "scope": "account"
-    },
-    {
-      "id": "bank_wechat",
-      "label": "微信",
-      "group": "银行 / 支付",
-      "path": "icons/bank/bank_wechat.svg",
+      "path": "icons/png/bank_spdb.png",
       "scope": "account"
     }
   ]
