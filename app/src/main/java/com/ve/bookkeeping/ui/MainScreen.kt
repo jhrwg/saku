@@ -141,6 +141,7 @@ fun MainScreen(
     onOpenSecurity: () -> Unit,
     onOpenFeedback: () -> Unit,
     onOpenTags: () -> Unit,
+    onOpenIcons: () -> Unit = {},
     onOpenRates: () -> Unit,
     onOpenDebts: () -> Unit,
     avatarPath: String,
@@ -353,6 +354,7 @@ fun MainScreen(
                             crashCount = crashCount,
                             budgetSummary = budgetSummary,
                             onOpenCategories = onOpenCategories,
+                            onOpenIcons = onOpenIcons,
                             onOpenWebDav = onOpenWebDav,
                             onOpenAppearance = onOpenAppearance,
                             themeModeLabel = themeModeLabel,
@@ -400,8 +402,9 @@ fun MainScreen(
                                     switchToPage(pagerState, index, scope)
                                 },
                                 shape = RoundedCornerShape(50),
+                                // 浅色底：主色只做 10% 淡染，换任何主题都像默认主题一样清爽
                                 color = if (selected) {
-                                    MaterialTheme.colorScheme.primaryContainer
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
                                 } else {
                                     Color.Transparent
                                 },
@@ -415,7 +418,7 @@ fun MainScreen(
                                         imageVector = if (selected) tab.selectedIcon else tab.unselectedIcon,
                                         contentDescription = tab.label,
                                         tint = if (selected) {
-                                            MaterialTheme.colorScheme.onPrimaryContainer
+                                            MaterialTheme.colorScheme.primary
                                         } else {
                                             MaterialTheme.colorScheme.onSurfaceVariant
                                         },
@@ -425,7 +428,7 @@ fun MainScreen(
                                         text = tab.label,
                                         style = MaterialTheme.typography.labelSmall,
                                         color = if (selected) {
-                                            MaterialTheme.colorScheme.onPrimaryContainer
+                                            MaterialTheme.colorScheme.primary
                                         } else {
                                             MaterialTheme.colorScheme.onSurfaceVariant
                                         },
@@ -471,9 +474,8 @@ fun MainScreen(
                             scaleY = fabScaleAnim.value
                         },
                     shape = RoundedCornerShape(18.dp),
-                    // 换主题色后不再是高饱和实心块，统一用浅色容器 + 主色图标
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
