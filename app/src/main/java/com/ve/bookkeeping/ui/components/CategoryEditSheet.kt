@@ -89,13 +89,17 @@ fun CategoryEditSheet(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            IconCatalog.builtIn.chunked(6).forEach { row ->
+            val ctx = androidx.compose.ui.platform.LocalContext.current
+            val icons = androidx.compose.runtime.remember(IconPrefsVersion()) {
+                com.ve.bookkeeping.ui.pages.RemoteIcons.localIcons(ctx, "category")
+            }
+            icons.chunked(6).forEach { row ->
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     row.forEach { item ->
-                        val selected = iconId == item.id
+                        val selected = iconId == item.id || (iconId == null && item.id == category.id)
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -111,9 +115,9 @@ fun CategoryEditSheet(
                                 .clickable { iconId = item.id },
                             contentAlignment = Alignment.Center,
                         ) {
-                            item.vector?.let { vec ->
+                            if (item.vector != null) {
                                 Icon(
-                                    imageVector = vec,
+                                    imageVector = item.vector,
                                     contentDescription = item.label,
                                     tint = if (selected) {
                                         MaterialTheme.colorScheme.primary
@@ -122,6 +126,17 @@ fun CategoryEditSheet(
                                     },
                                     modifier = Modifier.size(20.dp),
                                 )
+                            } else {
+                                val bmp = androidx.compose.runtime.remember(item.id) {
+                                    com.ve.bookkeeping.ui.pages.RemoteIcons.load(ctx, item.id, 128)
+                                }
+                                if (bmp != null) {
+                                    androidx.compose.foundation.Image(
+                                        bitmap = bmp,
+                                        contentDescription = item.label,
+                                        modifier = Modifier.size(24.dp),
+                                    )
+                                }
                             }
                         }
                     }
@@ -137,3 +152,7 @@ fun CategoryEditSheet(
         }
     }
 }
+
+/** 读一下全局图标版本号，下载/换了图标后自动重组。 */
+@Composable
+private fun IconPrefsVersion(): Int = com.ve.bookkeeping.data.IconPrefs.version
