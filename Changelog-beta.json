@@ -1,11 +1,11 @@
 {
-    "latest": "1.4.3-beta",
-    "version": "1.4.3-beta",
+    "latest": "1.4.4-beta",
+    "version": "1.4.4-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.3-beta/vebk-1.4.3-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.4.4-beta/vebk-1.4.4-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.4.4-beta/vebk-1.4.4-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.4.4-beta/vebk-1.4.4-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,19 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.4.4-beta",
+            "date": "2026-11-22",
+            "notes": [
+                "测试版 1.4.4-beta",
+                "",
+                "调整",
+                "• 移除银行 / 支付 logo 相关功能：图标库只保留分类图标（69 个，全部中文）",
+                "• 账户图标的「更换图标」恢复为进入编辑账户页选择内置图标",
+                "",
+                "该日志由AI编写，正确内容请等待正式版。"
+            ]
+        },
         {
             "version": "1.4.3-beta",
             "date": "2026-11-22",
