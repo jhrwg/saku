@@ -14,8 +14,8 @@ android {
         applicationId = "com.ve.bookkeeping"
         minSdk = 24
         targetSdk = 37
-        versionCode = 115
-        versionName = "1.3.24-beta"
+        versionCode = 117
+        versionName = "1.3.26-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.okhttp)
+    implementation("com.caverock:androidsvg-aar:1.4")
     implementation(libs.androidx.work)
     implementation(libs.androidx.biometric)
 
