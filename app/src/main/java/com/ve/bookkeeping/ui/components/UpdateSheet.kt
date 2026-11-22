@@ -205,27 +205,33 @@ fun UpdateSheet(
             } else {
                 // 三个下载通道：悬浮固定在底部，不随更新日志滚动
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
-                        onClick = { info.directUrl?.let { startDownload(it) } },
+                    // 顺序：GitHub 下载 → GitHub 镜像下载 → Gitee 下载（推荐，高亮）
+                    DownloadChoice(
+                        title = "GitHub",
+                        hint = "直连",
                         enabled = !info.directUrl.isNullOrBlank(),
-                        modifier = Modifier.weight(1f).height(46.dp),
-                        shape = RoundedCornerShape(14.dp),
-                    ) { Text(text = "GitHub", style = MaterialTheme.typography.labelLarge) }
-                    OutlinedButton(
-                        onClick = {
-                            val url = info.mirrorUrl ?: info.directUrl
-                            url?.let { startDownload(it) }
-                        },
+                        highlighted = false,
+                        modifier = Modifier.weight(1f),
+                        onClick = { info.directUrl?.let { startDownload(it) } },
+                    )
+                    DownloadChoice(
+                        title = "镜像",
+                        hint = "加速",
                         enabled = !(info.mirrorUrl ?: info.directUrl).isNullOrBlank(),
-                        modifier = Modifier.weight(1f).height(46.dp),
-                        shape = RoundedCornerShape(14.dp),
-                    ) { Text(text = "在线", style = MaterialTheme.typography.labelLarge) }
-                    Button(
-                        onClick = { info.giteeUrl?.let { startDownload(it) } },
+                        highlighted = false,
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            (info.mirrorUrl ?: info.directUrl)?.let { startDownload(it) }
+                        },
+                    )
+                    DownloadChoice(
+                        title = "Gitee",
+                        hint = "推荐",
                         enabled = !info.giteeUrl.isNullOrBlank(),
-                        modifier = Modifier.weight(1f).height(46.dp),
-                        shape = RoundedCornerShape(14.dp),
-                    ) { Text(text = "Gitee", style = MaterialTheme.typography.labelLarge) }
+                        highlighted = true,
+                        modifier = Modifier.weight(1f),
+                        onClick = { info.giteeUrl?.let { startDownload(it) } },
+                    )
                 }
             }
         },
@@ -298,5 +304,45 @@ fun UpdateSheet(
                 }
             }
         }
+    }
+}
+
+/** 下载渠道按钮：两行显示（名称 + 一句话说明），推荐项用实心高亮。 */
+@Composable
+private fun DownloadChoice(
+    title: String,
+    hint: String,
+    enabled: Boolean,
+    highlighted: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val content: @Composable () -> Unit = {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = hint,
+                style = MaterialTheme.typography.labelSmall,
+            )
+        }
+    }
+    if (highlighted) {
+        Button(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = modifier.height(52.dp),
+            shape = RoundedCornerShape(14.dp),
+        ) { content() }
+    } else {
+        OutlinedButton(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = modifier.height(52.dp),
+            shape = RoundedCornerShape(14.dp),
+        ) { content() }
     }
 }
