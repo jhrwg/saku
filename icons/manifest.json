@@ -37,6 +37,150 @@
       "label": "星星·联机",
       "group": "其他",
       "path": "icons/png/star.png"
+    },
+    {
+      "id": "net_umbrella",
+      "label": "雨伞·联机",
+      "group": "生活",
+      "path": "icons/png/umbrella2.png"
+    },
+    {
+      "id": "net_house",
+      "label": "房子·联机",
+      "group": "居住",
+      "path": "icons/png/house.png"
+    },
+    {
+      "id": "net_bulb",
+      "label": "灯泡·联机",
+      "group": "居住",
+      "path": "icons/png/bulb.png"
+    },
+    {
+      "id": "net_drop",
+      "label": "水滴·联机",
+      "group": "居住",
+      "path": "icons/png/drop.png"
+    },
+    {
+      "id": "net_card",
+      "label": "公交卡·联机",
+      "group": "交通",
+      "path": "icons/png/card.png"
+    },
+    {
+      "id": "net_pill",
+      "label": "药丸·联机",
+      "group": "医疗",
+      "path": "icons/png/pill.png"
+    },
+    {
+      "id": "net_run",
+      "label": "跑步·联机",
+      "group": "运动",
+      "path": "icons/png/run.png"
+    },
+    {
+      "id": "net_work_sit",
+      "label": "办公·联机",
+      "group": "工作",
+      "path": "icons/png/work_sit.png"
+    },
+    {
+      "id": "net_book2",
+      "label": "书本·联机",
+      "group": "教育",
+      "path": "icons/png/book2.png"
+    },
+    {
+      "id": "net_pencil",
+      "label": "铅笔·联机",
+      "group": "文具",
+      "path": "icons/png/pencil.png"
+    },
+    {
+      "id": "net_phone2",
+      "label": "手机·联机",
+      "group": "通讯",
+      "path": "icons/png/phone2.png"
+    },
+    {
+      "id": "net_cloud",
+      "label": "云·联机",
+      "group": "网络",
+      "path": "icons/png/cloud.png"
+    },
+    {
+      "id": "net_gift",
+      "label": "礼物盒·联机",
+      "group": "购物",
+      "path": "icons/png/gift.png"
+    },
+    {
+      "id": "net_wheat",
+      "label": "麦穗·联机",
+      "group": "收入",
+      "path": "icons/png/wheat.png"
+    },
+    {
+      "id": "net_chart",
+      "label": "图表·联机",
+      "group": "收入",
+      "path": "icons/png/chart.png"
+    },
+    {
+      "id": "net_bed",
+      "label": "床·联机",
+      "group": "住宿",
+      "path": "icons/png/bed.png"
+    },
+    {
+      "id": "net_camera",
+      "label": "相机·联机",
+      "group": "娱乐",
+      "path": "icons/png/camera.png"
+    },
+    {
+      "id": "net_headset",
+      "label": "耳机·联机",
+      "group": "娱乐",
+      "path": "icons/png/headset.png"
+    },
+    {
+      "id": "net_lamp",
+      "label": "台灯·联机",
+      "group": "家居",
+      "path": "icons/png/lamp.png"
+    },
+    {
+      "id": "net_paw",
+      "label": "爪印·联机",
+      "group": "宠物",
+      "path": "icons/png/paw.png"
+    },
+    {
+      "id": "net_medkit",
+      "label": "药箱·联机",
+      "group": "医疗",
+      "path": "icons/png/medkit.png"
+    },
+    {
+      "id": "net_ticket",
+      "label": "机票·联机",
+      "group": "交通",
+      "path": "icons/png/ticket.png"
+    },
+    {
+      "id": "net_star2",
+      "label": "星星2·联机",
+      "group": "其他",
+      "path": "icons/png/star2.png"
+    },
+    {
+      "id": "net_transfer",
+      "label": "转账·联机",
+      "group": "财务",
+      "path": "icons/png/transfer.png"
     }
   ]
 }
