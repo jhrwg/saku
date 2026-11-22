@@ -42,12 +42,14 @@ fun AppSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    /** 高度上限占屏幕比例：默认半屏；记账键盘传 1f 表示不限高、完整展示。 */
+    heightFraction: Float = 0.5f,
     footer: (@Composable () -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    // 扣掉拖拽条与导航栏占位，保证弹窗整体不超过半屏
-    val maxHeight = (screenHeight * 0.5f - 84.dp).coerceAtLeast(240.dp)
+    // 扣掉拖拽条与导航栏占位，保证弹窗不超高
+    val maxHeight = (screenHeight * heightFraction - 84.dp).coerceAtLeast(240.dp)
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
