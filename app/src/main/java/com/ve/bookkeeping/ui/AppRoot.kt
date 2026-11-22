@@ -133,6 +133,8 @@ sealed interface AppRoute {
 
     data object CategoryManage : AppRoute
 
+    data object Icons : AppRoute
+
     data object Pro : AppRoute
 
     data object Recurring : AppRoute
@@ -411,6 +413,8 @@ private fun AppContent(
         routeKey == "webdav" -> AppRoute.WebDav
 
         routeKey == "tags" -> AppRoute.Tags
+
+        routeKey == "icons" -> AppRoute.Icons
 
         routeKey == "rates" -> AppRoute.Rates
 
@@ -941,6 +945,7 @@ private fun AppContent(
                 onRecordClick = { actionRecord = it },
                 onAccountClick = { actionAccount = it },
                 onOpenCategories = { routeKey = "categories" },
+                onOpenIcons = { routeKey = "icons" },
                 onOpenWebDav = {
                     if (appearance.proEnabled) {
                         routeKey = "webdav"
@@ -1219,7 +1224,11 @@ private fun AppContent(
                 },
             )
 
-            AppRoute.Rates -> RatesPage(
+            AppRoute.Icons -> com.ve.bookkeeping.ui.pages.IconLibraryPage(
+                onBack = { backToMain() },
+            )
+
+        AppRoute.Rates -> RatesPage(
                 onBack = { backToMain() },
             )
 
