@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "note": "联网图标清单：App 里「我的 → 图标 → 联网图标」按需下载，不占安装包",
+  "icons": [
+    {
+      "id": "net_coffee",
+      "label": "咖啡·联机",
+      "group": "餐饮",
+      "path": "icons/png/coffee.png"
+    },
+    {
+      "id": "net_bowl",
+      "label": "碗筷·联机",
+      "group": "餐饮",
+      "path": "icons/png/bowl.png"
+    },
+    {
+      "id": "net_bus",
+      "label": "公交·联机",
+      "group": "交通",
+      "path": "icons/png/bus.png"
+    },
+    {
+      "id": "net_leaf",
+      "label": "叶子·联机",
+      "group": "生活",
+      "path": "icons/png/leaf.png"
+    },
+    {
+      "id": "net_coin",
+      "label": "硬币·联机",
+      "group": "财务",
+      "path": "icons/png/coin.png"
+    },
+    {
+      "id": "net_star",
+      "label": "星星·联机",
+      "group": "其他",
+      "path": "icons/png/star.png"
+    }
+  ]
+}
