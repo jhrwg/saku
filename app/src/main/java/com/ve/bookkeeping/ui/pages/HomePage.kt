@@ -235,9 +235,8 @@ private fun OverviewCard(summary: HomeSummary) {
             StatTile(
                 label = "本月收入",
                 value = "¥${moneyText(summary.monthIncome)}",
-                // 保持和默认主题一样的浅底：主色只做一层很淡的染色
-                container = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
-                contentColor = MaterialTheme.colorScheme.primary,
+                container = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.weight(1f),
             )
             StatTile(
