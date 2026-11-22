@@ -602,7 +602,13 @@ private fun AppContent(
     fun applyIconOverrides(list: List<EntryCategory>): List<EntryCategory> =
         list.map { c ->
             val vec = IconPrefs.categoryIcon(context, c.id)?.let { IconCatalog.find(it)?.vector }
-            if (vec != null) c.copy(icon = vec) else c
+            val newName = IconPrefs.categoryName(context, c.id)
+            when {
+                vec != null && newName != null -> c.copy(icon = vec, label = newName)
+                vec != null -> c.copy(icon = vec)
+                newName != null -> c.copy(label = newName)
+                else -> c
+            }
         }
 
     val expenseCategories = remember(iconVersion) {
@@ -1196,6 +1202,12 @@ private fun AppContent(
                 },
                 onDeleteCategory = { type, id -> deleteCategory(type, id) },
                 onBack = { routeKey = "main" },
+                onRenameCategory = { category, newName ->
+                    IconPrefs.setCategoryName(context, category.id, newName)
+                },
+                onSetCategoryIcon = { category, iconId ->
+                    IconPrefs.setCategoryIcon(context, category.id, iconId)
+                },
             )
 
             AppRoute.Pro -> ProPage(
