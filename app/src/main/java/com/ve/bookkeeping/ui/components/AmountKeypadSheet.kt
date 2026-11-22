@@ -155,7 +155,8 @@ fun AmountKeypadSheet(
         haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
     }
 
-    AppSheet(onDismiss = onDismiss) {
+    // 记账键盘要完整展示（数字键 + 分类 + 账户），不受半屏限制
+    AppSheet(onDismiss = onDismiss, heightFraction = 1f) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
