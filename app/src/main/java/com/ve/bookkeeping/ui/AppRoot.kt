@@ -665,7 +665,6 @@ private fun AppContent(
     }
     var adjustAccount by remember { mutableStateOf<AccountOption?>(null) }
     var iconEditAccount by remember { mutableStateOf<AccountOption?>(null) }
-    var iconPickAccount by remember { mutableStateOf<AccountOption?>(null) }
     var showAppearance by remember { mutableStateOf(false) }
     val webDavClient = remember { WebDavClient() }
 
@@ -1257,7 +1256,6 @@ private fun AppContent(
             AppRoute.Icons -> com.ve.bookkeeping.ui.pages.IconLibraryPage(
                 categories = (expenseCategories + incomeCategories + transferCategories)
                     .filter { it.parentId == null },
-                accounts = liveAccounts(),
                 onIconChanged = { /* IconPrefs.version 已经是状态，无需额外刷新 */ },
                 onBack = { backToMain() },
             )
@@ -1799,7 +1797,7 @@ private fun AppContent(
                 actionAccount = null
             },
             onChangeIcon = {
-                iconPickAccount = account
+                iconEditAccount = account
                 actionAccount = null
             },
             onAdjustBalance = {
@@ -1967,14 +1965,6 @@ private fun AppContent(
                 CrashReport.markHandled(context, crashFile)
                 pendingCrash = null
             },
-        )
-    }
-
-    iconPickAccount?.let { acc ->
-        com.ve.bookkeeping.ui.components.AccountIconPickerSheet(
-            accountId = acc.id,
-            currentIconId = acc.iconId,
-            onDismiss = { iconPickAccount = null },
         )
     }
 
