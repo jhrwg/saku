@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "note": "联网图标：分类图标（Material Symbols Rounded）+ 账户用银行/支付图标（已裁成方形，仅标记）",
+  "version": 6,
+  "note": "联网图标：分类图标（Material Symbols Rounded）+ 银行徽标（方形，仅账户图标）",
   "icons": [
     {
       "id": "net_bank",
