@@ -92,6 +92,8 @@ data class AppIcon(
     val group: String,
     val vector: ImageVector? = null,
     val remoteUrl: String? = null,
+    /** category = 可给分类用；account = 只能给账户用（银行 logo 等）。 */
+    val scope: String = "category",
 )
 
 /**
