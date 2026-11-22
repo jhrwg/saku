@@ -1,11 +1,11 @@
 {
-    "latest": "1.3.23-beta",
-    "version": "1.3.23-beta",
+    "latest": "1.3.24-beta",
+    "version": "1.3.24-beta",
     "beta": true,
     "pan": "https://pan.baidu.com/s/你的链接",
-    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.23-beta/vebk-1.3.23-beta.apk",
-    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.23-beta/vebk-1.3.23-beta.apk",
-    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.23-beta/vebk-1.3.23-beta.apk",
+    "gitee": "https://gitee.com/yijiang772/saku/releases/download/v1.3.24-beta/vebk-1.3.24-beta.apk",
+    "direct": "https://github.com/jhrwg/saku/releases/download/v1.3.24-beta/vebk-1.3.24-beta.apk",
+    "mirror": "https://gh-proxy.com/https://github.com/jhrwg/saku/releases/download/v1.3.24-beta/vebk-1.3.24-beta.apk",
     "force": false,
     "notice": {
         "enabled": true,
@@ -13,6 +13,19 @@
         "link": ""
     },
     "releases": [
+        {
+            "version": "1.3.24-beta",
+            "date": "2026-11-22",
+            "notes": [
+                "修复",
+                "• 图标清单原来指向私有仓库，匿名读不到；改到公开的 saku 仓库，联网图标现在能正常加载",
+                "新增",
+                "• 功能区「图标」：内置 83 个可直接用，联网图标按需下载、离线可用、不进安装包",
+                "调整",
+                "• 底部 Tab 栏选中项改为浅色底（上一版改错了位置，这次是对的）",
+                "• 记一笔键盘弹窗不再限制半屏"
+            ]
+        },
         {
             "version": "1.3.23-beta",
             "date": "2026-11-22",
